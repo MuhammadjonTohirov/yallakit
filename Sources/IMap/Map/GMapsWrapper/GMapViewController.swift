@@ -1,0 +1,115 @@
+//
+//  MapViewController.swift
+//  Ildam
+//
+//  Created by applebro on 27/11/23.
+//
+
+import Foundation
+import UIKit
+import GoogleMaps
+import Core
+
+public struct GMapStatics {
+    public static let viewAngle: CGFloat = 0
+}
+
+public class GMapViewController: UIViewController {
+    lazy var map = {
+        GMSServicesConfig.setupAPIKey()
+        Logging.l("GMaps \(GMSServices.sdkVersion())")
+        return GMSMapView(frame: .zero)
+    }()
+    
+    var isAnimating: Bool = false
+    
+    weak var delegate: GMSMapViewDelegate? {
+        didSet {
+            map.delegate = delegate
+        }
+    }
+    
+    public override func loadView() {
+        super.loadView()
+    }
+    
+    public override func viewDidAppear(_ animated: Bool) {
+        self.view.addSubview(map)
+        map.settings.rotateGestures = true
+        map.settings.tiltGestures = false
+        
+        changeMapStyle(by: traitCollection.userInterfaceStyle)
+        
+        map.autoresizingMask = [.flexibleWidth, .flexibleHeight, .flexibleTopMargin, .flexibleBottomMargin]
+        map.isBuildingsEnabled = true
+        
+        map.isMyLocationEnabled = true
+        
+        map.animate(toViewingAngle: GMapStatics.viewAngle)
+    }
+    
+    public override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        map.frame = view.bounds
+    }
+    
+    public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            changeMapStyle(by: traitCollection.userInterfaceStyle)
+        }
+    }
+    
+    private func changeMapStyle(by interface: UIUserInterfaceStyle) {
+        switch interface {
+        case .unspecified:
+            map.mapStyle = try! GMSMapStyle.init(jsonString: GMapStyles.default)
+        case .light:
+            map.mapStyle = try! GMSMapStyle.init(jsonString: GMapStyles.default)
+        case .dark:
+            map.mapStyle = try! GMSMapStyle.init(jsonString: GMapStyles.night)
+        @unknown default:
+            break
+        }
+    }
+    
+    func focus(toLocation location: CLLocation) {
+        // set angle 45
+        map.animate(toLocation: location.coordinate)
+        map.animate(toViewingAngle: GMapStatics.viewAngle)
+    }
+    
+    func setShowsMyCurrentLocation(to value: Bool) {
+        map.isMyLocationEnabled = value
+    }
+}
+
+extension GMSMapView {
+    var locationAtCenter: CLLocation {
+        // Account for both top and bottom padding to find the true visual center
+        // If top padding > bottom padding, center shifts up
+        // If bottom padding > top padding, center shifts down
+        let paddingOffset = self.padding.bottom / 2
+        let safeAreaOffset = UIApplication.shared.safeArea.top / 2 - UIApplication.shared.safeArea.bottom / 2
+        
+        let visualCenter = CGPoint(
+            x: self.bounds.midX,
+            y: self.bounds.midY - paddingOffset + pickerShift / 2 + safeAreaOffset
+        )
+        
+        let coordinate = self.projection.coordinate(for: visualCenter)
+        
+        // Debug logs
+        debugPrint("GMSMapView", "Map bounds: \(self.bounds)")
+        debugPrint("GMSMapView", "Map padding: \(self.padding)")
+        debugPrint("GMSMapView", "Padding offset: \(paddingOffset)")
+        debugPrint("GMSMapView", "Visual center point: \(visualCenter)")
+        debugPrint("GMSMapView", "Resulting coordinate: \(coordinate)")
+        
+        return CLLocation(
+            latitude: coordinate.latitude,
+            longitude: coordinate.longitude
+        )
+    }
+}

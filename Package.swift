@@ -1,24 +1,82 @@
 // swift-tools-version: 6.1
-// The swift-tools-version declares the minimum version of Swift required to build this package.
-
 import PackageDescription
 
 let package = Package(
     name: "YallaKit",
+    platforms: [
+        .iOS(.v16)
+    ],
     products: [
-        // Products define the executables and libraries a package produces, making them visible to other packages.
-        .library(
-            name: "YallaKit",
-            targets: ["YallaKit"]),
+        .library(name: "YallaKit", targets: ["YallaKit"]),
+        .library(name: "Core", type: .dynamic, targets: ["Core"]),
+        .library(name: "NetworkLayer", type: .dynamic, targets: ["NetworkLayer"]),
+        .library(name: "IMap", targets: ["IMap"]),
+        .library(name: "IldamSDK", type: .dynamic, targets: ["IldamSDK"])
     ],
     targets: [
-        // Targets are the basic building blocks of a package, defining a module or a test suite.
-        // Targets can depend on other targets in this package and products from dependencies.
         .target(
-            name: "YallaKit"),
-        .testTarget(
-            name: "YallaKitTests",
-            dependencies: ["YallaKit"]
+            name: "YallaKit",
+            dependencies: ["Core", "NetworkLayer", "IMap", "IldamSDK"]
         ),
+        .target(
+            name: "Core",
+            dependencies: ["NetworkLayer"]
+        ),
+        .target(
+            name: "NetworkLayer",
+            dependencies: []
+        ),
+        .target(
+            name: "IMap",
+            dependencies: [
+                "Core",
+                "NetworkLayer",
+                "GoogleMapsWrapper"
+            ]
+        ),
+        .target(
+            name: "IldamSDK",
+            dependencies: ["Core", "NetworkLayer"]
+        ),
+        .target(
+            name: "GoogleMapsWrapper",
+            dependencies: [
+                "GoogleMaps",
+                "GoogleMapsBase",
+                "GoogleMapsCore"
+            ],
+            linkerSettings: [
+                .linkedFramework("QuartzCore"),
+                .linkedFramework("OpenGLES"),
+                .linkedFramework("CoreText"),
+                .linkedFramework("CoreLocation"),
+                .linkedFramework("CoreGraphics"),
+                .linkedFramework("CoreData"),
+                .linkedFramework("CoreImage"),
+                .linkedFramework("GLKit"),
+                .linkedFramework("ImageIO"),
+                .linkedFramework("Metal"),
+                .linkedFramework("SystemConfiguration"),
+                .linkedFramework("UIKit"),
+                .linkedFramework("Foundation"),
+                .linkedFramework("SwiftUI"),
+                .linkedFramework("CoreTelephony"),
+                .linkedFramework("Accelerate"),
+                .linkedLibrary("c++"),
+                .linkedLibrary("z")
+            ]
+        ),
+        .binaryTarget(
+            name: "GoogleMaps",
+            path: "Sources/GoogleMaps.xcframework"
+        ),
+        .binaryTarget(
+            name: "GoogleMapsBase",
+            path: "Sources/GoogleMapsBase.xcframework"
+        ),
+        .binaryTarget(
+            name: "GoogleMapsCore",
+            path: "Sources/GoogleMapsCore.xcframework"
+        )
     ]
 )
