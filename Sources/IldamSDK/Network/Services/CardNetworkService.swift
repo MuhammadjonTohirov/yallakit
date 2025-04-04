@@ -17,6 +17,7 @@ public protocol CardServiceProtocol {
 }
 
 public final class CardService: CardServiceProtocol {
+    nonisolated(unsafe) public static let shared: CardServiceProtocol = CardService()
     
     private let addCardUseCase: AddCardUseCaseProtocol
     private let verifyCardUseCase: VerifyCardUseCaseProtocol

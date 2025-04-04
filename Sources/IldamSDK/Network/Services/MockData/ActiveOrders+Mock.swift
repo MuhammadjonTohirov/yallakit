@@ -57,6 +57,7 @@ extension NetResOrderTaxiDetails {
                     coords: .init(lat: 40.387981896981, lng: 71.798038780689)
                 )
             ],
+            services: [],
             bonusUsed: false
         )
     }

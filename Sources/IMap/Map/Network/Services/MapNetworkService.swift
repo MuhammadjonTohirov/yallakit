@@ -8,7 +8,9 @@
 import Foundation
 import NetworkLayer
 
-public struct MapNetworkService {
+public struct MapNetworkService : Sendable {
+    public static let shared = MapNetworkService()
+    
     //MARK: - get address
     public func getAddress(from lat: Double, lng: Double) async throws -> CoordinateAddress? {
         let info: NetResGetAddress? = (try await Network.sendThrow(request: MainNetworkRoute.getAddress(lat: lat, lng: lng)))?.result
@@ -16,3 +18,14 @@ public struct MapNetworkService {
         return .init(with: info)
     }
 }
+
+ 
+//public actor MapNetworkServiceActor: Sendable {
+//    public func getAddress(from lat: Double, lng: Double) async throws -> CoordinateAddress? {
+//        let info: NetResGetAddress? = (try await Network.sendThrow(
+//            request: MainNetworkRoute.getAddress(lat: lat, lng: lng))
+//        )?.result
+//        
+//        return .init(with: info)
+//    }
+//}

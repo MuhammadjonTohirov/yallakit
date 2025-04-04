@@ -12,22 +12,22 @@ public protocol PolygonNetworkServiceProtocol {
     var polygonList: [PolygonItem] { get }
     
     @discardableResult
-    func getPolygonList() async throws -> [PolygonItem]
+    mutating func getPolygonList() async throws -> [PolygonItem]
     
     func polygon(at lat: Double, lng: Double) -> PolygonItem?
     
     func isInPolygon(lat: Double, lng: Double) -> Bool
 }
 
-public final class PolygonService: PolygonNetworkServiceProtocol {
+public struct PolygonService: PolygonNetworkServiceProtocol {
     public var polygonList: [PolygonItem] = []
     
     typealias Coor = (lat: Double, lng: Double)
     
-    @MainActor public static let shared: PolygonNetworkServiceProtocol = PolygonService()
+    nonisolated(unsafe) public static let shared: PolygonNetworkServiceProtocol = PolygonService()
     
     @discardableResult
-    public func getPolygonList() async throws -> [PolygonItem] {
+    mutating public func getPolygonList() async throws -> [PolygonItem] {
         guard polygonList.isEmpty else {
             return polygonList
         }

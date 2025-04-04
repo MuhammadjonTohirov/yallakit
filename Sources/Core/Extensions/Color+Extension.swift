@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import UIKit
 
 public extension Color {
     
@@ -38,11 +39,5 @@ public extension Color {
     
     static var tertiaryBackground: Color {
         .init(uiColor: .tertiarySystemBackground)
-    }
-}
-
-extension UIColor {
-    public static var actionColor: UIColor {
-        return .label
     }
 }

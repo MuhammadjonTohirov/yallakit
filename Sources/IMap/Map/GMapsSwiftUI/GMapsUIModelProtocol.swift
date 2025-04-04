@@ -88,16 +88,12 @@ public protocol GMapsLocationPickerModelProtocol {
 }
 
 public extension GMapsUIModel {
-
-    @MainActor
-    func set(location: CLLocationCoordinate2D, rotation: CLLocationDegrees, toExecutorId id: String) {
-        
-        let executors = self.executorMarkers ?? []
-        for marker in executors {
+    @MainActor func set(location: CLLocationCoordinate2D, rotation: CLLocationDegrees, toExecutorId id: String) {
+        self.executorMarkers?.forEach({ marker in
             if marker.accessibilityLabel == id {
                 marker.position = location
                 marker.rotation = rotation
             }
-        }
+        })
     }
 }

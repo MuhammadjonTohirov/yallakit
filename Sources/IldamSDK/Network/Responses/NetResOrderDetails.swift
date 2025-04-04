@@ -86,6 +86,7 @@ struct NetResOrderTaxiDetails: Codable {
     let totalPrice: Float?
     let fixedPrice: Bool
     let routes: [NetResOrderRoute]
+    let services: [NetResOrderService]?
     let bonusUsed: Bool?
     
     enum CodingKeys: String, CodingKey {
@@ -97,6 +98,7 @@ struct NetResOrderTaxiDetails: Codable {
         case totalPrice = "total_price"
         case routes
         case bonusUsed = "use_the_bonus"
+        case services
     }
 }
 
@@ -187,5 +189,17 @@ struct NetResTaxiOrderExecutorDriver: Codable {
 extension NetResOrderDetails {
     var asModel: OrderDetails? {
         .init(res: self)
+    }
+}
+
+struct NetResOrderService: Codable {
+    let cost: Double?
+    let costType: String?
+    let name: String?
+    
+    enum CodingKeys: String, CodingKey {
+        case cost
+        case costType = "cost_type"
+        case name
     }
 }

@@ -16,7 +16,8 @@ public enum GMapsUIState {
     case normal
 }
 
-open class GMapsUIModel: ObservableObject, GMapsUIModelProtocol, GMapsLocationPickerModelProtocol, @unchecked Sendable {
+@preconcurrency
+open class GMapsUIModel: ObservableObject, @preconcurrency GMapsUIModelProtocol, @preconcurrency GMapsLocationPickerModelProtocol {
     @Published public var currentLocation: CLLocation?
     @Published public var camera: GMapCamera? {
         didSet {
@@ -57,7 +58,6 @@ open class GMapsUIModel: ObservableObject, GMapsUIModelProtocol, GMapsLocationPi
     
     @Published public var routeCoordinates: [RouteDataCoordinate]? = []
     @Published public var routeMarkers: [GMSMarker]? = []
-    
     @Published public var executorMarkers: [GMSMarker]? = []
     
     public var pickedLocation: CLLocation?
@@ -68,15 +68,14 @@ open class GMapsUIModel: ObservableObject, GMapsUIModelProtocol, GMapsLocationPi
         
     }
     
-    func onAppear() async {
+    @MainActor func onAppear() {
         GLocationManager.shared.startUpdatingLocation()
         set(pinOffsetY: (pickerShift - bottomPadding) / 2)
         currentLocationChangeHandler()
-        await setupInitialBottomPadding()
-    }
-    
-    private func setupInitialBottomPadding() async {
-        bottomPadding = 280 + (await UIApplication.shared.safeArea.bottom)
+        
+        let btnsafe = UIApplication.shared.safeArea.bottom
+        
+        self.set(bottomPadding: 280 + btnsafe)
     }
     
     private func currentLocationChangeHandler() {
@@ -93,6 +92,7 @@ open class GMapsUIModel: ObservableObject, GMapsUIModelProtocol, GMapsLocationPi
         self.isMapVisible = isMapVisible
     }
     
+    @MainActor
     @objc
     private func onChangeCurrentLocation(_ notification: Notification) {
         guard let _ = notification.object as? CLLocation else {
@@ -111,13 +111,15 @@ open class GMapsUIModel: ObservableObject, GMapsUIModelProtocol, GMapsLocationPi
         }
     }
     
+    @MainActor
     open func focusToCurrentLocation(animate: Bool = false, lock: Bool = false) {
         if let loc = GLocationManager.shared.currentLocation {
             debugPrint("GMapsModel", "current", loc)
-            focus(toLocation: loc, animate: animate, lock: lock)
+            self.focus(toLocation: loc, animate: animate, lock: lock)
         }
     }
     
+    @MainActor
     open func focus(
         toLocation location: CLLocation,
         maintainZoom: Bool = false,
@@ -164,14 +166,12 @@ open class GMapsUIModel: ObservableObject, GMapsUIModelProtocol, GMapsLocationPi
         
         self.delegate?.onStartDragging(model: self)
         
-        DispatchQueue.main.async {
-            withAnimation {
-                self.isDragging = true
-            }
-            
-            if self.hasAddressPicker {
-                self.set(address: "")
-            }
+        withAnimation {
+            self.isDragging = true
+        }
+        
+        if self.hasAddressPicker {
+            self.set(address: "")
         }
     }
     
@@ -224,7 +224,6 @@ open class GMapsUIModel: ObservableObject, GMapsUIModelProtocol, GMapsLocationPi
         )
         
         debugPrint("GMapUIModel", "zoomOut", currentZoom - 0.2)
-        
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
             self.camera = nil
         }
@@ -250,31 +249,33 @@ open class GMapsUIModel: ObservableObject, GMapsUIModelProtocol, GMapsLocationPi
         return false
     }
     
+    @MainActor
     open func loadPickedAddressDetails() {
         guard let location = self.pickedLocation else {
             return
         }
         
-        Task.detached(priority: .utility) { [weak self] in
-            guard let self else {return}
+        Task(priority: .utility) { [weak self] in
+            guard let self else { return }
+            
             do {
-                if let address = try await MapNetworkService().getAddress(
+                if let address = try await MapNetworkService.shared.getAddress(
                     from: location.coordinate.latitude,
-                    lng: location.coordinate.longitude)?.name {
-                    
+                    lng: location.coordinate.longitude
+                )?.name {
                     await MainActor.run {
                         self.set(address: address)
-                        
+
                         withAnimation {
                             self.isDragging = false
                         }
-                        
+
                         self.delegate?.onPickAddress(model: self, location, address)
                         self.pinModel.set(state: .initial)
                     }
                 }
             } catch {
-                
+                // Handle error here
             }
         }
     }

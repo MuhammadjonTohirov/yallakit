@@ -12,6 +12,7 @@ public protocol FindExecutorsUseCaseProtocol {
 }
 
 public struct FindExecutorsUseCase: FindExecutorsUseCaseProtocol {
+    nonisolated(unsafe) public static var shared: FindExecutorsUseCaseProtocol = FindExecutorsUseCase()
     
     public func getExecutors(tariffId: Int?, lat: Double, lng: Double, options: [Int]) async -> TaxiExecutors? {
         debugPrint("GetExecutors", "Real")

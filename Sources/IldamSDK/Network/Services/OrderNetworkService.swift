@@ -31,6 +31,7 @@ public protocol OrderNetworkServiceProtocol {
 }
 
 public class OrderNetworkService: OrderNetworkServiceProtocol {
+    nonisolated(unsafe) public static var shared: OrderNetworkServiceProtocol = OrderNetworkService()
     
     private let activeOrdersUseCase: ActiveOrdersUseCaseProtocol
     private let orderDetailsUseCase: GetOrderDetailsUseCaseProtocol

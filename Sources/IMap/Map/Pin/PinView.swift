@@ -42,7 +42,7 @@ public struct PinView: View {
             VStack(spacing: 0) {
                 Circle()
                     .frame(width: 50)
-                    .foregroundStyle(Color.primary)
+                    .foregroundStyle(Color.iPrimary)
                     .overlay {
                         pinCircleOverlay
                     }

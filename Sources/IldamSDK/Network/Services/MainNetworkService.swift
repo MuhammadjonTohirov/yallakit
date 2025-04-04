@@ -39,6 +39,7 @@ public protocol MainNetworkServiceProtocl {
 }
 
 public struct MainNetworkService: MainNetworkServiceProtocl {
+    nonisolated(unsafe) public static let shared = MainNetworkService()
     
     public func getTaxiTariffs(coords: [(lat: Double, lng: Double)], addressId: Int?, options: [Int]?) async -> [TaxiTariff] {
         let result = try? await RouteTariffCalcUseCase().execute(

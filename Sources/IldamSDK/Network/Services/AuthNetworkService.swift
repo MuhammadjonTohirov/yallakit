@@ -20,6 +20,7 @@ public protocol AuthServiceProtocol {
 }
 
 public final class AuthService: AuthServiceProtocol {
+    nonisolated(unsafe) public static let shared: AuthServiceProtocol = AuthService()
     
     private let sendOTPUseCase: SendOTPUseCaseProtocol
     private let validateOTPUseCase: ValidateOTPUseCaseProtocol

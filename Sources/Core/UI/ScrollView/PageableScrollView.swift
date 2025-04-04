@@ -139,7 +139,7 @@ public struct PageableScrollView<Content: View>: View {
 
 // MARK: - Preference Key for Scroll Offset
 struct ScrollOffsetKey: PreferenceKey {
-    static let defaultValue: CGFloat = 0
+    nonisolated(unsafe) static var defaultValue: CGFloat = 0
     static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
         value = nextValue()
     }

@@ -63,7 +63,7 @@ public struct GMapsUI: View {
             .padding(.vertical, Padding.small / 2)
             .background {
                 Capsule()
-                    .foregroundStyle(Color.init(uiColor: UIColor.actionColor))
+                    .foregroundStyle(Color.iAction)
             }
             .offset(y: -viewModel.bottomPadding / 2 - 80)
             .padding(.horizontal, Padding.medium)
@@ -73,9 +73,7 @@ public struct GMapsUI: View {
     }
     
     private func onAppear() {
-        Task { @MainActor in
-            await self.viewModel.onAppear()
-        }
+        self.viewModel.onAppear()
     }
 }
 
@@ -89,7 +87,7 @@ public struct GMapsUI: View {
             .padding(.vertical, Padding.small / 2)
             .background {
                 Capsule()
-                    .foregroundStyle(Color.init(uiColor: .red))
+                    .foregroundStyle(Color.iAction)
             }
             .padding(.horizontal, Padding.medium)
             .allowsHitTesting(false)

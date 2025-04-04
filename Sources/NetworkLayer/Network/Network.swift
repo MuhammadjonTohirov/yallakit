@@ -146,7 +146,7 @@ public struct Network {
         guard let data = request.body else {
             fatalError("No data on request")
         }
-        
+
         // Perform the upload with the provided data
         let (resultData, _) = try await URLSession.shared.upload(for: mutableRequest, from: data)
         

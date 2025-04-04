@@ -5,8 +5,8 @@
 //  Created by applebro on 28/04/23.
 //
 
-import UIKit
 import Foundation
+import UIKit
 
 public extension Encodable {
     /// Turns json into a Dictionary

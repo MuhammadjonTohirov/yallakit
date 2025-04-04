@@ -45,7 +45,9 @@ public enum CardType {
 
 public final class SyncCardsUseCaseImpl: SyncCardsUseCase {
     public var cards: [CardItem] = []
-        
+    
+    nonisolated(unsafe) public static let shared = SyncCardsUseCaseImpl()
+    
     public var defaultCard: CardItem? {
         cards.first(where: {$0.isDefault})
     }

@@ -6,7 +6,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <GoogleMaps/GoogleMaps.h>
 
 //! Project version number for IMap.
 FOUNDATION_EXPORT double IMapVersionNumber;

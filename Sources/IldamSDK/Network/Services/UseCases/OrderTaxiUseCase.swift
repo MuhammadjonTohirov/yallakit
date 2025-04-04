@@ -14,6 +14,7 @@ public protocol OrderTaxiUseCaseProtocol {
 }
 
 public struct OrderTaxiUseCase: OrderTaxiUseCaseProtocol {
+    nonisolated(unsafe) public static var shared: OrderTaxiUseCaseProtocol = OrderTaxiUseCase()
     
     public init() {
         

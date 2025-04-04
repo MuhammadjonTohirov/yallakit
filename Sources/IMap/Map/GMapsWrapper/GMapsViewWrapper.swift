@@ -114,7 +114,7 @@ public struct GMapsViewWrapper: UIViewControllerRepresentable {
             let lng = position.target.longitude
             
             Logging.l(tag: "MapViewWrapper", "coordinate: \(lat), \(lng)")
-          
+            
             mapView.animate(toViewingAngle: GMapStatics.viewAngle)
             self.parent.outCamera = .init(
                 camera: position,
@@ -125,7 +125,8 @@ public struct GMapsViewWrapper: UIViewControllerRepresentable {
             self.parent.onEndDragging(mapView.locationAtCenter)
         }
         
-        @MainActor public func mapView(_ mapView: GMSMapView, willMove gesture: Bool) {
+        @MainActor
+        public func mapView(_ mapView: GMSMapView, willMove gesture: Bool) {
             debugPrint("Will move \(gesture)")
             
             if gesture {

@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct CoordinateAddress {
+public struct CoordinateAddress: Sendable {
     public var lat: String
     public var lng: String
     public var name: String

@@ -84,6 +84,7 @@ public struct OrderDetails: Codable {
         self.taxi = .init(res: res)
         self.statusTime = res.statusTime?.map({StatusTime(res: $0)})
         self.paymentType = res.paymentType ?? "cash"
+        
         print("new order", res.status)
     }
     
@@ -133,6 +134,7 @@ public struct OrderTaxiDetails: Codable {
     public let totalPrice: Float?
     public let fixedPrice: Bool
     public let routes: [OrderRoute]
+    public var services: [OrderServiceItem]?
     
     init?(res: NetResOrderDetails?) {
         guard let res = res else { return nil }
@@ -143,6 +145,7 @@ public struct OrderTaxiDetails: Codable {
         self.fixedPrice = res.taxi?.fixedPrice ?? false
         self.totalPrice = res.taxi?.totalPrice
         self.routes = (res.taxi?.routes ?? []).compactMap(OrderRoute.init)
+        self.services = res.taxi?.services?.compactMap(OrderServiceItem.init)
     }
     
     init?(taxiRes res: NetResOrderTaxiDetails?) {
@@ -289,5 +292,23 @@ public extension OrderDetails {
         ].compactMap({$0}).joined(separator: " ")
         
         return "order_info".localize(arguments: url, distance, driver, car)
+    }
+}
+
+public struct OrderServiceItem: Codable {
+    public var cost: Double?
+    public var costType: String?
+    public var name: String?
+    
+    public init(cost: Double? = nil, costType: String? = nil, name: String? = nil) {
+        self.cost = cost
+        self.costType = costType
+        self.name = name
+    }
+    
+    init(_ res: NetResOrderService) {
+        self.cost = res.cost
+        self.costType = res.costType
+        self.name = res.name
     }
 }
