@@ -66,15 +66,15 @@ let package = Package(
                 .linkedLibrary("z")
             ]
         ),
-        .target(
+        .binaryTarget(
             name: "GoogleMaps",
             path: "Sources/GoogleMaps.xcframework"
         ),
-        .target(
+        .binaryTarget(
             name: "GoogleMapsBase",
             path: "Sources/GoogleMapsBase.xcframework"
         ),
-        .target(
+        .binaryTarget(
             name: "GoogleMapsCore",
             path: "Sources/GoogleMapsCore.xcframework"
         )
