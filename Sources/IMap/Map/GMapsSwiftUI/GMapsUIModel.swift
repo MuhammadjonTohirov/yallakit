@@ -68,7 +68,8 @@ open class GMapsUIModel: ObservableObject, @preconcurrency GMapsUIModelProtocol,
         
     }
     
-    @MainActor func onAppear() {
+    @MainActor
+    func onAppear() {
         GLocationManager.shared.startUpdatingLocation()
         set(pinOffsetY: (pickerShift - bottomPadding) / 2)
         currentLocationChangeHandler()
@@ -175,6 +176,7 @@ open class GMapsUIModel: ObservableObject, @preconcurrency GMapsUIModelProtocol,
         }
     }
     
+    @MainActor
     open func focusTo(coordinates: [CLLocationCoordinate2D], lock: Bool = false) {
         let path = GMSMutablePath()
 
@@ -196,6 +198,7 @@ open class GMapsUIModel: ObservableObject, @preconcurrency GMapsUIModelProtocol,
         }
     }
     
+    @MainActor
     open func zoomOut() {
         guard let mapCamera = cameraValue?.camera else {
             debugPrint("GMapsUIModel: zoomOut - cameraValue is nil")
@@ -229,6 +232,7 @@ open class GMapsUIModel: ObservableObject, @preconcurrency GMapsUIModelProtocol,
         }
     }
     
+    @MainActor
     @discardableResult
     open func focusToRoute() -> Bool {
         guard let routes = routeCoordinates else {

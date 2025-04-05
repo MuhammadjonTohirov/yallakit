@@ -24,6 +24,10 @@ public struct PolygonService: PolygonNetworkServiceProtocol {
     
     typealias Coor = (lat: Double, lng: Double)
     
+    public init() {
+        
+    }
+    
     nonisolated(unsafe) public static let shared: PolygonNetworkServiceProtocol = PolygonService()
     
     @discardableResult
