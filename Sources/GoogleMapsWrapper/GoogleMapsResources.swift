@@ -5,8 +5,3 @@ public class GoogleMapsResources {
     public static let resourceBundle = Bundle.module
 }
 
-extension Bundle {
-    static var module: Bundle {
-        return .init(for: GoogleMapsResources.self)
-    }
-}
