@@ -8,7 +8,7 @@
 import Foundation
 import Core
 
-public enum OrderStatus: String, CaseIterable, Codable {
+public enum OrderStatus: String, CaseIterable, Codable, Sendable {
     case new
     case sending
     case userSending
