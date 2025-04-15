@@ -18,7 +18,13 @@ public class GMapViewController: UIViewController {
     lazy var map = {
         GMSServicesConfig.setupAPIKey()
         Logging.l("GMaps \(GMSServices.sdkVersion())")
-        return GMSMapView(frame: .zero)
+        let options: GMSMapViewOptions = .init()
+        options.frame = .zero
+        if let currentLocation = GLocationManager.shared.currentLocation {
+            options.camera = .init(latitude: currentLocation.coordinate.latitude, longitude: currentLocation.coordinate.longitude, zoom: 15)
+
+        }
+        return GMSMapView.init(options: options)
     }()
     
     var isAnimating: Bool = false
