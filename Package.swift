@@ -13,6 +13,10 @@ let package = Package(
         .library(name: "IMap", targets: ["IMap"]),
         .library(name: "IldamSDK", type: .dynamic, targets: ["IldamSDK"])
     ],
+    dependencies: [
+        // ✅ Google Maps SDK via SPM
+        .package(url: "https://github.com/googlemaps/ios-maps-sdk", from: "9.4.0")
+    ],
     targets: [
         .target(
             name: "YallaKit",
@@ -41,12 +45,7 @@ let package = Package(
         .target(
             name: "GoogleMapsWrapper",
             dependencies: [
-                "GoogleMaps",
-                "GoogleMapsBase",
-                "GoogleMapsCore"
-            ],
-            resources: [
-                .copy("GoogleMaps.bundle"),
+                .product(name: "GoogleMaps", package: "ios-maps-sdk")
             ],
             linkerSettings: [
                 .linkedFramework("QuartzCore"),
@@ -68,18 +67,6 @@ let package = Package(
                 .linkedLibrary("c++"),
                 .linkedLibrary("z")
             ]
-        ),
-        .binaryTarget(
-            name: "GoogleMaps",
-            path: "Sources/GoogleMaps.xcframework"
-        ),
-        .binaryTarget(
-            name: "GoogleMapsBase",
-            path: "Sources/GoogleMapsBase.xcframework"
-        ),
-        .binaryTarget(
-            name: "GoogleMapsCore",
-            path: "Sources/GoogleMapsCore.xcframework"
         )
     ]
 )
