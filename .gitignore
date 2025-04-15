@@ -6,5 +6,5 @@ xcuserdata/
 DerivedData/
 .swiftpm/
 .netrc
-*.xcframework/
-**/GoogleMaps.bundle/
+#*.xcframework/
+#**/GoogleMaps.bundle/
