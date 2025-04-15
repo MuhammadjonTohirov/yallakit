@@ -9,7 +9,7 @@
 import Foundation
 import Core
 
-public protocol AuthServiceProtocol {
+public protocol AuthServiceProtocol: Sendable {
     func sendOTP(username: String) async throws -> OTPResponse?
     func validate(username: String, code: Int) async -> ValidationResponse?
     func getUserInfo() async -> UserInfoResponse?
@@ -19,8 +19,8 @@ public protocol AuthServiceProtocol {
     func changeAvatar(profileAvatar: Data) async -> (success: Bool, result: AvatarResponse?)
 }
 
-public final class AuthService: AuthServiceProtocol {
-    nonisolated(unsafe) public static let shared: AuthServiceProtocol = AuthService()
+public final class AuthService: AuthServiceProtocol, @unchecked Sendable {
+    public static let shared: AuthServiceProtocol = AuthService()
     
     private let sendOTPUseCase: SendOTPUseCaseProtocol
     private let validateOTPUseCase: ValidateOTPUseCaseProtocol

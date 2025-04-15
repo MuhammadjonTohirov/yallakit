@@ -13,7 +13,7 @@ enum MainNetworkRoute: URLRequestProtocol {
     var url: URL {
         switch self {
         case .getAddress(let lat, let lng):
-            return URL.baseAPICli.appendingPath("map", "geocoding").appending(queryItems: [
+            return URL.goIldamAPI.appendingPath("location-name").appending(queryItems: [
                 .init(name: "lat", value: "\(lat)"),
                 .init(name: "lng", value: "\(lng)")
             ])
@@ -22,15 +22,18 @@ enum MainNetworkRoute: URLRequestProtocol {
     
     var body: Data? {
         switch self {
-        case .getAddress:
-            return nil
+        case let .getAddress(lat, lng):
+            return [
+                "lat": lat,
+                "lng": lng
+            ].asData
         }
     }
     
     var method: HTTPMethod {
         switch self {
         case .getAddress:
-            return .get
+            return .post
         }
     }
     

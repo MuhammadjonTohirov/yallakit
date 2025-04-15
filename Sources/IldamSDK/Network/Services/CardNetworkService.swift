@@ -9,15 +9,15 @@
 import Foundation
 import Core
 
-public protocol CardServiceProtocol {
+public protocol CardServiceProtocol: Sendable {
     func addCard(request: CardAddRequest) async throws -> CardAddResponse?
     func verifyCard(request: CardVerifyRequest) async throws -> Bool
     func getCardList() async throws -> [CardItem]
     func setDefaultCard(cardId: String) async throws -> Bool
 }
 
-public final class CardService: CardServiceProtocol {
-    nonisolated(unsafe) public static let shared: CardServiceProtocol = CardService()
+public final class CardService: CardServiceProtocol, @unchecked Sendable {
+    public static let shared: CardServiceProtocol = CardService()
     
     private let addCardUseCase: AddCardUseCaseProtocol
     private let verifyCardUseCase: VerifyCardUseCaseProtocol

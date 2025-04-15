@@ -10,7 +10,7 @@ import Foundation
 import NetworkLayer
 import Core
 
-public protocol OrderNetworkServiceProtocol {
+public protocol OrderNetworkServiceProtocol: Sendable {
     func activeOrders() async throws -> [OrderDetails]
     
     func order(withId id: Int) async throws -> OrderDetails?
@@ -30,8 +30,8 @@ public protocol OrderNetworkServiceProtocol {
     func orderTaxi(req: OrderTaxiRequest) async throws -> Int?
 }
 
-public class OrderNetworkService: OrderNetworkServiceProtocol {
-    nonisolated(unsafe) public static var shared: OrderNetworkServiceProtocol = OrderNetworkService()
+public class OrderNetworkService: OrderNetworkServiceProtocol, @unchecked Sendable {
+    public static let shared: OrderNetworkServiceProtocol = OrderNetworkService()
     
     private let activeOrdersUseCase: ActiveOrdersUseCaseProtocol
     private let orderDetailsUseCase: GetOrderDetailsUseCaseProtocol

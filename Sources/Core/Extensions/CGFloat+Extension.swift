@@ -37,7 +37,7 @@ public extension Float {
     
     @available(iOS 13.0, *)
     var asMoneySum: String {
-        return [asMoney(locale: Locale(identifier: "uz_UZ")), "uzs".localize].joined(separator: " ")
+        return [asMoney(locale: Locale(identifier: "uz_UZ")), "uzs".localize].joined(separator: "")
     }
     
     @available(iOS 13.0, *)

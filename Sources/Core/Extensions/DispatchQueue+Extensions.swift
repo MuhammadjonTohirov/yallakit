@@ -7,7 +7,7 @@
 
 import Foundation
 
-public func mainIfNeeded(_ task: @escaping @Sendable () -> Void) {
+public func mainIfNeeded(_ task: @Sendable @escaping () -> Void) {
     guard !Thread.isMainThread else {
         task()
         return

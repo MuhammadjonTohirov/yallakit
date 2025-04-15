@@ -8,8 +8,8 @@
 import Foundation
 import CoreLocation
 
-public class GLocationManager: NSObject, CLLocationManagerDelegate {
-    nonisolated(unsafe) public static let shared = GLocationManager()
+public class GLocationManager: NSObject, CLLocationManagerDelegate, @unchecked Sendable {
+    public static let shared = GLocationManager()
     public private(set) var locationManager = CLLocationManager()
     public var locationUpdateHandler: ((CLLocation) -> Void)?
     public var statusChangeHandler: ((_ status: CLAuthorizationStatus) -> Void)?
@@ -27,15 +27,13 @@ public class GLocationManager: NSObject, CLLocationManagerDelegate {
         locationManager.requestWhenInUseAuthorization()
     }
     
-    public func startUpdatingLocation() {
-        DispatchQueue.global(qos: .utility).async {
-            if CLLocationManager.locationServicesEnabled() {
-                self.locationManager.startUpdatingLocation()
-                self.postLastLocationNotification()
-            } else {
-                print("Location services are not enabled.")
-                // Handle the case where location services are not enabled.
-            }
+    public func startUpdatingLocation() async {
+        if CLLocationManager.locationServicesEnabled() {
+            self.locationManager.startUpdatingLocation()
+            self.postLastLocationNotification()
+        } else {
+            print("Location services are not enabled.")
+            // Handle the case where location services are not enabled.
         }
     }
     

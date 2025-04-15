@@ -9,8 +9,9 @@ import Foundation
 import AVKit
 
 public struct SEffect {
-
-    @MainActor public static func rigid() {
+    
+    @MainActor 
+    public static func rigid() {
         let generator = UIImpactFeedbackGenerator(style: .rigid)
         generator.impactOccurred()
     }

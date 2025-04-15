@@ -8,7 +8,7 @@
 import Foundation
 import Core
 
-public struct OrderRoute: Codable, Sendable {
+public struct OrderRoute: Codable {
     public let index: Int
     public let fullAddress: String
     public let coords: Coord

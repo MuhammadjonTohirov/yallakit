@@ -8,8 +8,10 @@
 import Foundation
 import GoogleMaps
 
-public struct GMSServicesConfig {
-    nonisolated(unsafe) static var didConfig = false
+public struct GMSServicesConfig: Sendable {
+    @MainActor static var didConfig = false
+    
+    @MainActor
     public static func setupAPIKey() {
         guard !didConfig else { return }
         didConfig = true

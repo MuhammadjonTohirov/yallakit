@@ -8,7 +8,7 @@
 import Foundation
 import Core
 
-public enum OrderStatus: String, CaseIterable, Codable, Sendable {
+public enum OrderStatus: String, CaseIterable, Codable {
     case new
     case sending
     case userSending
@@ -61,7 +61,7 @@ public enum OrderStatus: String, CaseIterable, Codable, Sendable {
     }
 }
 
-public struct OrderDetails: Codable, Sendable {
+public struct OrderDetails: Codable {
     public let id: Int
     public let dateTime: Double?
     public let service: String
@@ -110,7 +110,7 @@ public struct OrderDetails: Codable, Sendable {
         self.paymentType = paymentType
     }
     
-    public struct StatusTime: Codable, Sendable {
+    public struct StatusTime: Codable {
         public let status: OrderStatus
         public let time: Double
         
@@ -126,7 +126,7 @@ public struct OrderDetails: Codable, Sendable {
     }
 }
 
-public struct OrderTaxiDetails: Codable, Sendable {
+public struct OrderTaxiDetails: Codable {
     public let tariff: String
     public let startPrice: Float?
     public let distance: Float?
@@ -163,7 +163,7 @@ public struct OrderTaxiDetails: Codable, Sendable {
     }
 }
 
-public struct TaxiOrderExecutor: Codable, Sendable {
+public struct TaxiOrderExecutor: Codable {
     public let id: Int
     public let phone: String
     public let givenNames: String
@@ -186,7 +186,7 @@ public struct TaxiOrderExecutor: Codable, Sendable {
     }
 }
 
-public struct TaxiOrderExecutorCoords: Codable, Sendable {
+public struct TaxiOrderExecutorCoords: Codable {
     public let lat: Double
     public let lng: Double
     public let heading: Double?
@@ -205,7 +205,7 @@ public struct TaxiOrderExecutorCoords: Codable, Sendable {
     }
 }
 
-public struct TaxiOrderExecutorDriver: Codable, Sendable {
+public struct TaxiOrderExecutorDriver: Codable {
     public let id: Int
     public let color: TaxiOrderExecutorDriver.Color?
     public let stateNumber: String?
@@ -229,7 +229,7 @@ public struct TaxiOrderExecutorDriver: Codable, Sendable {
         self.model = res.driver?.model
     }
     
-    public struct Color: Codable, Sendable {
+    public struct Color: Codable {
         public let color: String?
         public let colorName: String?
         
@@ -295,7 +295,7 @@ public extension OrderDetails {
     }
 }
 
-public struct OrderServiceItem: Codable, Sendable {
+public struct OrderServiceItem: Codable {
     public var cost: Double?
     public var costType: String?
     public var name: String?

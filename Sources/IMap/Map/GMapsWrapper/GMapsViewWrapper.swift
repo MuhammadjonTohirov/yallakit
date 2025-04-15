@@ -22,12 +22,13 @@ public struct GMapCamera {
     }
 }
 
-public struct GMapsViewWrapper: UIViewControllerRepresentable {
+public struct GMapsViewWrapper: UIViewControllerRepresentable, @unchecked Sendable {
     var inputCamera: GMapCamera?
     @Binding var outCamera: GMapCamera?
     var bottomPadding: CGFloat
     var showMyLocation: Bool
     var onStartDragging: () -> ()
+    var onStartMoving: () -> ()
     var onEndDragging: (_ location: CLLocation) -> ()
 
     var routeCoordinates: [RouteDataCoordinate]?
@@ -108,8 +109,7 @@ public struct GMapsViewWrapper: UIViewControllerRepresentable {
             self.parent = parent
         }
         
-        @MainActor
-        public func mapView(_ mapView: GMSMapView, idleAt position: GMSCameraPosition) {
+        @MainActor public func mapView(_ mapView: GMSMapView, idleAt position: GMSCameraPosition) {
             let lat = position.target.latitude
             let lng = position.target.longitude
             
@@ -125,12 +125,13 @@ public struct GMapsViewWrapper: UIViewControllerRepresentable {
             self.parent.onEndDragging(mapView.locationAtCenter)
         }
         
-        @MainActor
-        public func mapView(_ mapView: GMSMapView, willMove gesture: Bool) {
+        @MainActor public func mapView(_ mapView: GMSMapView, willMove gesture: Bool) {
             debugPrint("Will move \(gesture)")
             
             if gesture {
                 self.parent.onStartDragging()
+            } else {
+                self.parent.onStartMoving()
             }
         }
         

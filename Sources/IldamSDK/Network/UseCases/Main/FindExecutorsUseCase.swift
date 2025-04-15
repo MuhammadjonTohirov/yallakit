@@ -7,12 +7,16 @@
 
 import Foundation
 
-public protocol FindExecutorsUseCaseProtocol {
+public protocol FindExecutorsUseCaseProtocol: Sendable {
     func getExecutors(tariffId: Int?, lat: Double, lng: Double, options: [Int]) async -> TaxiExecutors?
 }
 
-public struct FindExecutorsUseCase: FindExecutorsUseCaseProtocol {
-    nonisolated(unsafe) public static var shared: FindExecutorsUseCaseProtocol = FindExecutorsUseCase()
+public struct FindExecutorsUseCase: FindExecutorsUseCaseProtocol, @unchecked Sendable {
+    public static let shared: FindExecutorsUseCaseProtocol = FindExecutorsUseCase()
+    
+    public init() {
+        
+    }
     
     public func getExecutors(tariffId: Int?, lat: Double, lng: Double, options: [Int]) async -> TaxiExecutors? {
         debugPrint("GetExecutors", "Real")
@@ -22,23 +26,5 @@ public struct FindExecutorsUseCase: FindExecutorsUseCaseProtocol {
         }
         
         return .init(timeout: result.timeout, executors: result.executors?.map({.init(id: $0.id, heading: $0.heading, lat: $0.lat, lng: $0.lng, distance: $0.distance)}) ?? [])
-    }
-}
-
-public struct FindExecutorsMockUseCase: FindExecutorsUseCaseProtocol {
-    public init() {
-        
-    }
-    public func getExecutors(tariffId: Int?, lat: Double, lng: Double, options: [Int]) async -> TaxiExecutors? {
-        debugPrint("GetExecutors", "Mock")
-        return .init(timeout: 50, executors: [
-            .init(
-                id: 0,
-                heading: 10,
-                lat: 40.3838485874778,
-                lng: 71.78310088813305,
-                distance: 1
-            )
-        ])
     }
 }

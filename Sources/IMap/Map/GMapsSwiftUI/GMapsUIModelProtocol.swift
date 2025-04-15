@@ -9,10 +9,11 @@ import Foundation
 import Core
 import GoogleMaps
 
-public protocol GMapsDelegate: AnyObject {
+public protocol GMapsDelegate: AnyObject, Sendable {
     func onPickAddress(model: GMapsUIModel, _ location: CLLocation, _ address: String)
     func onEndDragging(model: GMapsUIModel, _ location: CLLocation)
     func onStartDragging(model: GMapsUIModel)
+    func onStartMoving(model: GMapsUIModel)
     
     func onFocusToRoute()
 }
@@ -28,9 +29,11 @@ public extension GMapsDelegate {
     ) {
         
     }
+    
+    func onStartMoving(model: GMapsUIModel) {}
 }
 
-public protocol GMapsUIModelProtocol: AnyObject {
+public protocol GMapsUIModelProtocol: AnyObject, Sendable {
     var pickedLocation: CLLocation? {get set}
     var pickedAddress: String {get set}
     var hasAddressPicker: Bool {get}
@@ -60,7 +63,7 @@ public protocol GMapsUIModelProtocol: AnyObject {
     
     func set(pickedLocation: CLLocation)
     
-    func set(location: CLLocationCoordinate2D, rotation: CLLocationDegrees, toExecutorId id: String) async
+    func set(location: CLLocationCoordinate2D, rotation: CLLocationDegrees, toExecutorId id: String)
     
     func loadPickedAddressDetails()
     
@@ -87,8 +90,9 @@ public protocol GMapsLocationPickerModelProtocol {
     func focusToCurrentLocation(animate: Bool, lock: Bool)
 }
 
-public extension GMapsUIModel {
-    @MainActor func set(location: CLLocationCoordinate2D, rotation: CLLocationDegrees, toExecutorId id: String) {
+public extension GMapsUIModelProtocol {
+    @MainActor
+    func set(location: CLLocationCoordinate2D, rotation: CLLocationDegrees, toExecutorId id: String) {
         self.executorMarkers?.forEach({ marker in
             if marker.accessibilityLabel == id {
                 marker.position = location

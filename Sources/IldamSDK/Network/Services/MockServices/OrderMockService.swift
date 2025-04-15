@@ -108,6 +108,6 @@ public final class OrderNetworkMockService: OrderNetworkService {
     public override func orderTaxi(req: OrderTaxiRequest) async throws -> Int? {
         isOrderCreated = true
         Logging.l(tag: "OrderNetworkMockService", "Order new test order")
-        return try await OrderTaxiMockUseCase().orderTaxi(req: req)
+        fatalError("\(#function), Not implemented")
     }
 }

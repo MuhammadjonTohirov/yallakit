@@ -16,8 +16,7 @@ public enum GMapsUIState {
     case normal
 }
 
-@preconcurrency
-open class GMapsUIModel: ObservableObject, @preconcurrency GMapsUIModelProtocol, @preconcurrency GMapsLocationPickerModelProtocol {
+open class GMapsUIModel: ObservableObject, @preconcurrency GMapsUIModelProtocol, GMapsLocationPickerModelProtocol, @unchecked Sendable {
     @Published public var currentLocation: CLLocation?
     @Published public var camera: GMapCamera? {
         didSet {
@@ -32,6 +31,7 @@ open class GMapsUIModel: ObservableObject, @preconcurrency GMapsUIModelProtocol,
     
     var shouldFocusToCurrentLocation: Bool = false
     
+    @MainActor
     @Published public private(set) var bottomPadding: CGFloat = 0
     
     @Published
@@ -43,7 +43,9 @@ open class GMapsUIModel: ObservableObject, @preconcurrency GMapsUIModelProtocol,
     @Published public var isDragging: Bool = false {
         didSet {
             if isDragging {
-                self.pinModel.set(state: .pinning)
+                Task { @MainActor in
+                    self.pinModel.set(state: .pinning)
+                }
             }
         }
     }
@@ -68,16 +70,14 @@ open class GMapsUIModel: ObservableObject, @preconcurrency GMapsUIModelProtocol,
         
     }
     
-    @MainActor
     func onAppear() {
-        GLocationManager.shared.startUpdatingLocation()
-        set(pinOffsetY: (pickerShift - bottomPadding) / 2)
-        currentLocationChangeHandler()
-        
-        let btnsafe = UIApplication.shared.safeArea.bottom
-        
-        self.set(bottomPadding: 280 + btnsafe)
-    }
+        Task{ @MainActor in
+            bottomPadding = 280 + UIApplication.shared.safeArea.bottom
+            await GLocationManager.shared.startUpdatingLocation()
+            set(pinOffsetY: (pickerShift - bottomPadding) / 2)
+            currentLocationChangeHandler()
+       }
+     }
     
     private func currentLocationChangeHandler() {
         NotificationCenter.default.addObserver(
@@ -93,7 +93,6 @@ open class GMapsUIModel: ObservableObject, @preconcurrency GMapsUIModelProtocol,
         self.isMapVisible = isMapVisible
     }
     
-    @MainActor
     @objc
     private func onChangeCurrentLocation(_ notification: Notification) {
         guard let _ = notification.object as? CLLocation else {
@@ -112,15 +111,16 @@ open class GMapsUIModel: ObservableObject, @preconcurrency GMapsUIModelProtocol,
         }
     }
     
-    @MainActor
     open func focusToCurrentLocation(animate: Bool = false, lock: Bool = false) {
         if let loc = GLocationManager.shared.currentLocation {
-            debugPrint("GMapsModel", "current", loc)
-            self.focus(toLocation: loc, animate: animate, lock: lock)
+//            if (self.pickedLocation?.isEqual(to: loc) ?? false) {
+//                return
+//            }
+            
+            focus(toLocation: loc, animate: animate, lock: lock)
         }
     }
     
-    @MainActor
     open func focus(
         toLocation location: CLLocation,
         maintainZoom: Bool = false,
@@ -128,7 +128,7 @@ open class GMapsUIModel: ObservableObject, @preconcurrency GMapsUIModelProtocol,
         lock: Bool = false
     ) {
         let currentZoom = cameraValue?.camera?.zoom ?? 16.5
-        debugPrint("GMapsModel", "focus", location)
+        Logging.l(tag: "GMapsUIModel", "focus \(location)")
         let camera = GMSCameraPosition.camera(
             withLatitude: location.coordinate.latitude,
             longitude: location.coordinate.longitude,
@@ -143,13 +143,7 @@ open class GMapsUIModel: ObservableObject, @preconcurrency GMapsUIModelProtocol,
             animate: animate
         )
 
-        self.pickedLocation = location
-
-        if !lock {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                self.camera = nil
-            }
-        }
+        self.set(pickedLocation: location)
     }
     
     open func endDragging(with location: CLLocation) {
@@ -167,16 +161,21 @@ open class GMapsUIModel: ObservableObject, @preconcurrency GMapsUIModelProtocol,
         
         self.delegate?.onStartDragging(model: self)
         
-        withAnimation {
-            self.isDragging = true
-        }
-        
-        if self.hasAddressPicker {
-            self.set(address: "")
+        DispatchQueue.main.async {
+            withAnimation {
+                self.isDragging = true
+            }
+            
+            if self.hasAddressPicker {
+                self.set(address: "")
+            }
         }
     }
     
-    @MainActor
+    open func startMoving() {
+        self.delegate?.onStartMoving(model: self)
+    }
+    
     open func focusTo(coordinates: [CLLocationCoordinate2D], lock: Bool = false) {
         let path = GMSMutablePath()
 
@@ -191,14 +190,9 @@ open class GMapsUIModel: ObservableObject, @preconcurrency GMapsUIModelProtocol,
             animate: true
         )
         
-        if !lock {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                self.camera = nil
-            }
-        }
+        Logging.l(tag: "GMapsUIModel", "focus to coordinates")
     }
     
-    @MainActor
     open func zoomOut() {
         guard let mapCamera = cameraValue?.camera else {
             debugPrint("GMapsUIModel: zoomOut - cameraValue is nil")
@@ -226,13 +220,9 @@ open class GMapsUIModel: ObservableObject, @preconcurrency GMapsUIModelProtocol,
             animate: false
         )
         
-        debugPrint("GMapUIModel", "zoomOut", currentZoom - 0.2)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-            self.camera = nil
-        }
+        debugPrint("GMapsUIModel", "zoomOut", currentZoom - 0.2)
     }
     
-    @MainActor
     @discardableResult
     open func focusToRoute() -> Bool {
         guard let routes = routeCoordinates else {
@@ -244,7 +234,8 @@ open class GMapsUIModel: ObservableObject, @preconcurrency GMapsUIModelProtocol,
         
         if !routes.isEmpty {
             focusTo(
-                coordinates: routes.chunked(into: 3).reduce(into: [CLLocationCoordinate2D](), { $0 += $1.map { $0.coordinate } })
+                coordinates: routes.chunked(into: 3)
+                    .reduce(into: [CLLocationCoordinate2D](), { $0 += $1.map { $0.coordinate } })
             )
             
             return true
@@ -253,33 +244,28 @@ open class GMapsUIModel: ObservableObject, @preconcurrency GMapsUIModelProtocol,
         return false
     }
     
-    @MainActor
     open func loadPickedAddressDetails() {
         guard let location = self.pickedLocation else {
             return
         }
         
-        Task(priority: .utility) { [weak self] in
-            guard let self else { return }
-            
+        Task.detached(priority: .utility) { [weak self] in
+            guard let self else {return}
             do {
                 if let address = try await MapNetworkService.shared.getAddress(
                     from: location.coordinate.latitude,
-                    lng: location.coordinate.longitude
-                )?.name {
+                    lng: location.coordinate.longitude)?.name {
+                    
                     await MainActor.run {
                         self.set(address: address)
-
-                        withAnimation {
-                            self.isDragging = false
-                        }
-
+                        
+                        self.isDragging = false
                         self.delegate?.onPickAddress(model: self, location, address)
                         self.pinModel.set(state: .initial)
                     }
                 }
             } catch {
-                // Handle error here
+                
             }
         }
     }
@@ -303,6 +289,7 @@ open class GMapsUIModel: ObservableObject, @preconcurrency GMapsUIModelProtocol,
         self.hasAddressPicker = hasAddressPicker
     }
     
+    @MainActor
     open func set(bottomPadding: CGFloat) {
         self.bottomPadding = bottomPadding
         
@@ -353,5 +340,16 @@ public extension GRoutePoint {
 public extension GMapsUIModel {
     func set(shouldFocusToCurrentLocation: Bool) {
         self.shouldFocusToCurrentLocation = shouldFocusToCurrentLocation
+    }
+}
+
+public extension CLLocation {
+    func isEqual(to: CLLocation) -> Bool {
+        let llat = Int(self.coordinate.latitude * 100000)
+        let llong = Int(self.coordinate.longitude * 100000)
+        let tlat = Int(to.coordinate.latitude * 100000)
+        let tlong = Int(to.coordinate.longitude * 100000)
+        
+        return llat == tlat && llong == tlong
     }
 }

@@ -18,12 +18,14 @@ public class PinViewModel: ObservableObject {
         
     }
     
+    @MainActor
     public func set(state: PinState) {
         debugPrint("Set pin state \(state.id)")
         if state == .initial {
             print(#file, #function, #line)
         }
-        withAnimation(.easeInOut(duration: 0.3)) {
+        
+        withAnimation(.easeInOut(duration: 0.2)) {
             self.state = state
         }
     }

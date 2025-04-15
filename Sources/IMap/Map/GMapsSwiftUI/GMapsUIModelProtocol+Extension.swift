@@ -38,18 +38,24 @@ public extension GMapsUIModelProtocol {
     }
     
     func clearRouteAndMarkers() {
-        self.clearRouteMarkers()
-        self.routeCoordinates = []
+        mainIfNeeded {
+            self.clearRouteMarkers()
+            self.routeCoordinates = []
+        }
     }
     
     func clearRouteMarkers() {
-        self.routeMarkers?.forEach({ marker in
-            marker.map = nil
-        })
-        self.routeMarkers?.removeAll()
+        mainIfNeeded {
+            self.routeMarkers?.forEach({ marker in
+                marker.map = nil
+            })
+            self.routeMarkers?.removeAll()
+        }
     }
     
     func clearRoute() {
-        self.routeCoordinates = []
+        mainIfNeeded {
+            self.routeCoordinates = []
+        }
     }
 }

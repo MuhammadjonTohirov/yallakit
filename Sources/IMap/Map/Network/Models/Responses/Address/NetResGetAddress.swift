@@ -9,7 +9,15 @@ import Foundation
 import NetworkLayer
 
 struct NetResGetAddress: NetResBody {
-    var lat: String
-    var lng: String
+    let id: Int?
+    var lat: Double
+    var lng: Double
     var name: String
+    
+    enum CodingKeys: String, CodingKey {
+        case id
+        case lat
+        case lng
+        case name = "display_name"
+    }
 }

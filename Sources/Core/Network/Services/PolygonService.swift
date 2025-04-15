@@ -8,30 +8,26 @@
 import Foundation
 import NetworkLayer
 
-public protocol PolygonNetworkServiceProtocol {
+public protocol PolygonNetworkServiceProtocol: Sendable {
     var polygonList: [PolygonItem] { get }
     
     @discardableResult
-    mutating func getPolygonList() async throws -> [PolygonItem]
+    func getPolygonList() async throws -> [PolygonItem]
     
     func polygon(at lat: Double, lng: Double) -> PolygonItem?
     
     func isInPolygon(lat: Double, lng: Double) -> Bool
 }
 
-public struct PolygonService: PolygonNetworkServiceProtocol {
+public final class PolygonService: @unchecked Sendable, PolygonNetworkServiceProtocol {
     public var polygonList: [PolygonItem] = []
     
     typealias Coor = (lat: Double, lng: Double)
     
-    public init() {
-        
-    }
-    
-    nonisolated(unsafe) public static let shared: PolygonNetworkServiceProtocol = PolygonService()
+    public static let shared: PolygonNetworkServiceProtocol = PolygonService()
     
     @discardableResult
-    mutating public func getPolygonList() async throws -> [PolygonItem] {
+    public func getPolygonList() async throws -> [PolygonItem] {
         guard polygonList.isEmpty else {
             return polygonList
         }

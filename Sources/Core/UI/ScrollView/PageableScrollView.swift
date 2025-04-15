@@ -34,6 +34,25 @@ public struct PageableScrollView<Content: View>: View {
     /// Scroll view height tracker
     @State private var scrollViewHeight: CGFloat = 0
     
+    var title: String = ""
+    
+    private var opactiy: CGFloat {
+        let opc: CGFloat = 1 - (safeArea.top - titleRect.minY) / (safeArea.top - statusBarHeight)
+        return opc
+    }
+    
+    @State
+    private
+    var safeArea: EdgeInsets = .init()
+     
+    private
+    var statusBarHeight: CGFloat {
+        UIApplication.shared.statusBarHeight.height
+    }
+
+    @State private var show = false
+    @State private var titleRect: CGRect = .zero
+
     // MARK: - Initialization
     
     /// Initialize a new pageable scroll view
@@ -42,10 +61,12 @@ public struct PageableScrollView<Content: View>: View {
     ///   - onReachedBottom: Callback when user scrolls near bottom
     ///   - content: Content view builder
     public init(
+        title: String = "",
         bottomThreshold: CGFloat = 200,
         onReachedBottom: @escaping () -> Void,
         @ViewBuilder content: () -> Content
     ) {
+        self.title = title
         self.content = content()
         self.bottomThreshold = bottomThreshold
         self.onReachedBottom = onReachedBottom
@@ -55,9 +76,24 @@ public struct PageableScrollView<Content: View>: View {
     
     public var body: some View {
         ScrollView {
-            LazyVStack {
-                // Main content
-                content
+            LazyVStack(alignment: .leading, spacing: 0) {
+                if !title.isEmpty {
+                    HStack {
+                        Text(title)
+                            .multilineTextAlignment(.leading)
+                            .foregroundStyle(Color.label)
+                            .font(.inter(.bold, size: 32))
+                            .padding(.top, 32)
+                            .padding(.leading, 20)
+                            .readRect(rect: $titleRect)
+                            .opacity(opactiy)
+                        Spacer()
+                    }
+                }
+                
+                LazyVStack(spacing: 0) {
+                    content
+                }
                 
                 // Spacer at the bottom that triggers pagination
                 Color.clear
@@ -84,6 +120,11 @@ public struct PageableScrollView<Content: View>: View {
                 }
             )
         }
+        .toolbar(content: {
+            ToolbarItem(placement: .principal) {
+                titleToolbar
+            }
+        })
         // Track scroll view size and scroll position
         .overlay(
             GeometryReader { geometry in
@@ -96,6 +137,9 @@ public struct PageableScrollView<Content: View>: View {
                     .onChange(of: geometry.size.height) { newHeight in
                         scrollViewHeight = newHeight
                         checkIfBottomReached()
+                    }
+                    .onChange(of: geometry.safeAreaInsets) { value in
+                        self.safeArea = value
                     }
             }
         )
@@ -135,10 +179,21 @@ public struct PageableScrollView<Content: View>: View {
             hasReachedBottom = false
         }
     }
+    
+    @ViewBuilder
+    private var titleToolbar: some View {
+        if title.isEmpty {
+            EmptyView()
+        } else {
+            Text(title)
+                .font(.inter(.bold, size: 16))
+                .opacity((0.3 - opactiy).limitBottom(0).limitTop(1))
+        }
+    }
 }
 
 // MARK: - Preference Key for Scroll Offset
-struct ScrollOffsetKey: PreferenceKey {
+struct ScrollOffsetKey: PreferenceKey, Sendable {
     nonisolated(unsafe) static var defaultValue: CGFloat = 0
     static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
         value = nextValue()

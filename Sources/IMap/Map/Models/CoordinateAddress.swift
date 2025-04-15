@@ -7,15 +7,17 @@
 
 import Foundation
 
-public struct CoordinateAddress: Sendable {
-    public var lat: String
-    public var lng: String
+public struct CoordinateAddress {
+    public let id: Int?
+    public var lat: Double
+    public var lng: Double
     public var name: String
     
-    public init(lat: String, lng: String, name: String) {
+    public init(lat: Double, lng: Double, name: String) {
         self.lat = lat
         self.lng = lng
         self.name = name
+        self.id = nil
     }
     
     init?(with: NetResGetAddress?) {
@@ -23,6 +25,7 @@ public struct CoordinateAddress: Sendable {
             return nil
         }
         
+        self.id = with.id
         self.lat = with.lat
         self.lng = with.lng
         self.name = with.name

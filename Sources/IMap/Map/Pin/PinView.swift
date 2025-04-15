@@ -51,7 +51,6 @@ public struct PinView: View {
                     .frame(width: 2, height: 20)
                     .visibility(vm.state != .searching)
             }
-            .offset(y: offsetY)
             .background {
                 Rectangle()
                     .foregroundStyle(Color.black.opacity(0))
@@ -63,11 +62,12 @@ public struct PinView: View {
                         isPinAnimating = true
                     }
                 default:
-                    withAnimation {
+                    withAnimation(.easeInOut(duration: 0.2)) {
                         isPinAnimating = false
                     }
                 }
             })
+            .offset(y: offsetY)
             
             Circle()
                 .frame(width: 8, height: 8)
@@ -76,22 +76,24 @@ public struct PinView: View {
     }
     
     private var pinCircleOverlay: some View {
-        Group {
-            switch vm.state {
-            case .initial, .loading:
-                pinningOverlay
-            case .pinning:
-                loadingOverlay
-            case .waiting(let time, let unit):
+        ZStack {
+            // Pinning overlay (white circle)
+            pinningOverlay
+                .opacity(vm.state == .initial || vm.state == .loading || vm.state == .searching ? 1 : 0)
+            
+            // Loading overlay (spinner)
+            loadingOverlay
+                .opacity(vm.state == .pinning ? 1 : 0)
+            
+            // Waiting overlay (timer)
+            if case .waiting(let time, let unit) = vm.state {
                 waitingOverlay(time: time, unit: unit)
-            case .searching:
-                pinningOverlay
-            @unknown default:
-                EmptyView()
+                    .opacity(1)
+            } else {
+                waitingOverlay(time: "", unit: "")
+                    .opacity(0)
             }
         }
-        .transition(.identity)
-        .animation(.easeInOut, value: vm.state)
     }
     
     private var loadingOverlay: some View {

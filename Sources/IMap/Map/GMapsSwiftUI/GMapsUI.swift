@@ -28,6 +28,9 @@ public struct GMapsUI: View {
                 onStartDragging: {
                     viewModel.startDragging() 
                 },
+                onStartMoving: {
+                    viewModel.startMoving()
+                },
                 onEndDragging: { location in
                     Logging.l("End dragging \(location)")
                     viewModel.endDragging(with: location)

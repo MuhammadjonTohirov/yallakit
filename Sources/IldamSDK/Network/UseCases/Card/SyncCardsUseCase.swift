@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 import Core
 
-public protocol SyncCardsUseCase {
+public protocol SyncCardsUseCase: Sendable {
     
 }
 
@@ -43,10 +43,10 @@ public enum CardType {
     }
 }
 
-public final class SyncCardsUseCaseImpl: SyncCardsUseCase {
+public final class SyncCardsUseCaseImpl: @unchecked Sendable, SyncCardsUseCase {
     public var cards: [CardItem] = []
     
-    nonisolated(unsafe) public static let shared = SyncCardsUseCaseImpl()
+    public static let shared = SyncCardsUseCaseImpl()
     
     public var defaultCard: CardItem? {
         cards.first(where: {$0.isDefault})

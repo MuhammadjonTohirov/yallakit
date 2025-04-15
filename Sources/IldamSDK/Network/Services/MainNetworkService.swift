@@ -9,7 +9,7 @@ import Foundation
 import Core
 import NetworkLayer
 
-public protocol MainNetworkServiceProtocl {
+public protocol MainNetworkServiceProtocl: Sendable {
     func getTaxiTariffs(coords: [(lat: Double, lng: Double)], addressId: Int?, options: [Int]?) async -> [TaxiTariff]
     
     func loadAddress(text: String) async -> [SearchAddressItem]?
@@ -38,8 +38,8 @@ public protocol MainNetworkServiceProtocl {
     func getOrderDetails(orderId: Int) async throws -> OrderDetails?
 }
 
-public struct MainNetworkService: MainNetworkServiceProtocl {
-    nonisolated(unsafe) public static let shared = MainNetworkService()
+public struct MainNetworkService: MainNetworkServiceProtocl, Sendable {
+    public static let shared = MainNetworkService()
     
     public func getTaxiTariffs(coords: [(lat: Double, lng: Double)], addressId: Int?, options: [Int]?) async -> [TaxiTariff] {
         let result = try? await RouteTariffCalcUseCase().execute(
@@ -49,8 +49,11 @@ public struct MainNetworkService: MainNetworkServiceProtocl {
                 addressId: addressId
             )
         )
-        
-        return result?.tariffs ?? []
+        let tariffs = result?.tariffs ?? []
+        if tariffs.isEmpty {
+            print("STOP")
+        }
+        return tariffs
     }
     
     public func loadAddress(text: String) async -> [SearchAddressItem]? {

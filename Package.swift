@@ -46,8 +46,7 @@ let package = Package(
                 "GoogleMapsCore"
             ],
             resources: [
-//                Copy bundle
-                .copy("GoogleMaps.bundle")
+                .copy("GoogleMaps.bundle"),
             ],
             linkerSettings: [
                 .linkedFramework("QuartzCore"),

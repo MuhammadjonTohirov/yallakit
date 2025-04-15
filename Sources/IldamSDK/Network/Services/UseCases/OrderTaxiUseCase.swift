@@ -9,12 +9,12 @@ import Foundation
 import NetworkLayer
 import Core
 
-public protocol OrderTaxiUseCaseProtocol {
+public protocol OrderTaxiUseCaseProtocol: Sendable {
     func orderTaxi(req: OrderTaxiRequest) async throws -> Int?
 }
 
-public struct OrderTaxiUseCase: OrderTaxiUseCaseProtocol {
-    nonisolated(unsafe) public static var shared: OrderTaxiUseCaseProtocol = OrderTaxiUseCase()
+public struct OrderTaxiUseCase: OrderTaxiUseCaseProtocol, @unchecked Sendable {
+    public static let shared: OrderTaxiUseCaseProtocol = OrderTaxiUseCase()
     
     public init() {
         
@@ -28,12 +28,5 @@ public struct OrderTaxiUseCase: OrderTaxiUseCaseProtocol {
         ))
         
         return result?.result?.id
-    }
-}
-
-public struct OrderTaxiMockUseCase: OrderTaxiUseCaseProtocol {
-    public func orderTaxi(req: OrderTaxiRequest) async throws -> Int? {
-        Logging.l(tag: "OrderTaxiMockUseCase", "order taxi")
-        return 1216985
     }
 }

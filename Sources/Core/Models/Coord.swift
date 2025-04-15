@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Coord: Codable, Sendable {
+public struct Coord: Codable {
     public var lat: Double
     public var lng: Double
     

@@ -36,8 +36,8 @@ public enum AppTheme: Codable {
     }
 }
 
-final public class UserSettings {
-    nonisolated(unsafe) public static let shared = UserSettings()
+final public class UserSettings: @unchecked Sendable {
+    public static let shared = UserSettings()
     
     public private(set) var userAvatarURL: URL = URL.baseAPICli.appendingPath("Client", "ProfileAvatar")
     
@@ -87,7 +87,8 @@ final public class UserSettings {
     @codableWrapper(key: "fcmToken", nil)
     public var fcmToken: String?
     
-    @MainActor public func set(interfaceStyle: UIUserInterfaceStyle) {
+    @MainActor
+    public func set(interfaceStyle: UIUserInterfaceStyle) {
         (UIApplication.shared.connectedScenes.first as? UIWindowScene)?.windows.forEach({ window in
             window.overrideUserInterfaceStyle = interfaceStyle
         })
