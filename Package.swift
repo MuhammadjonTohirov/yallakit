@@ -8,10 +8,10 @@ let package = Package(
     ],
     products: [
         .library(name: "YallaKit", targets: ["YallaKit"]),
-        .library(name: "Core", type: .dynamic, targets: ["Core"]),
-        .library(name: "NetworkLayer", type: .dynamic, targets: ["NetworkLayer"]),
+        .library(name: "Core", targets: ["Core"]),
+        .library(name: "NetworkLayer", targets: ["NetworkLayer"]),
         .library(name: "IMap", targets: ["IMap"]),
-        .library(name: "IldamSDK", type: .dynamic, targets: ["IldamSDK"])
+        .library(name: "IldamSDK", targets: ["IldamSDK"])
     ],
     dependencies: [
         // ✅ Google Maps SDK via SPM
@@ -24,8 +24,7 @@ let package = Package(
                 "Core",
                 "NetworkLayer",
                 "IMap",
-                "IldamSDK",
-                "GoogleMapsWrapper"
+                "IldamSDK"
             ]
         ),
         .target(
