@@ -7,8 +7,8 @@
 
 import Foundation
 
-struct GMapStyles {
-    static let dark = """
+public struct GMapStyles {
+    public static let dark = """
             [
               {
                 "elementType": "geometry",
@@ -386,5 +386,5 @@ struct GMapStyles {
     ]
     """
     
-    static let `default`: String = "[]"
+    public static let `default`: String = "[]"
 }

@@ -39,11 +39,11 @@ public class GMapViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    public override func loadView() {
+    open override func loadView() {
         super.loadView()
     }
     
-    public override func viewDidAppear(_ animated: Bool) {
+    open override func viewDidAppear(_ animated: Bool) {
         self.view.addSubview(map)
         map.settings.rotateGestures = true
         map.settings.tiltGestures = false
@@ -58,12 +58,12 @@ public class GMapViewController: UIViewController {
         map.animate(toViewingAngle: GMapStatics.viewAngle)
     }
     
-    public override func viewDidLayoutSubviews() {
+    open override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         map.frame = view.bounds
     }
     
-    public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+    open override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
@@ -84,18 +84,18 @@ public class GMapViewController: UIViewController {
         }
     }
     
-    func focus(toLocation location: CLLocation) {
+    open func focus(toLocation location: CLLocation) {
         // set angle 45
         map.animate(toLocation: location.coordinate)
         map.animate(toViewingAngle: GMapStatics.viewAngle)
     }
     
-    func setShowsMyCurrentLocation(to value: Bool) {
+    open func setShowsMyCurrentLocation(to value: Bool) {
         map.isMyLocationEnabled = value
     }
 }
 
-extension GMSMapView {
+public extension GMSMapView {
     var locationAtCenter: CLLocation {
         // Account for both top and bottom padding to find the true visual center
         // If top padding > bottom padding, center shifts up
