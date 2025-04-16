@@ -13,13 +13,12 @@ import Core
 public class PinViewModel: ObservableObject {
     @Published public var state: PinState = .initial
     
-    @available(*, deprecated, message: "Not used anymore")
-    public func set(dragging: Bool) {
+    public init() {
         
     }
     
     @MainActor
-    public func set(state: PinState) {
+    open func set(state: PinState) {
         debugPrint("Set pin state \(state.id)")
         if state == .initial {
             print(#file, #function, #line)
