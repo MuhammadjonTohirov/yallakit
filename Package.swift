@@ -20,7 +20,13 @@ let package = Package(
     targets: [
         .target(
             name: "YallaKit",
-            dependencies: ["Core", "NetworkLayer", "IMap", "IldamSDK"]
+            dependencies: [
+                "Core",
+                "NetworkLayer",
+                "IMap",
+                "IldamSDK",
+                "GoogleMapsWrapper"
+            ]
         ),
         .target(
             name: "Core",
