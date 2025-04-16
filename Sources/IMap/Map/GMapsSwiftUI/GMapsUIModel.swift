@@ -25,11 +25,19 @@ open class GMapsUIModel: ObservableObject, @preconcurrency GMapsUIModelProtocol,
     }
     @Published public var cameraValue: GMapCamera?
     @Published public var isMapEnabled: Bool = true
+    private let defaultZoomLevel: Float = 16.5
     
     @Published public private(set) var state: GMapsUIState = .normal
     @Published public private(set) var hasAddressView: Bool = false
     
     var shouldFocusToCurrentLocation: Bool = false
+    lazy var options: GMSMapViewOptions = {
+        let opt = GMSMapViewOptions()
+        if let currentLocation = GLocationManager.shared.currentLocation {
+            opt.camera = .init(latitude: currentLocation.coordinate.latitude, longitude: currentLocation.coordinate.longitude, zoom: defaultZoomLevel)
+        }
+        return opt
+    }()
     
     @MainActor
     @Published public private(set) var bottomPadding: CGFloat = 0
@@ -123,12 +131,12 @@ open class GMapsUIModel: ObservableObject, @preconcurrency GMapsUIModelProtocol,
         animate: Bool = false,
         lock: Bool = false
     ) {
-        let currentZoom = cameraValue?.camera?.zoom ?? 16.5
+        let currentZoom = cameraValue?.camera?.zoom ?? self.defaultZoomLevel
         Logging.l(tag: "GMapsUIModel", "focus \(location)")
         let camera = GMSCameraPosition.camera(
             withLatitude: location.coordinate.latitude,
             longitude: location.coordinate.longitude,
-            zoom: maintainZoom ? currentZoom : 16.5, // Zoom level
+            zoom: maintainZoom ? currentZoom : self.defaultZoomLevel, // Zoom level
             bearing: 0, // Orientation of the camera, 0 means north
             viewingAngle: GMapStatics.viewAngle // Tilt of the camera in degrees
         )

@@ -23,6 +23,7 @@ public struct GMapsUI: View {
             GMapsViewWrapper(
                 inputCamera: viewModel.camera,
                 outCamera: $viewModel.cameraValue,
+                options: viewModel.options,
                 bottomPadding: viewModel.bottomPadding,
                 showMyLocation: viewModel.showMyLocation,
                 onStartDragging: {

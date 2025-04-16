@@ -25,6 +25,7 @@ public struct GMapCamera {
 public struct GMapsViewWrapper: UIViewControllerRepresentable, @unchecked Sendable {
     var inputCamera: GMapCamera?
     @Binding var outCamera: GMapCamera?
+    var options: GMSMapViewOptions
     var bottomPadding: CGFloat
     var showMyLocation: Bool
     var onStartDragging: () -> ()
@@ -36,7 +37,7 @@ public struct GMapsViewWrapper: UIViewControllerRepresentable, @unchecked Sendab
     var executerPoints: [GMSMarker]?
 
     public func makeUIViewController(context: Context) -> GMapViewController {
-        let vc = GMapViewController()
+        let vc = GMapViewController(option: options)
         vc.delegate = context.coordinator
 
         return vc

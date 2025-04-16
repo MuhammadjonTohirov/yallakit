@@ -15,10 +15,10 @@ public struct GMapStatics {
 }
 
 public class GMapViewController: UIViewController {
+    private var options: GMSMapViewOptions
     lazy var map = {
         GMSServicesConfig.setupAPIKey()
         Logging.l("GMaps \(GMSServices.sdkVersion())")
-        let options: GMSMapViewOptions = .init()
         return GMSMapView.init(options: options)
     }()
     
@@ -28,6 +28,15 @@ public class GMapViewController: UIViewController {
         didSet {
             map.delegate = delegate
         }
+    }
+    
+    public init(option: GMSMapViewOptions) {
+        self.options = option
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    public required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     public override func loadView() {
