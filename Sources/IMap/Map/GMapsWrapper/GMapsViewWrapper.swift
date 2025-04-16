@@ -35,6 +35,20 @@ public struct GMapsViewWrapper: UIViewControllerRepresentable, @unchecked Sendab
     var routeCoordinates: [RouteDataCoordinate]?
     var routePoints: [GMSMarker]?
     var executerPoints: [GMSMarker]?
+    
+    public init(inputCamera: GMapCamera? = nil, outCamera: Binding<GMapCamera?>, options: GMSMapViewOptions, bottomPadding: CGFloat, showMyLocation: Bool, onStartDragging: @escaping () -> Void, onStartMoving: @escaping () -> Void, onEndDragging: @escaping (_: CLLocation) -> Void, routeCoordinates: [RouteDataCoordinate]? = nil, routePoints: [GMSMarker]? = nil, executerPoints: [GMSMarker]? = nil) {
+        self.inputCamera = inputCamera
+        self._outCamera = outCamera
+        self.options = options
+        self.bottomPadding = bottomPadding
+        self.showMyLocation = showMyLocation
+        self.onStartDragging = onStartDragging
+        self.onStartMoving = onStartMoving
+        self.onEndDragging = onEndDragging
+        self.routeCoordinates = routeCoordinates
+        self.routePoints = routePoints
+        self.executerPoints = executerPoints
+    }
 
     public func makeUIViewController(context: Context) -> GMapViewController {
         let vc = GMapViewController(option: options)
