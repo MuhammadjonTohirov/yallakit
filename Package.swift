@@ -4,7 +4,7 @@ import PackageDescription
 let package = Package(
     name: "YallaKit",
     platforms: [
-        .iOS(.v16)
+        .iOS(.init("16.6"))
     ],
     products: [
         .library(name: "YallaKit", targets: ["YallaKit"]),

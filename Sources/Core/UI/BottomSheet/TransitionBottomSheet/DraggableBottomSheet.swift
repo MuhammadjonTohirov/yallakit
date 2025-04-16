@@ -16,7 +16,8 @@ public struct DraggableBottomSheet<FirstView: View, SecondView: View>: View {
     // Configuration
     private let minHeight: CGFloat
     private let maxTopSpace: CGFloat
-    
+    @Environment(\.scenePhase) private var scenePhase
+
     // State
     @State private var offset: CGFloat = 0 {
         didSet {
@@ -118,6 +119,9 @@ public struct DraggableBottomSheet<FirstView: View, SecondView: View>: View {
             }
             .ignoresSafeArea(edges: .bottom)
         }
+        .onChange(val: scenePhase, action: { old, new in
+            
+        })
         .background(
             Color.background
                 .opacity(dragProgress)
@@ -131,8 +135,16 @@ public struct DraggableBottomSheet<FirstView: View, SecondView: View>: View {
             }
         }
         .onChange(of: dragState) { newValue in
-            if newValue == .interrupted {
-                self.isExpanded.toggle()
+            let diff = maxDragDistance - offset
+            
+            if diff >= 60 {
+                if newValue == .interrupted {
+                    isExpanded.toggle()
+                    dragState = .normal
+                }
+            } else {
+                isExpanded = false
+                offset = maxDragDistance
                 dragState = .normal
             }
         }
@@ -152,9 +164,8 @@ public struct DraggableBottomSheet<FirstView: View, SecondView: View>: View {
             }
         })
         .coordinateSpace(name: "scroll")
-        .sizeBasedBounce()
+        .scrollBounceBehavior(.basedOnSize, axes: .vertical)
         .opacity(dragProgress)
-//        .disabled(!isScrollEnabled)
         .disabled(dragProgress != 1)
     }
     
@@ -193,14 +204,22 @@ public struct DraggableBottomSheet<FirstView: View, SecondView: View>: View {
             lastOffset = offset
         }
     }
+    private var minimumDragDistance: CGFloat {
+        if !isExpanded {
+            return 20
+        }
+        
+        return 0
+    }
     
     // Drag gesture to handle sheet movement
     private var dragGesture: some Gesture {
-        DragGesture(minimumDistance: 0)
+        DragGesture(minimumDistance: minimumDragDistance)
             .updating($isDragging) { _, state, _ in
                 state = true
             }
             .onChanged { value in
+                guard scenePhase == .active else { return }
                 let dragAmount = value.translation.height
                 dragState = .started
                 // Allow dragging UP from any state
@@ -276,17 +295,8 @@ extension View {
 }
 
 struct ScrollPreferenceKey: @preconcurrency PreferenceKey {
-    @MainActor static var defaultValue: CGFloat = 0
+    @MainActor static let defaultValue: CGFloat = 0
     static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
         value = nextValue()
-    }
-}
-
-extension View {
-    @ViewBuilder
-    func sizeBasedBounce() -> some View {
-        if #available(iOS 16.4, *) {
-            self.scrollBounceBehavior(.basedOnSize)
-        }
     }
 }
