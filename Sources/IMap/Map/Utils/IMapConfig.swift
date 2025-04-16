@@ -10,7 +10,7 @@ import SwiftUI
 
 public struct MapTheme: Sendable {
     @MainActor
-    public static var colors: Colors = .init(iAction: .blue, iPrimary: .background)
+    public static var colors: Colors = .init(iAction: Color("IAction"), iPrimary: Color("IPrimary"))
     
     public struct Colors {
         public var iAction: Color
