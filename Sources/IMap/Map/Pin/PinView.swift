@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Core
 import SwiftUI
 
 public struct PinView: View {
@@ -124,16 +125,3 @@ public struct PinView: View {
         .frame(height: 48)
     }
 }
-
-extension View {
-    @ViewBuilder
-    func visibility(_ visibile: Bool) -> some View {
-        if !visibile {
-            EmptyView()
-                .frame(height: 0)
-        } else {
-            self
-        }
-    }
-}
-

@@ -10,8 +10,10 @@ import UIKit
 import GoogleMaps
 import Core
 
+
 public struct GMapStatics {
     public static let viewAngle: CGFloat = 0
+    @MainActor public static var pickerShift: CGFloat = 50
 }
 
 public class GMapViewController: UIViewController {
@@ -105,7 +107,7 @@ public extension GMSMapView {
         
         let visualCenter = CGPoint(
             x: self.bounds.midX,
-            y: self.bounds.midY - paddingOffset + pickerShift / 2 + safeAreaOffset
+            y: self.bounds.midY - paddingOffset + GMapStatics.pickerShift / 2 + safeAreaOffset
         )
         
         let coordinate = self.projection.coordinate(for: visualCenter)
