@@ -113,10 +113,6 @@ open class GMapsUIModel: ObservableObject, @preconcurrency GMapsUIModelProtocol,
     
     open func focusToCurrentLocation(animate: Bool = false, lock: Bool = false) {
         if let loc = GLocationManager.shared.currentLocation {
-//            if (self.pickedLocation?.isEqual(to: loc) ?? false) {
-//                return
-//            }
-            
             focus(toLocation: loc, animate: animate, lock: lock)
         }
     }

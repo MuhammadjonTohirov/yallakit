@@ -44,9 +44,11 @@ public extension URL {
         ("brand-id", "2")
     }()
     
-    //"AIzaSyD0uKSmSaabl3CJRrBeQ_wpJ0uowlhqylE"
-    static let googleMapsApiKey = "AIzaSyC_dHd88uaz8yUlmxKbvXo7n-a7mPhgaWI"
-    
+    //"AIzaSyD0uKSmSaabl3CJRrBeQ_wpJ0uowlhqylE" - old
+    //"AIzaSyC_dHd88uaz8yUlmxKbvXo7n-a7mPhgaWI" - mine
+    //"AIzaSyAkRnWYc4T9mCqk7GFIdXWYmwGs9f3X-6Q" - new
+    static let googleMapsApiKey = "AIzaSyAkRnWYc4T9mCqk7GFIdXWYmwGs9f3X-6Q"
+ 
     func appendingPath(_ pathList: Any...) -> URL {
         var url = self
         pathList.forEach { path in
