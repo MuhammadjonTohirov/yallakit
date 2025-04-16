@@ -137,15 +137,17 @@ public struct DraggableBottomSheet<FirstView: View, SecondView: View>: View {
         .onChange(of: dragState) { newValue in
             let diff = maxDragDistance - offset
             
-            if diff >= 60 {
-                if newValue == .interrupted {
-                    isExpanded.toggle()
+            withTransaction(.init(animation: nil)) {
+                if diff >= 60 {
+                    if newValue == .interrupted {
+                        isExpanded.toggle()
+                        dragState = .normal
+                    }
+                } else {
+                    isExpanded = false
+                    offset = maxDragDistance
                     dragState = .normal
                 }
-            } else {
-                isExpanded = false
-                offset = maxDragDistance
-                dragState = .normal
             }
         }
     }
