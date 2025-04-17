@@ -23,6 +23,8 @@ public struct GMapCamera {
 }
 
 public struct GMapsViewWrapper: UIViewControllerRepresentable, @unchecked Sendable {
+    public typealias MarkerView = (_ mapView: GMSMapView, _ marker: GMSMarker) -> UIView?
+    
     var inputCamera: GMapCamera?
     @Binding var outCamera: GMapCamera?
     var options: GMSMapViewOptions
@@ -31,12 +33,13 @@ public struct GMapsViewWrapper: UIViewControllerRepresentable, @unchecked Sendab
     var onStartDragging: () -> ()
     var onStartMoving: () -> ()
     var onEndDragging: (_ location: CLLocation) -> ()
+    var markerInfoView: MarkerView?
 
     var routeCoordinates: [RouteDataCoordinate]?
     var routePoints: [GMSMarker]?
     var executerPoints: [GMSMarker]?
     
-    public init(inputCamera: GMapCamera? = nil, outCamera: Binding<GMapCamera?>, options: GMSMapViewOptions, bottomPadding: CGFloat, showMyLocation: Bool, onStartDragging: @escaping () -> Void, onStartMoving: @escaping () -> Void, onEndDragging: @escaping (_: CLLocation) -> Void, routeCoordinates: [RouteDataCoordinate]? = nil, routePoints: [GMSMarker]? = nil, executerPoints: [GMSMarker]? = nil) {
+    public init(inputCamera: GMapCamera? = nil, outCamera: Binding<GMapCamera?>, options: GMSMapViewOptions, bottomPadding: CGFloat, showMyLocation: Bool, onStartDragging: @escaping () -> Void, onStartMoving: @escaping () -> Void, onEndDragging: @escaping (_: CLLocation) -> Void, routeCoordinates: [RouteDataCoordinate]? = nil, routePoints: [GMSMarker]? = nil, executerPoints: [GMSMarker]? = nil, markerInfo viewForMarker: MarkerView?) {
         self.inputCamera = inputCamera
         self._outCamera = outCamera
         self.options = options
@@ -48,6 +51,7 @@ public struct GMapsViewWrapper: UIViewControllerRepresentable, @unchecked Sendab
         self.routeCoordinates = routeCoordinates
         self.routePoints = routePoints
         self.executerPoints = executerPoints
+        self.markerInfoView = viewForMarker
     }
 
     public func makeUIViewController(context: Context) -> GMapViewController {
@@ -219,6 +223,10 @@ public struct GMapsViewWrapper: UIViewControllerRepresentable, @unchecked Sendab
             for marker in markers {
                 marker.map = map
             }
+        }
+        
+        @MainActor public func mapView(_ mapView: GMSMapView, markerInfoWindow marker: GMSMarker) -> UIView? {
+            return parent.markerInfoView?(mapView, marker)
         }
     }
 }
