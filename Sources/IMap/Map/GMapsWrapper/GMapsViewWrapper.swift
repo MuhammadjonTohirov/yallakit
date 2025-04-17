@@ -215,19 +215,19 @@ public struct GMapsViewWrapper: UIViewControllerRepresentable, @unchecked Sendab
             self.hasDrawn = true
         }
         
-        func populateRouteMarkers(onMap map: GMSMapView, markers: [GMSMarker]) {
+        func populateRouteMarkers(onMap map: GMSMapView, markers: Set<GMSMarker>) {
             for marker in markers {
                 marker.map = map
             }
         }
         
-        func populateExecutorMarkers(onMap map: GMSMapView, markers: [GMSMarker]) {
+        func populateExecutorMarkers(onMap map: GMSMapView, markers: Set<GMSMarker>) {
             for marker in markers {
                 marker.map = map
             }
         }
         
-        func populateOtherMarkers(onMap map: GMSMapView, markers: [GMSMarker]) {
+        func populateOtherMarkers(onMap map: GMSMapView, markers: Set<GMSMarker>) {
             for marker in markers {
                 marker.map = map
             }
