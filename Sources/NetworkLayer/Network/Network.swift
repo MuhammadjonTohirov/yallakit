@@ -39,7 +39,7 @@ public struct Network {
         }
     }
     
-    public static func sendThrow<T: NetResBody>(request: URLRequestProtocol) async throws -> NetRes<T>? {
+    public static func sendThrow<T: NetResBody>(urlSession: URLSession = URLSession.shared, request: URLRequestProtocol) async throws -> NetRes<T>? {
         do {
             Logging.l("--- --- REQUEST --- ---")
             Logging.l(request.url.absoluteString)
@@ -52,7 +52,7 @@ public struct Network {
             var result: (Data, URLResponse?)!
             
             do {
-                result = try await URLSession.shared.data(for: request.request())
+                result = try await urlSession.data(for: request.request())
             } catch {
                 throw NetworkError.timeout
             }

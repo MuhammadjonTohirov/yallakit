@@ -18,12 +18,15 @@ protocol RouteTariffCalcGatewayProtocol {
     )
 }
 
-struct RouteTariffCalcGateway: RouteTariffCalcGatewayProtocol {
+final class RouteTariffCalcGateway: RouteTariffCalcGatewayProtocol {
+    private lazy var session: URLSession = URLSession(configuration: .default)
+    
     func calculateRouteAndTariffs(
         req: NetReqTaxiTariff
     ) async throws -> (map: NetResRouteCoords?, tariffs: [NetResTaxiTariff]?) {
-
+        await session.tasks.0.forEach({$0.cancel()})
         let result: NetRes<NetResRoute>? = try await Network.sendThrow(
+            urlSession: session,
             request: MainNetworkRoute.getRouteCoordinates(
                 req: req
             )
