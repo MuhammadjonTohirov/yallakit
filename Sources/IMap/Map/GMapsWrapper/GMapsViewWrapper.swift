@@ -36,10 +36,11 @@ public struct GMapsViewWrapper: UIViewControllerRepresentable, @unchecked Sendab
     var markerInfoView: MarkerView?
 
     var routeCoordinates: [RouteDataCoordinate]?
-    var routePoints: [GMSMarker]?
-    var executerPoints: [GMSMarker]?
+    var routePoints: Set<GMSMarker>?
+    var executerPoints: Set<GMSMarker>?
+    var otherMarkers: Set<GMSMarker>?
     
-    public init(inputCamera: GMapCamera? = nil, outCamera: Binding<GMapCamera?>, options: GMSMapViewOptions, bottomPadding: CGFloat, showMyLocation: Bool, onStartDragging: @escaping () -> Void, onStartMoving: @escaping () -> Void, onEndDragging: @escaping (_: CLLocation) -> Void, routeCoordinates: [RouteDataCoordinate]? = nil, routePoints: [GMSMarker]? = nil, executerPoints: [GMSMarker]? = nil, markerInfo viewForMarker: MarkerView?) {
+    public init(inputCamera: GMapCamera? = nil, outCamera: Binding<GMapCamera?>, options: GMSMapViewOptions, bottomPadding: CGFloat, showMyLocation: Bool, onStartDragging: @escaping () -> Void, onStartMoving: @escaping () -> Void, onEndDragging: @escaping (_: CLLocation) -> Void, routeCoordinates: [RouteDataCoordinate]? = nil, routePoints: Set<GMSMarker>? = nil, executerPoints: Set<GMSMarker>? = nil, otherMarkers: Set<GMSMarker>? = nil, markerInfo viewForMarker: MarkerView?) {
         self.inputCamera = inputCamera
         self._outCamera = outCamera
         self.options = options
@@ -52,6 +53,7 @@ public struct GMapsViewWrapper: UIViewControllerRepresentable, @unchecked Sendab
         self.routePoints = routePoints
         self.executerPoints = executerPoints
         self.markerInfoView = viewForMarker
+        self.otherMarkers = otherMarkers
     }
 
     public func makeUIViewController(context: Context) -> GMapViewController {
@@ -223,6 +225,19 @@ public struct GMapsViewWrapper: UIViewControllerRepresentable, @unchecked Sendab
             for marker in markers {
                 marker.map = map
             }
+        }
+        
+        func populateOtherMarkers(onMap map: GMSMapView, markers: [GMSMarker]) {
+            for marker in markers {
+                marker.map = map
+            }
+        }
+        
+        @MainActor
+        func deleteOtherMarkers() {
+            self.parent.otherMarkers?.forEach({ marker in
+                marker.map = nil
+            })
         }
         
         @MainActor public func mapView(_ mapView: GMSMapView, markerInfoWindow marker: GMSMarker) -> UIView? {
