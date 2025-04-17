@@ -31,16 +31,20 @@ public struct DraggableBottomSheet<FirstView: View, SecondView: View>: View {
     @GestureState private var isDragging = false
     @State private var isScrollEnabled: Bool = true
     @State private var dragState: DragState = .normal
+    
     // Screen dimensions
+    @MainActor
     private var screenHeight: CGFloat {
         UIApplication.shared.screenFrame.height
     }
     
+    @MainActor
     private var screenSafeAreaInsets: UIEdgeInsets {
         UIApplication.shared.safeArea
     }
     
     // Full height = screen height minus top space
+    @MainActor
     private var fullHeight: CGFloat {
         screenHeight - maxTopSpace - screenSafeAreaInsets.top - screenSafeAreaInsets.bottom
     }
