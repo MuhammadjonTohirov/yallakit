@@ -17,7 +17,6 @@ public class PinViewModel: ObservableObject {
         
     }
     
-    @MainActor
     open func set(state: PinState) {
         debugPrint("Set pin state \(state.id)")
         if state == .initial {

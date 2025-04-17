@@ -114,7 +114,7 @@ public struct GMapsViewWrapper: UIViewControllerRepresentable, @unchecked Sendab
         Coordinator(parent: self)
     }
     
-    public class Coordinator: NSObject, @preconcurrency GMSMapViewDelegate {
+    public class Coordinator: NSObject, @preconcurrency GMSMapViewDelegate, @unchecked Sendable {
         var parent: GMapsViewWrapper
         private(set) var isDrawing: Bool = false
         private(set) var hasDrawn: Bool = false
@@ -140,13 +140,15 @@ public struct GMapsViewWrapper: UIViewControllerRepresentable, @unchecked Sendab
             self.parent.onEndDragging(mapView.locationAtCenter)
         }
         
-        @MainActor public func mapView(_ mapView: GMSMapView, willMove gesture: Bool) {
+        public func mapView(_ mapView: GMSMapView, willMove gesture: Bool) {
             debugPrint("Will move \(gesture)")
             
-            if gesture {
-                self.parent.onStartDragging()
-            } else {
-                self.parent.onStartMoving()
+            Task {@MainActor in
+                if gesture {
+                    self.parent.onStartDragging()
+                } else {
+                    self.parent.onStartMoving()
+                }
             }
         }
         
