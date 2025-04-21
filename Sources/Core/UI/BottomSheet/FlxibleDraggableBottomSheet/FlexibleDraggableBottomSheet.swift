@@ -191,7 +191,7 @@ public struct FlexibleBottomSheet<Content: View>: View {
     private func handleDragEnd() {
         let dragThreshold: CGFloat = 50
         
-        withAnimation(.spring()) {
+        withAnimation(.linear(duration: 0.2)) {
             if viewModel.currentPosition == .partial {
                 if viewModel.dragOffset < -dragThreshold {
                     viewModel.currentPosition = .full
