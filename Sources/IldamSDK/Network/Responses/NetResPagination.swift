@@ -8,12 +8,12 @@
 import Foundation
 
 struct NetResPagination: Codable {
-    let total: Int
-    let count: Int
-    let perPage: Int
-    let currentPage: Int
-    let totalPages: Int
-    let lastPage: Int
+    let total: Int?
+    let count: Int?
+    let perPage: Int?
+    let currentPage: Int?
+    let totalPages: Int?
+    let lastPage: Int?
     
     enum CodingKeys: String, CodingKey {
         case total

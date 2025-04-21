@@ -8,7 +8,7 @@
 import Foundation
 
 public struct NotificationsResponse {
-    public var list: [NotificationItem]
+    public var list: [NotificationItem]?
     public var pagination: PaginationItem?
     
     public init(list: [NotificationItem], pagination: PaginationItem? = nil) {
@@ -18,11 +18,11 @@ public struct NotificationsResponse {
 }
 
 public struct NotificationItem {
-    public let id: Int
-    public let title: String
-    public let content: String
-    public let createdAt: Int
-    public let readed: Bool
+    public let id: Int?
+    public let title: String?
+    public let content: String?
+    public let createdAt: Int?
+    public let readed: Bool?
     public let image: String?
     
     public init(id: Int, title: String, content: String, createdAt: Int, readed: Bool, image: String?) {
@@ -36,12 +36,12 @@ public struct NotificationItem {
 }
 
 public struct PaginationItem: Codable {
-    public let total: Int
-    public let count: Int
-    public let perPage: Int
-    public let currentPage: Int
-    public let totalPages: Int
-    public let lastPage: Int
+    public let total: Int?
+    public let count: Int?
+    public let perPage: Int?
+    public let currentPage: Int?
+    public let totalPages: Int?
+    public let lastPage: Int?
     
     public init(total: Int, count: Int, perPage: Int, currentPage: Int, totalPages: Int, lastPage: Int) {
         self.total = total
@@ -80,7 +80,7 @@ extension PaginationItem {
 extension NotificationsResponse {
     init?(res: NetResNotifications?) {
         guard let res else { return nil }
-        self.list = res.list.compactMap(NotificationItem.init)
+        self.list = res.list?.compactMap(NotificationItem.init)
         self.pagination = res.pagination.flatMap(PaginationItem.init)
     }
 }

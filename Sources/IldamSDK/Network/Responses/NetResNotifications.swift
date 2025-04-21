@@ -8,16 +8,16 @@
 import Foundation
 
 struct NetResNotifications: NetResBody {
-    var list: [NetResNotification]
+    var list: [NetResNotification]?
     var pagination: NetResPagination?
 }
 
 struct NetResNotification: NetResBody {
-    let id: Int
-    let title: String
-    let content: String
-    let createdAt: Int
-    let readed: Bool
+    let id: Int?
+    let title: String?
+    let content: String?
+    let createdAt: Int?
+    let readed: Bool?
     let image: String?
     
     enum CodingKeys: String, CodingKey {
