@@ -14,7 +14,7 @@ public protocol UnreadNotificationsUseCaseProtocol {
 public final class UnreadNotificationsUseCase: UnreadNotificationsUseCaseProtocol {
     private let gateway: UnreadNotificationsGatewayProtocol
     
-    init(gateway: UnreadNoztificationsGatewayProtocol = UnreadNotificationsGateway()) {
+    init(gateway: UnreadNotificationsGatewayProtocol = UnreadNotificationsGateway()) {
         self.gateway = gateway
     }
 
