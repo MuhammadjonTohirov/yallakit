@@ -17,7 +17,7 @@ struct ShowAndReadNotifGatewayImpl: ShowAndReadNotifGateway {
         let notificationId: Int
         
         var url: URL {
-            URL.goIldamAPI.appending(path: "notification/show/\(notificationId)")
+            URL.baseAPICli.appending(path: "notification/show/\(notificationId)")
         }
         
         var body: Data?

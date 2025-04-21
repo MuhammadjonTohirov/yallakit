@@ -16,7 +16,7 @@ protocol ReadAllNotifsGateway {
 struct ReadAllNotifsGatewayImpl: ReadAllNotifsGateway {
     struct Request: URLRequestProtocol {
         var url: URL {
-            return URL.goIldamAPI.appendingPath("notification", "readed")
+            return URL.baseAPICli.appendingPath("notification", "readed")
         }
         
         var body: Data? = nil

@@ -18,7 +18,7 @@ struct LoadNotificationsGateway: LoadNotificationsGatewayProtocol {
         let perPage: Int
         
         var url: URL {
-            URL.goIldamAPI.appending(path: "notifications")
+            URL.baseAPICli.appending(path: "notifications")
                 .appending(queryItems: [
                     .init(name: "per_page", value: perPage.description),
                     .init(name: "page", value: page.description)

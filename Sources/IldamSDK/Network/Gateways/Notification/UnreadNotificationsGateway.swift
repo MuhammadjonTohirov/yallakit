@@ -16,7 +16,7 @@ protocol UnreadNotificationsGatewayProtocol {
 struct UnreadNotificationsGateway: UnreadNotificationsGatewayProtocol {
     struct Request: URLRequestProtocol {
         var url: URL {
-            URL.goIldamAPI.appending(path: "/notification/count")
+            URL.baseAPICli.appending(path: "/notification/count")
         }
         
         var body: Data?
