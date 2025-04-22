@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct NotificationsResponse {
+public struct NotificationsResponse: Sendable {
     public var list: [NotificationItem]?
     
     public init(list: [NotificationItem]) {
@@ -15,7 +15,7 @@ public struct NotificationsResponse {
     }
 }
 
-public struct NotificationItem {
+public struct NotificationItem: Sendable {
     public let id: Int?
     public let title: String?
     public let content: String?

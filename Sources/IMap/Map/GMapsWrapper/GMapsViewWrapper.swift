@@ -125,6 +125,8 @@ public struct GMapsViewWrapper: UIViewControllerRepresentable, @unchecked Sendab
         private(set) var isDrawing: Bool = false
         private(set) var hasDrawn: Bool = false
         private(set) var polyline: GMSPolyline?
+        private var lastCameraPosition: GMSCameraPosition?
+        private var isUserInteracting = false
         
         init(parent: GMapsViewWrapper) {
             self.parent = parent
@@ -148,7 +150,8 @@ public struct GMapsViewWrapper: UIViewControllerRepresentable, @unchecked Sendab
         
         public func mapView(_ mapView: GMSMapView, willMove gesture: Bool) {
             debugPrint("Will move \(gesture)")
-            
+            isUserInteracting = gesture
+
             Task {@MainActor in
                 if gesture {
                     self.parent.onStartDragging()
@@ -231,6 +234,19 @@ public struct GMapsViewWrapper: UIViewControllerRepresentable, @unchecked Sendab
             for marker in markers {
                 marker.map = map
             }
+        }
+        
+        @MainActor
+        public func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
+            if let lastPosition = lastCameraPosition, lastPosition.zoom != position.zoom && isUserInteracting {
+                let center = mapView.center
+                let coordinate = mapView.projection.coordinate(for: center)
+                
+                let cameraUpdate = GMSCameraUpdate.setTarget(coordinate)
+                mapView.animate(with: cameraUpdate)
+            }
+            
+            lastCameraPosition = position
         }
         
         @MainActor
