@@ -59,7 +59,10 @@ public struct GMapsViewWrapper: UIViewControllerRepresentable, @unchecked Sendab
     public func makeUIViewController(context: Context) -> GMapViewController {
         let vc = GMapViewController(option: options)
         vc.delegate = context.coordinator
-
+        vc.map.isBuildingsEnabled = true
+        vc.map.isIndoorEnabled = true
+        vc.map.isTrafficEnabled = true
+        vc.map.settings.allowScrollGesturesDuringRotateOrZoom = false
         return vc
     }
     
@@ -236,22 +239,22 @@ public struct GMapsViewWrapper: UIViewControllerRepresentable, @unchecked Sendab
             }
         }
         
-        @MainActor
-        public func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
-            if let lastPosition = lastCameraPosition, lastPosition.zoom != position.zoom && isUserInteracting {
-                // Get the visual center where the pin is located
-                let visualCenter = CGPoint(
-                    x: mapView.bounds.midX,
-                    y: mapView.bounds.midY - mapView.padding.bottom / 2 + 25
-                )
-                
-                let coordinate = mapView.projection.coordinate(for: visualCenter)
-                let cameraUpdate = GMSCameraUpdate.setTarget(coordinate)
-                mapView.animate(with: cameraUpdate)
-            }
-            
-            lastCameraPosition = position
-        }
+//        @MainActor
+//        public func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
+//            if let lastPosition = lastCameraPosition, lastPosition.zoom != position.zoom && isUserInteracting {
+//                // Get the visual center where the pin is located
+//                let visualCenter = CGPoint(
+//                    x: mapView.bounds.midX,
+//                    y: mapView.bounds.midY - mapView.padding.bottom / 2 + 25
+//                )
+//                
+//                let coordinate = mapView.projection.coordinate(for: visualCenter)
+//                let cameraUpdate = GMSCameraUpdate.setTarget(coordinate)
+//                mapView.animate(with: cameraUpdate)
+//            }
+//            
+//            lastCameraPosition = position
+//        }
         
         @MainActor
         func deleteOtherMarkers() {
