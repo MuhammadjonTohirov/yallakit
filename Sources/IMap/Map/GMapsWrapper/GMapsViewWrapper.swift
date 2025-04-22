@@ -239,9 +239,13 @@ public struct GMapsViewWrapper: UIViewControllerRepresentable, @unchecked Sendab
         @MainActor
         public func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
             if let lastPosition = lastCameraPosition, lastPosition.zoom != position.zoom && isUserInteracting {
-                let center = mapView.center
-                let coordinate = mapView.projection.coordinate(for: center)
+                // Get the visual center where the pin is located
+                let visualCenter = CGPoint(
+                    x: mapView.bounds.midX,
+                    y: mapView.bounds.midY - mapView.padding.bottom / 2 + 25
+                )
                 
+                let coordinate = mapView.projection.coordinate(for: visualCenter)
                 let cameraUpdate = GMSCameraUpdate.setTarget(coordinate)
                 mapView.animate(with: cameraUpdate)
             }
