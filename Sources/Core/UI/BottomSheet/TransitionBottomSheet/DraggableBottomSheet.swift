@@ -205,7 +205,7 @@ public struct DraggableBottomSheet<FirstView: View, SecondView: View>: View {
     
     // Toggle method to show/hide the sheet
     private func toggleSheet(expanded: Bool) {
-        withAnimation(.spring(response: 0.12, dampingFraction: 0.9)) {
+        withAnimation(.spring(response: 0.2, dampingFraction: 0.9)) {
             offset = expanded ? 0 : maxDragDistance
             lastOffset = offset
         }
@@ -258,7 +258,7 @@ public struct DraggableBottomSheet<FirstView: View, SecondView: View>: View {
         let dragAmount = value.translation.height
         let velocity = value.predictedEndTranslation.height - dragAmount
         
-        withAnimation(.spring(response: 0.12, dampingFraction: 0.9)) {
+        withAnimation(.spring(response: 0.2, dampingFraction: 0.9)) {
             if dragAmount + velocity < -10 || offset < maxDragDistance * 0.1 {
                 expandSeet()
             } else {
