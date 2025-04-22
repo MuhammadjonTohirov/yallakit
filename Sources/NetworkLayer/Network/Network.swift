@@ -45,7 +45,8 @@ public struct Network {
             Logging.l(request.url.absoluteString)
             
             if let requestBody = request.request().httpBody,
-               let json = try JSONSerialization.jsonObject(with: requestBody, options: .fragmentsAllowed) as? [String: Any], let jsonData = try? JSONSerialization.data(withJSONObject: json, options: [.prettyPrinted, .sortedKeys]) {
+               let json = try JSONSerialization.jsonObject(with: requestBody, options: .fragmentsAllowed) as? [String: Any],
+               let jsonData = try? JSONSerialization.data(withJSONObject: json, options: [.prettyPrinted]) {
                 Logging.l(String.init(data: jsonData, encoding: .utf8) ?? "")
             }
             
@@ -65,11 +66,11 @@ public struct Network {
                 throw NetworkError.unauthorized
             }
             
-            let str = try data.asJson()
+            let str = try data.asJsonString()
             
             Logging.l("--- --- RESPONSE --- ---")
             Logging.l((request.url, code))
-            Logging.l(str)
+            Logging.l(str ?? "")
             
             let res = try JSONDecoder().decode(NetRes<T>.self, from: data)
             

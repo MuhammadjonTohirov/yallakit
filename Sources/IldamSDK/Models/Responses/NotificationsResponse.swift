@@ -9,11 +9,9 @@ import Foundation
 
 public struct NotificationsResponse {
     public var list: [NotificationItem]?
-    public var pagination: PaginationItem?
     
-    public init(list: [NotificationItem], pagination: PaginationItem? = nil) {
+    public init(list: [NotificationItem]) {
         self.list = list
-        self.pagination = pagination
     }
 }
 
@@ -35,24 +33,6 @@ public struct NotificationItem {
     }
 }
 
-public struct PaginationItem: Codable {
-    public let total: Int?
-    public let count: Int?
-    public let perPage: Int?
-    public let currentPage: Int?
-    public let totalPages: Int?
-    public let lastPage: Int?
-    
-    public init(total: Int, count: Int, perPage: Int, currentPage: Int, totalPages: Int, lastPage: Int) {
-        self.total = total
-        self.count = count
-        self.perPage = perPage
-        self.currentPage = currentPage
-        self.totalPages = totalPages
-        self.lastPage = lastPage
-    }
-}
-
 extension NotificationItem {
     init?(res: NetResNotification?) {
         guard let res else { return nil }
@@ -65,22 +45,9 @@ extension NotificationItem {
     }
 }
 
-extension PaginationItem {
-    init?(res: NetResPagination?) {
-        guard let res else { return nil }
-        total = res.total
-        count = res.count
-        perPage = res.perPage
-        currentPage = res.currentPage
-        totalPages = res.totalPages
-        lastPage = res.lastPage
-    }
-}
-
 extension NotificationsResponse {
     init?(res: NetResNotifications?) {
         guard let res else { return nil }
         self.list = res.list?.compactMap(NotificationItem.init)
-        self.pagination = res.pagination.flatMap(PaginationItem.init)
     }
 }

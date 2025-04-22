@@ -72,6 +72,10 @@ let package = Package(
                 .linkedLibrary("c++"),
                 .linkedLibrary("z")
             ]
+        ),
+        .testTarget(
+            name: "IldamSDKTests",
+            dependencies: ["IldamSDK", "NetworkLayer", "Core"]
         )
     ]
 )

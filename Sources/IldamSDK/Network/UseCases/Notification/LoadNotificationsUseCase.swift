@@ -12,7 +12,11 @@ public protocol LoadNotificationsUseCaseProtocol {
 }
 
 public final class LoadNotificationsUseCase: LoadNotificationsUseCaseProtocol {
-    let gateway = LoadNotificationsGateway()
+    var gateway: any LoadNotificationsGatewayProtocol = LoadNotificationsGateway()
+    
+    init(gateway: any LoadNotificationsGatewayProtocol = LoadNotificationsGateway()) {
+        self.gateway = gateway
+    }
 
     public init() {}
 

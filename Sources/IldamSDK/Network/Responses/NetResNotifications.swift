@@ -9,7 +9,6 @@ import Foundation
 
 struct NetResNotifications: NetResBody {
     var list: [NetResNotification]?
-    var pagination: NetResPagination?
 }
 
 struct NetResNotification: NetResBody {
