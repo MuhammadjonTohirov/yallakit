@@ -39,12 +39,3 @@ public struct SettingsConfigUseCaseImpl: SettingsConfigUseCase {
         return .init(res: result?.result)
     }
 }
-
-private extension OrderConfigSettings {
-    init?(res: NetResOrderSettings?) {
-        guard let res else {
-            return nil
-        }
-        self.orderCancelTime = res.orderCancelTime
-    }
-}
