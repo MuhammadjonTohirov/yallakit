@@ -258,7 +258,7 @@ public struct DraggableBottomSheet<FirstView: View, SecondView: View>: View {
         let dragAmount = value.translation.height
         let velocity = value.predictedEndTranslation.height - dragAmount
         
-        withAnimation(.spring(response: 0.2, dampingFraction: 0.9)) {
+        withAnimation(.interactiveSpring(duration: 0.3)) {
             if dragAmount + velocity < -10 || offset < maxDragDistance * 0.1 {
                 expandSeet()
             } else {
