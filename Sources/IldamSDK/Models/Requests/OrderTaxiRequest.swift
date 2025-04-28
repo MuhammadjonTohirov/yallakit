@@ -18,6 +18,7 @@ public struct OrderTaxiRequest: Codable {
     public var tariffOptions: [Int]
     public var toPhone: String
     public var addressId: Int?
+    public var bonusAmount: Int?
     
     enum CodingKeys: String, CodingKey {
         case addresses = "addresses"
@@ -30,9 +31,10 @@ public struct OrderTaxiRequest: Codable {
         case tariffOptions = "tariff_options"
         case toPhone = "to_phone"
         case addressId = "address_id"
+        case bonusAmount = "bonus_amount"
     }
     
-    public init(addresses: [TaxiOrderAddressItem], comment: String, dontCallMe: Bool, fixedPrice: Bool, paymentType: String, service: String, tariffID: Int, tariffOptions: [Int], toPhone: String, addressId: Int? = nil) {
+    public init(addresses: [TaxiOrderAddressItem], comment: String, dontCallMe: Bool, fixedPrice: Bool, paymentType: String, service: String, tariffID: Int, tariffOptions: [Int], toPhone: String, addressId: Int? = nil, bonusAmount: Int? = nil) {
         self.addresses = addresses
         self.comment = comment
         self.dontCallMe = dontCallMe
@@ -43,6 +45,7 @@ public struct OrderTaxiRequest: Codable {
         self.tariffOptions = tariffOptions
         self.toPhone = toPhone
         self.addressId = addressId
+        self.bonusAmount = bonusAmount
     }
 }
 
