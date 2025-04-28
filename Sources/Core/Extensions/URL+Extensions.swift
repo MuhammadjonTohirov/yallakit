@@ -22,8 +22,12 @@ public extension URL {
         .init(string: "https://api2.ildam.uz")!
     }()
     
+    nonisolated(unsafe) static var baseAPIPHP: URL = {
+        .init(string: "https://api.ildam.uz")!
+    }()
+    
     nonisolated(unsafe) static var baseAPICli: URL = {
-        .init(string: "https://api.ildam.uz/cli")!
+        .init(string: baseAPIPHP.absoluteString + "/cli")!
     }()
     
     /// https://api2.ildam.uz/client

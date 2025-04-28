@@ -13,9 +13,9 @@ extension URLRequest {
         var req = URLRequest(url: url, cachePolicy: policy, timeoutInterval: interval)
         req.addValue(URL.langHeader.value, forHTTPHeaderField: URL.langHeader.key)
         req.addValue(URL.keyHeader.value, forHTTPHeaderField: URL.keyHeader.key)
-        req.addValue("IOS", forHTTPHeaderField: "X-DEVICE-TYPE")
         req.addValue("application/json", forHTTPHeaderField: "Content-Type")
         req.addValue("application/json", forHTTPHeaderField: "accept")
+        req.addValue("IOS", forHTTPHeaderField: "User-Agent-OS")
         
         if let accessToken = UserSettings.shared.accessToken, withAuth {
             req.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
@@ -27,7 +27,7 @@ extension URLRequest {
     public static func fromDataRequest(url: URL, boundary: String, policy: CachePolicy = .useProtocolCachePolicy, interval: TimeInterval = 60.0, withAuth: Bool = true) -> URLRequest {
         var req = URLRequest(url: url, cachePolicy: policy, timeoutInterval: interval)
         req.addValue(URL.langHeader.value, forHTTPHeaderField: URL.langHeader.key)
-        req.addValue("IOS", forHTTPHeaderField: "X-DEVICE-TYPE")
+        req.addValue("IOS", forHTTPHeaderField: "User-Agent-OS")
         req.addValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
         req.addValue("application/json", forHTTPHeaderField: "accept")
         

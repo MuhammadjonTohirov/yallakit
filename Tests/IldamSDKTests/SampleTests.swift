@@ -6,7 +6,7 @@
 //
 
 import XCTest
-@testable import YallaKit
+//@testable import YallaKit
 
 final class YallaKitTests: XCTestCase {
     func testExample() throws {

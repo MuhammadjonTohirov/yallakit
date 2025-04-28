@@ -1,0 +1,38 @@
+//
+//  DriverBuyPlanResponse.swift
+//  YallaKit
+//
+//  Created by MuhammadAli on 28/04/25.
+//
+
+import SwiftUI
+
+public struct DriverBuyPlanResponse: DNetResBody {
+    public let condition: Bool
+    public let plan: BuyPlanResult
+}
+public struct BuyPlanResult: Codable {
+    public let addressId: Int
+    public let cost: Int
+    public let deactivation: Bool
+    public let description: String
+    public let id: Int
+    public let limitTime: Int
+    public let limitUnit: String
+    public let name: String
+    public let orderPayCost: Int
+    public let orderPayPresent: Int
+
+    public init(addressId: Int, cost: Int, deactivation: Bool, description: String, id: Int, limitTime: Int, limitUnit: String, name: String, orderPayCost: Int, orderPayPresent: Int) {
+        self.addressId = addressId
+        self.cost = cost
+        self.deactivation = deactivation
+        self.description = description
+        self.id = id
+        self.limitTime = limitTime
+        self.limitUnit = limitUnit
+        self.name = name
+        self.orderPayCost = orderPayCost
+        self.orderPayPresent = orderPayPresent
+    }
+}

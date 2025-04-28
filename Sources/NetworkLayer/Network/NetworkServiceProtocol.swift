@@ -32,6 +32,7 @@ public extension Error {
 }
 
 public enum NetworkError: Error {
+    case emptyResponse
     case custom(message: String, code: Int = -1)
     case unauthorized
     case timeout
@@ -44,6 +45,8 @@ public enum NetworkError: Error {
             return "Unauthorized"
         case .timeout:
             return "Timeout"
+        case .emptyResponse:
+            return "Empty response"
         }
     }
     
@@ -55,6 +58,8 @@ public enum NetworkError: Error {
             return 401
         case .timeout:
             return -2
+        case .emptyResponse:
+            return 0
         }
     }
 }
