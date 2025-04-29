@@ -88,6 +88,7 @@ struct NetResOrderTaxiDetails: Codable {
     let routes: [NetResOrderRoute]
     let services: [NetResOrderService]?
     let bonusUsed: Bool?
+    var bonusAmount: Double?
     
     enum CodingKeys: String, CodingKey {
         case tariff
@@ -98,6 +99,7 @@ struct NetResOrderTaxiDetails: Codable {
         case totalPrice = "total_price"
         case routes
         case bonusUsed = "use_the_bonus"
+        case bonusAmount = "bonus_amount"
         case services
     }
 }

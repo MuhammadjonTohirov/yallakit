@@ -133,6 +133,8 @@ public struct OrderTaxiDetails: Codable, Sendable {
     public let clientTotalPrice: Float
     public let totalPrice: Float?
     public let fixedPrice: Bool
+    public var isUsingBonus: Bool?
+    public var bonusAmount: Double?
     public let routes: [OrderRoute]
     public var services: [OrderServiceItem]?
     
@@ -146,6 +148,8 @@ public struct OrderTaxiDetails: Codable, Sendable {
         self.totalPrice = res.taxi?.totalPrice
         self.routes = (res.taxi?.routes ?? []).compactMap(OrderRoute.init)
         self.services = res.taxi?.services?.compactMap(OrderServiceItem.init)
+        self.bonusAmount = res.taxi?.bonusAmount
+        self.isUsingBonus = res.taxi?.bonusAmount != nil
     }
     
     init?(taxiRes res: NetResOrderTaxiDetails?) {
@@ -160,6 +164,8 @@ public struct OrderTaxiDetails: Codable, Sendable {
         self.fixedPrice = res.fixedPrice
         self.totalPrice = res.totalPrice
         self.routes = res.routes.compactMap(OrderRoute.init)
+        self.bonusAmount = res.bonusAmount
+        self.isUsingBonus = res.bonusUsed
     }
 }
 
