@@ -20,6 +20,7 @@ struct NetReqOrderTaxi: Codable {
     var addressId: Int?
     var bonusAmount: Int?
     var cardId: String?
+    var useTheBonus: Bool?
 
     
     enum CodingKeys: String, CodingKey {
@@ -35,9 +36,10 @@ struct NetReqOrderTaxi: Codable {
         case addressId = "address_id"
         case bonusAmount = "bonus_amount"
         case cardId = "card_id"
+        case useTheBonus = "use_the_bonus"
     }
     
-    init(addresses: [NetReqOrderTaxiAddress], comment: String, dontCallMe: Bool, fixedPrice: Bool, paymentType: String, service: String, tariffID: Int, tariffOptions: [Int], toPhone: String, bonusAmount: Int? = nil, cardId: String? = nil) {
+    init(addresses: [NetReqOrderTaxiAddress], comment: String, dontCallMe: Bool, fixedPrice: Bool, paymentType: String, service: String, tariffID: Int, tariffOptions: [Int], toPhone: String, bonusAmount: Int? = nil, cardId: String? = nil, useTheBonus: Bool?) {
         self.addresses = addresses
         self.comment = comment
         self.dontCallMe = dontCallMe
@@ -49,6 +51,7 @@ struct NetReqOrderTaxi: Codable {
         self.bonusAmount = bonusAmount
         self.toPhone = toPhone
         self.cardId = cardId
+        self.useTheBonus = useTheBonus
     }
     
     init(model: OrderTaxiRequest) {
@@ -64,6 +67,7 @@ struct NetReqOrderTaxi: Codable {
         self.addressId = model.addressId
         self.bonusAmount = model.bonusAmount
         self.cardId = model.cardId
+        self.useTheBonus = (model.bonusAmount ?? 0) > 0
     }
 }
 
