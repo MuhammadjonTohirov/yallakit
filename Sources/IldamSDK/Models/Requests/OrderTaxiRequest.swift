@@ -19,6 +19,7 @@ public struct OrderTaxiRequest: Codable {
     public var toPhone: String
     public var addressId: Int?
     public var bonusAmount: Int?
+    public var cardId: String?
     
     enum CodingKeys: String, CodingKey {
         case addresses = "addresses"
@@ -32,20 +33,22 @@ public struct OrderTaxiRequest: Codable {
         case toPhone = "to_phone"
         case addressId = "address_id"
         case bonusAmount = "bonus_amount"
+        case cardId = "card_id"
     }
     
-    public init(addresses: [TaxiOrderAddressItem], comment: String, dontCallMe: Bool, fixedPrice: Bool, paymentType: String, service: String, tariffID: Int, tariffOptions: [Int], toPhone: String, addressId: Int? = nil, bonusAmount: Int? = nil) {
+    public init(addresses: [TaxiOrderAddressItem], comment: String, dontCallMe: Bool, fixedPrice: Bool, paymentType: String, service: String, tariffID: Int, tariffOptions: [Int], toPhone: String, addressId: Int? = nil, bonusAmount: Int? = nil, cardId: String? = nil) {
         self.addresses = addresses
         self.comment = comment
         self.dontCallMe = dontCallMe
         self.fixedPrice = fixedPrice
-        self.paymentType = paymentType
+        self.paymentType = paymentType == "cash" ? paymentType : "card"
         self.service = service
         self.tariffID = tariffID
         self.tariffOptions = tariffOptions
         self.toPhone = toPhone
         self.addressId = addressId
         self.bonusAmount = bonusAmount
+        self.cardId = cardId ?? (paymentType == "cash" ? nil : paymentType)
     }
 }
 
