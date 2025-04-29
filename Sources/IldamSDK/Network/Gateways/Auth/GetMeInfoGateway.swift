@@ -14,7 +14,10 @@ protocol GetMeInfoGatewayProtocol {
 }
 
 struct GetMeInfoGateway: GetMeInfoGatewayProtocol {
+    private var session: URLSession = .init(configuration: .default)
+    
     func getMeInfo() async -> NetResMeInfo? {
-        return (await Network.send(request: AuthNetworkRoute.getMeInfo))?.result
+        await session.tasks.0.forEach({$0.cancel()})
+        return (await Network.send(urlSession: session, request: AuthNetworkRoute.getMeInfo))?.result
     }
 }

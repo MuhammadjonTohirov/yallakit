@@ -30,7 +30,7 @@ public struct Network {
 
     nonisolated(unsafe) public static var delegate: NetworkDelegate?
     
-    public static func send<T: NetResBody>(request: URLRequestProtocol) async -> NetRes<T>? {
+    public static func send<T: NetResBody>(urlSession: URLSession = URLSession.shared, request: URLRequestProtocol) async -> NetRes<T>? {
         do {
             return try await sendThrow(request: request)
         } catch let error {
