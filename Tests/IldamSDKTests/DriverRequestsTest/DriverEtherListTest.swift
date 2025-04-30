@@ -15,10 +15,10 @@ final class DriverEtherListTest: XCTestCase {
     func testExecute_getorderList() async {
         UserSettings.shared.accessToken = ""
 
-        let getway = EtherListGetway()
+        let getway = EtherListGateway()
         
         let res = try? await getway.getEtherList(type: "ether")
-        XCTAssertNotNil(res != nil)
+        XCTAssertNotNil(res)
 
     }
 }

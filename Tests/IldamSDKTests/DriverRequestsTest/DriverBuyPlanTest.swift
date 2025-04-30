@@ -18,7 +18,7 @@ final class DriverBuyPlanTest: XCTestCase {
         let getway = DriverBuyPlanGetWay()
         
         let res = try? await getway.buyPlan(planId: 54)
-        XCTAssertNotNil(res != nil)
+        XCTAssertNotNil(res)
 
     }
 }

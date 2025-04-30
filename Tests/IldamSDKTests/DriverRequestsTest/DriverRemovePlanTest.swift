@@ -18,6 +18,6 @@ final class DriverRemovePlanTest: XCTestCase {
         let gateway = DriverRemovePlanGetway()
         let result = try? await gateway.removePlan(planId: 4)
         
-        XCTAssertNotNil(result != nil)
+        XCTAssertNotNil(result)
     }
 }

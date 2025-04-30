@@ -9,12 +9,12 @@ import NetworkLayer
 import Core
 
 protocol DriverOrderShowGetwayProtocol {
-    func getDriverOrderShow(orderId: Int) async throws -> DNetResDriverOrderShowResponse?
+    func getDriverOrderShow(orderId: Int) async throws -> DNetOrderShowResponse?
 }
 
 struct DriverOrderShowGetway: DriverOrderShowGetwayProtocol {
-    func getDriverOrderShow(orderId: Int) async throws -> DNetResDriverOrderShowResponse? {
-        let result: NetRes<DNetResDriverOrderShowResponse>? = try await Network.sendThrow(request: Request(orderId: orderId))
+    func getDriverOrderShow(orderId: Int) async throws -> DNetOrderShowResponse? {
+        let result: NetRes<DNetOrderShowResponse>? = try await Network.sendThrow(request: Request(orderId: orderId))
         return result?.result
     }
     

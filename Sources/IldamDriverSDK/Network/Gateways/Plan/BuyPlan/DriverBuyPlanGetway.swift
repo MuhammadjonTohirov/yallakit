@@ -13,7 +13,6 @@ protocol DriverBuyPlanProtocol {
 }
 
 public struct DriverBuyPlanGetWay: DriverBuyPlanProtocol {
-    
     public func buyPlan(planId: Int) async throws -> DriverBuyPlanResponse? {
         let result: NetRes<DriverBuyPlanResponse>? = try await Network.sendThrow(request: Request(planId: planId))
         return result?.result

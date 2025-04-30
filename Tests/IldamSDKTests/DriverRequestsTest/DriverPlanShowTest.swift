@@ -18,6 +18,6 @@ func testExecute_getPlanShow() async {
         let gateway = DriverPlanShowGetway()
         let result = try? await gateway.getPlanShow(planId: 4)
         
-        XCTAssertNotNil(result != nil)
+        XCTAssertNotNil(result)
     }
 }

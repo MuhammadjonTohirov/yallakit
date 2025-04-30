@@ -11,12 +11,12 @@ import SwiftUI
 import NetworkLayer
 
 protocol OrderTariffConfigurationGatewayProtocol {
-    func getOrderTariffConfiguration(orderId: Int) async throws -> DNetResOrderTariffConfigurationResponse?
+    func getOrderTariffConfiguration(orderId: Int) async throws -> DNetOrderTariffConfigResponse?
 }
 
-public struct OrderTariffConfigurationGateway: OrderTariffConfigurationGatewayProtocol {    
-    public func getOrderTariffConfiguration(orderId: Int) async throws -> DNetResOrderTariffConfigurationResponse? {
-        let response: NetRes<DNetResOrderTariffConfigurationResponse>? = try await Network.sendThrow(request: Request(orderId: orderId))
+ struct OrderTariffConfigurationGateway: OrderTariffConfigurationGatewayProtocol {
+     func getOrderTariffConfiguration(orderId: Int) async throws -> DNetOrderTariffConfigResponse? {
+        let response: NetRes<DNetOrderTariffConfigResponse>? = try await Network.sendThrow(request: Request(orderId: orderId))
         return response?.result
     }
     

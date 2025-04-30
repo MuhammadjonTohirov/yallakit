@@ -18,6 +18,6 @@ final class DriverPlanListsTest: XCTestCase {
         let gateway = DriverPlanListGatewayGetway()
         let result = try? await gateway.getPlanLists()
         
-        XCTAssertNotNil(result != nil)
+        XCTAssertNotNil(result)
     }
 }
