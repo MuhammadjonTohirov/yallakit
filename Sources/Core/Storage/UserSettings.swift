@@ -105,7 +105,6 @@ final public class UserSettings: @unchecked Sendable {
         tokenExpireDate = nil
         lastActiveDate = nil
         appPin = nil
-        isLanguageSelected = nil
         lastOTPKey = nil
         session = nil
         username = nil
