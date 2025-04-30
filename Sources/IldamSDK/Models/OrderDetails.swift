@@ -137,7 +137,8 @@ public struct OrderTaxiDetails: Codable, Sendable {
     public var bonusAmount: Double?
     public let routes: [OrderRoute]
     public var services: [OrderServiceItem]?
-    
+    public var award: Award?
+
     init?(res: NetResOrderDetails?) {
         guard let res = res else { return nil }
         self.tariff = res.taxi?.tariff ?? ""
@@ -150,6 +151,7 @@ public struct OrderTaxiDetails: Codable, Sendable {
         self.services = res.taxi?.services?.compactMap(OrderServiceItem.init)
         self.bonusAmount = res.taxi?.bonusAmount
         self.isUsingBonus = res.taxi?.bonusAmount != nil
+        self.award = res.taxi?.award.map { Award(amount: $0.amount, type: $0.type) }
     }
     
     init?(taxiRes res: NetResOrderTaxiDetails?) {
@@ -166,6 +168,17 @@ public struct OrderTaxiDetails: Codable, Sendable {
         self.routes = res.routes.compactMap(OrderRoute.init)
         self.bonusAmount = res.bonusAmount
         self.isUsingBonus = res.bonusUsed
+        self.award = res.award.map { Award(amount: $0.amount, type: $0.type) }
+    }
+    
+    public struct Award: Codable, Sendable {
+        public var amount: Int
+        public var type: String
+        
+        public init(amount: Int, type: String) {
+            self.amount = amount
+            self.type = type
+        }
     }
 }
 

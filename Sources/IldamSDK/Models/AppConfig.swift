@@ -7,12 +7,12 @@
 
 import Foundation
 
-public struct AppConfig: Codable {
+public struct AppConfig: Codable, Sendable {
     public let mapType: String?
     public let setting: Setting?
     public let twoGisKey: String?
     
-    public struct Setting: Codable {
+    public struct Setting: Codable, Sendable {
         public let executorLink: String?
         public let facebook: String?
         public let instagram: String?

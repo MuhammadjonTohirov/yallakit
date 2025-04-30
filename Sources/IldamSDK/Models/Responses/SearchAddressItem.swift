@@ -8,7 +8,7 @@
 // Models/SearchAddressResponse.swift
 import Foundation
 
-public struct SearchAddressItem {
+public struct SearchAddressItem: Sendable {
     public let lat: Double
     public let lng: Double
     public let name: String?
