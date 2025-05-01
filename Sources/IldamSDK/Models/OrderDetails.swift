@@ -336,14 +336,14 @@ public struct OrderServiceItem: Codable, Sendable {
 }
 
 public struct OrderTaxiTrack: Codable, Sendable {
-    var accuracy: Double?
-    var lat: Double?
-    var lng: Double?
-    var locationType: String? // ex: fused
-    var online: Bool?
-    var speed: Double?
-    var status: String? // ex: appointed
-    var time: Int?
+    public var accuracy: Double?
+    public var lat: Double?
+    public var lng: Double?
+    public var locationType: String? // ex: fused
+    public var online: Bool?
+    public var speed: Double?
+    public var status: String? // ex: appointed
+    public var time: Int?
     
     init(res: NetResOrderTaxiTrack) {
         self.accuracy = res.accuracy
