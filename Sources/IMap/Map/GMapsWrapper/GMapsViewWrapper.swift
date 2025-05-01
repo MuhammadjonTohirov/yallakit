@@ -182,17 +182,20 @@ public struct GMapsViewWrapper: UIViewControllerRepresentable, @unchecked Sendab
             if isDrawing || hasDrawn {
                 return
             }
-
+            
             let path = GMSMutablePath()
-            self.isDrawing = true
 
-            for location in coordinates.map({ $0.coordinate }) {
+            self.isDrawing = true
+            
+            for location in coordinates.map({$0.coordinate}) {
                 path.add(location)
             }
-
+            
+            //Step 5:
             self.polyline = GMSPolyline(path: path)
-
+            
             var lineColor: UIColor = .black
+            
             switch UserSettings.shared.theme {
             case .system:
                 lineColor = .label
@@ -203,28 +206,18 @@ public struct GMapsViewWrapper: UIViewControllerRepresentable, @unchecked Sendab
             default:
                 lineColor = .label
             }
-
-            // Dashed style: alternating solid and transparent spans
-            let solidStyle = GMSStrokeStyle.solidColor(lineColor)
-            let clearStyle = GMSStrokeStyle.solidColor(.clear)
-
-            let length = GMSGeometryLength(path)
-            var spans: [GMSStyleSpan] = []
-
-            // Adjust pattern sizes as needed
-            let patternLength: CLLocationDistance = 20.0  // Total cycle length (solid + gap)
-            let dashLength: CLLocationDistance = 10.0     // Solid segment
-
-            var distance: CLLocationDistance = 0.0
-            while distance < length {
-                spans.append(GMSStyleSpan(style: solidStyle, segments: dashLength))
-                spans.append(GMSStyleSpan(style: clearStyle, segments: patternLength - dashLength))
-                distance += patternLength
-            }
-
-            polyline?.spans = spans
+            let roundStyle: GMSSpriteStyle = GMSSpriteStyle(image: UIImage(systemName: "circle")!)
+            let roundStrokeStyle = GMSStrokeStyle.transparentStroke(withStamp: roundStyle)
+            
+            let style = GMSStrokeStyle.solidColor(lineColor)
+            
+            polyline?.strokeColor = lineColor
             polyline?.strokeWidth = 5.6
             polyline?.geodesic = true
+            polyline?.spans = [
+                GMSStyleSpan(style: style),
+                GMSStyleSpan(style: roundStrokeStyle)
+            ]
             polyline?.map = mapView
 
             self.isDrawing = false
