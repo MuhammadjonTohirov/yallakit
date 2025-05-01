@@ -228,7 +228,7 @@ struct NetResOrderTaxiTrack: Codable {
     var online: Bool?
     var speed: Double?
     var status: String? // ex: appointed
-    var time: Int?
+    var time: Int64?
     
     enum CodingKeys: String, CodingKey {
         case accuracy

@@ -343,7 +343,7 @@ public struct OrderTaxiTrack: Codable, Sendable {
     public var online: Bool?
     public var speed: Double?
     public var status: String? // ex: appointed
-    public var time: Int?
+    public var time: Int64?
     
     init(res: NetResOrderTaxiTrack) {
         self.accuracy = res.accuracy
@@ -356,7 +356,7 @@ public struct OrderTaxiTrack: Codable, Sendable {
         self.time = res.time
     }
     
-    public init(accuracy: Double? = nil, lat: Double? = nil, lng: Double? = nil, locationType: String? = nil, online: Bool? = nil, speed: Double? = nil, status: String? = nil, time: Int? = nil) {
+    public init(accuracy: Double? = nil, lat: Double? = nil, lng: Double? = nil, locationType: String? = nil, online: Bool? = nil, speed: Double? = nil, status: String? = nil, time: Int64? = nil) {
         self.accuracy = accuracy
         self.lat = lat
         self.lng = lng
