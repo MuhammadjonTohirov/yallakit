@@ -61,7 +61,7 @@ public struct GMapsViewWrapper: UIViewControllerRepresentable, @unchecked Sendab
         vc.delegate = context.coordinator
         vc.map.isBuildingsEnabled = true
         vc.map.isIndoorEnabled = true
-        vc.map.isTrafficEnabled = true
+        vc.map.isTrafficEnabled = false
         vc.map.settings.allowScrollGesturesDuringRotateOrZoom = false
         return vc
     }
@@ -178,22 +178,47 @@ public struct GMapsViewWrapper: UIViewControllerRepresentable, @unchecked Sendab
             })
         }
         
-        func drawPolyline(onMap mapView: GMSMapView, coordinates: [RouteDataCoordinate]) {
+        @MainActor func drawPolyline(onMap mapView: GMSMapView, coordinates: [RouteDataCoordinate]) {
             if isDrawing || hasDrawn {
                 return
             }
             
-            let path = GMSMutablePath()
-
             self.isDrawing = true
             
-            for location in coordinates.map({$0.coordinate}) {
-                path.add(location)
+            // Clear existing polyline
+            if let polyline = self.polyline {
+                polyline.map = nil
+                self.polyline = nil
             }
             
-            //Step 5:
-            self.polyline = GMSPolyline(path: path)
+            // Group consecutive segments by line type
+            var currentType: RouteLineType?
+            var currentSegment: [CLLocationCoordinate2D] = []
+            var segments: [(type: RouteLineType, coordinates: [CLLocationCoordinate2D])] = []
             
+            for (index, coordinate) in coordinates.enumerated() {
+                // If this is a new segment type or the first coordinate
+                if currentType != coordinate.lineType || index == 0 {
+                    // Save the previous segment if it exists
+                    if !currentSegment.isEmpty && currentType != nil {
+                        segments.append((type: currentType!, coordinates: currentSegment))
+                    }
+                    
+                    // Start a new segment
+                    currentType = coordinate.lineType
+                    currentSegment = [coordinate.coordinate]
+                } else {
+                    // Continue current segment
+                    currentSegment.append(coordinate.coordinate)
+                }
+                
+                // If this is the last coordinate, add the current segment
+                if index == coordinates.count - 1 && !currentSegment.isEmpty {
+                    segments.append((type: currentType!, coordinates: currentSegment))
+                }
+            }
+            
+            // Base color determination based on theme
             var lineColor: UIColor = .black
             
             switch UserSettings.shared.theme {
@@ -207,18 +232,72 @@ public struct GMapsViewWrapper: UIViewControllerRepresentable, @unchecked Sendab
                 lineColor = .label
             }
             
-            let style = GMSStrokeStyle.solidColor(lineColor)
+            // Create dashed line image for walking segments
+            let dashImage = createDashedLineImage(with: lineColor)
             
-            polyline?.strokeColor = lineColor
-            polyline?.strokeWidth = 5.6
-            polyline?.geodesic = true
-            polyline?.spans = [
-                GMSStyleSpan(style: style),
-            ]
-            polyline?.map = mapView
-
+            // Draw each segment with appropriate style
+            for segment in segments {
+                let path = GMSMutablePath()
+                for coordinate in segment.coordinates {
+                    path.add(coordinate)
+                }
+                
+                let polyline = GMSPolyline(path: path)
+                polyline.strokeWidth = 5.6
+                polyline.geodesic = true
+                
+                if segment.type == .walkLine {
+                    // Apply dashed line style for walking segments
+                    if let dashImage = dashImage {
+                        let dashStyle = GMSStrokeStyle.transparentStroke(withStamp: GMSSpriteStyle(image: dashImage))
+                        polyline.spans = [GMSStyleSpan(style: dashStyle)]
+                    } else {
+                        // Fallback if image creation fails - use solid line but with different color
+                        let walkColor = lineColor.withAlphaComponent(0.7)
+                        polyline.strokeColor = walkColor
+                    }
+                } else {
+                    // Create solid line style for car segments
+                    let solidStyle = GMSStrokeStyle.solidColor(lineColor)
+                    polyline.spans = [GMSStyleSpan(style: solidStyle)]
+                }
+                
+                polyline.map = mapView
+                
+                // Keep track of the last polyline (for cleaning up later)
+                self.polyline = polyline
+            }
+            
             self.isDrawing = false
             self.hasDrawn = true
+        }
+
+        // Helper method to create a dashed line image
+        @MainActor
+        private func createDashedLineImage(with color: UIColor) -> UIImage? {
+            let scale = UIScreen.main.scale
+            let width: CGFloat = 20.0
+            let height: CGFloat = 5.6
+            
+            UIGraphicsBeginImageContextWithOptions(CGSize(width: width, height: height), false, scale)
+            guard let context = UIGraphicsGetCurrentContext() else { return nil }
+            
+            // Clear background
+            context.clear(CGRect(x: 0, y: 0, width: width, height: height))
+            
+            // Draw the dashed line
+            context.setStrokeColor(color.cgColor)
+            context.setLineWidth(height)
+            context.setLineDash(phase: 0, lengths: [8, 6])
+            
+            context.move(to: CGPoint(x: 0, y: height/2))
+            context.addLine(to: CGPoint(x: width, y: height/2))
+            context.strokePath()
+            
+            let image = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
+            
+            return image
         }
         
         func populateRouteMarkers(onMap map: GMSMapView, markers: Set<GMSMarker>) {
@@ -238,23 +317,6 @@ public struct GMapsViewWrapper: UIViewControllerRepresentable, @unchecked Sendab
                 marker.map = map
             }
         }
-        
-//        @MainActor
-//        public func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
-//            if let lastPosition = lastCameraPosition, lastPosition.zoom != position.zoom && isUserInteracting {
-//                // Get the visual center where the pin is located
-//                let visualCenter = CGPoint(
-//                    x: mapView.bounds.midX,
-//                    y: mapView.bounds.midY - mapView.padding.bottom / 2 + 25
-//                )
-//                
-//                let coordinate = mapView.projection.coordinate(for: visualCenter)
-//                let cameraUpdate = GMSCameraUpdate.setTarget(coordinate)
-//                mapView.animate(with: cameraUpdate)
-//            }
-//            
-//            lastCameraPosition = position
-//        }
         
         @MainActor
         func deleteOtherMarkers() {
