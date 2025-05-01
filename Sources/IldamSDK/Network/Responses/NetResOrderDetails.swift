@@ -59,6 +59,7 @@ struct NetResOrderDetails: NetResBody {
         try container.encodeIfPresent(self.comment, forKey: .comment)
         try container.encodeIfPresent(self.statusTime, forKey: .statusTime)
         try container.encodeIfPresent(self.paymentType, forKey: .paymentType)
+        try container.encodeIfPresent(self.track, forKey: .track)
     }
     
     init(from decoder: any Decoder) throws {
@@ -72,6 +73,7 @@ struct NetResOrderDetails: NetResBody {
         self.comment = try container.decodeIfPresent(String.self, forKey: .comment)
         self.statusTime = try container.decodeIfPresent([StatusTime].self, forKey: .statusTime)
         self.paymentType = try? container.decodeIfPresent(String.self, forKey: .paymentType)
+        self.track = try? container.decodeIfPresent([NetResOrderTaxiTrack].self, forKey: .track)
     }
     
     struct StatusTime: Codable {
