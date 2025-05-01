@@ -19,6 +19,7 @@ struct NetResOrderDetails: NetResBody {
     var statusTime: [StatusTime]?
     var executor: NetResTaxiOrderExecutor?
     var taxi: NetResOrderTaxiDetails?
+    var track: [NetResOrderTaxiTrack]?
     var comment: String?
     var paymentType: String?
     
@@ -32,6 +33,7 @@ struct NetResOrderDetails: NetResBody {
         case comment
         case statusTime = "status_time"
         case paymentType = "payment_type"
+        case track
     }
     
     init(id: Int, dateTime: Double?, service: String, status: String, executor: NetResTaxiOrderExecutor?, taxi: NetResOrderTaxiDetails?, comment: String?) {
@@ -215,5 +217,27 @@ struct NetResOrderService: Codable {
         case cost
         case costType = "cost_type"
         case name
+    }
+}
+
+struct NetResOrderTaxiTrack: Codable {
+    var accuracy: Double?
+    var lat: Double?
+    var lng: Double?
+    var locationType: String? // ex: fused
+    var online: Bool?
+    var speed: Double?
+    var status: String? // ex: appointed
+    var time: Int?
+    
+    enum CodingKeys: String, CodingKey {
+        case accuracy
+        case lat
+        case lng
+        case locationType = "location_type"
+        case online
+        case speed
+        case status
+        case time
     }
 }

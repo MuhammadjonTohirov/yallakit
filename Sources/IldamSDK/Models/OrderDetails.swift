@@ -71,6 +71,7 @@ public struct OrderDetails: Codable, Sendable {
     public let comment: String?
     public let statusTime: [StatusTime]?
     public let paymentType: String
+    public let track: [OrderTaxiTrack]?
     
     init?(res: NetResOrderDetails?) {
         guard let res = res else { return nil }
@@ -84,7 +85,7 @@ public struct OrderDetails: Codable, Sendable {
         self.taxi = .init(res: res)
         self.statusTime = res.statusTime?.map({StatusTime(res: $0)})
         self.paymentType = res.paymentType ?? "cash"
-        
+        self.track = res.track?.map({OrderTaxiTrack(res: $0)})
         print("new order", res.status)
     }
     
@@ -97,7 +98,8 @@ public struct OrderDetails: Codable, Sendable {
         taxi: OrderTaxiDetails?,
         comment: String?,
         statusTime: [StatusTime]?,
-        paymentType: String
+        paymentType: String,
+        track: [OrderTaxiTrack]?
     ) {
         self.id = id
         self.dateTime = dateTime
@@ -108,6 +110,7 @@ public struct OrderDetails: Codable, Sendable {
         self.comment = comment
         self.statusTime = statusTime
         self.paymentType = paymentType
+        self.track = track
     }
     
     public struct StatusTime: Codable, Sendable {
@@ -329,5 +332,38 @@ public struct OrderServiceItem: Codable, Sendable {
         self.cost = res.cost
         self.costType = res.costType
         self.name = res.name
+    }
+}
+
+public struct OrderTaxiTrack: Codable, Sendable {
+    var accuracy: Double?
+    var lat: Double?
+    var lng: Double?
+    var locationType: String? // ex: fused
+    var online: Bool?
+    var speed: Double?
+    var status: String? // ex: appointed
+    var time: Int?
+    
+    init(res: NetResOrderTaxiTrack) {
+        self.accuracy = res.accuracy
+        self.lat = res.lat
+        self.lng = res.lng
+        self.locationType = res.locationType
+        self.online = res.online
+        self.speed = res.speed
+        self.status = res.status
+        self.time = res.time
+    }
+    
+    public init(accuracy: Double? = nil, lat: Double? = nil, lng: Double? = nil, locationType: String? = nil, online: Bool? = nil, speed: Double? = nil, status: String? = nil, time: Int? = nil) {
+        self.accuracy = accuracy
+        self.lat = lat
+        self.lng = lng
+        self.locationType = locationType
+        self.online = online
+        self.speed = speed
+        self.status = status
+        self.time = time
     }
 }
