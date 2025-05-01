@@ -240,4 +240,39 @@ struct NetResOrderTaxiTrack: Codable {
         case status
         case time
     }
+    
+    init(accuracy: Double? = nil, lat: Double? = nil, lng: Double? = nil, locationType: String? = nil, online: Bool? = nil, speed: Double? = nil, status: String? = nil, time: Int64? = nil) {
+        self.accuracy = accuracy
+        self.lat = lat
+        self.lng = lng
+        self.locationType = locationType
+        self.online = online
+        self.speed = speed
+        self.status = status
+        self.time = time
+    }
+    
+    init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.accuracy = try? container.decodeIfPresent(Double.self, forKey: .accuracy)
+        self.lat = try? container.decodeIfPresent(Double.self, forKey: .lat)
+        self.lng = try? container.decodeIfPresent(Double.self, forKey: .lng)
+        self.locationType = try? container.decodeIfPresent(String.self, forKey: .locationType)
+        self.online = try? container.decodeIfPresent(Bool.self, forKey: .online)
+        self.speed = try? container.decodeIfPresent(Double.self, forKey: .speed)
+        self.status = try? container.decodeIfPresent(String.self, forKey: .status)
+        self.time = try? container.decodeIfPresent(Int64.self, forKey: .time)
+    }
+    
+    func encode(to encoder: any Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try? container.encodeIfPresent(self.accuracy, forKey: .accuracy)
+        try? container.encodeIfPresent(self.lat, forKey: .lat)
+        try? container.encodeIfPresent(self.lng, forKey: .lng)
+        try? container.encodeIfPresent(self.locationType, forKey: .locationType)
+        try? container.encodeIfPresent(self.online, forKey: .online)
+        try? container.encodeIfPresent(self.speed, forKey: .speed)
+        try? container.encodeIfPresent(self.status, forKey: .status)
+        try? container.encodeIfPresent(self.time, forKey: .time)
+    }
 }
