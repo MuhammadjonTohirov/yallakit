@@ -215,8 +215,8 @@ public struct GMapsViewWrapper: UIViewControllerRepresentable, @unchecked Sendab
             polyline?.strokeWidth = 5.6
             polyline?.geodesic = true
             polyline?.spans = [
-                GMSStyleSpan(style: style),
-                GMSStyleSpan(style: roundStrokeStyle)
+                GMSStyleSpan(style: roundStrokeStyle),
+                GMSStyleSpan(style: style)
             ]
             polyline?.map = mapView
 
