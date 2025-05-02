@@ -41,6 +41,10 @@ let package = Package(
                 "Core",
                 "NetworkLayer",
                 "GoogleMapsWrapper"
+            ],
+            resources: [
+                // assets
+                .process("Assets")
             ]
         ),
         .target(
