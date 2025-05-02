@@ -206,7 +206,7 @@ public struct GMapsViewWrapper: UIViewControllerRepresentable, @unchecked Sendab
             default:
                 lineColor = .label
             }
-            let roundStyle: GMSSpriteStyle = GMSSpriteStyle(image: UIImage(systemName: "circle")!)
+            let roundStyle: GMSSpriteStyle = GMSSpriteStyle(image: UIImage(systemName: "largecircle.fill.circle")!)
             let roundStrokeStyle = GMSStrokeStyle.transparentStroke(withStamp: roundStyle)
             
             let style = GMSStrokeStyle.solidColor(lineColor)
@@ -216,7 +216,8 @@ public struct GMapsViewWrapper: UIViewControllerRepresentable, @unchecked Sendab
             polyline?.geodesic = true
             polyline?.spans = [
                 GMSStyleSpan(style: roundStrokeStyle),
-                GMSStyleSpan(style: style)
+                GMSStyleSpan(style: style),
+                GMSStyleSpan(style: roundStrokeStyle),
             ]
             polyline?.map = mapView
 
