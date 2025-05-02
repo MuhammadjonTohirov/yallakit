@@ -209,7 +209,7 @@ public struct GMapsViewWrapper: UIViewControllerRepresentable, @unchecked Sendab
             }
             
             let roundStyle: GMSSpriteStyle = GMSSpriteStyle(
-                image: UIImage.systemImageFilled(symbolName: "largecircle.fill.circle", color: .red, size: .init(width: 12, height: 12))!
+                image: UIImage(named: "img_circle")!
             )
             
             let roundStrokeStyle = GMSStrokeStyle.transparentStroke(withStamp: roundStyle)
