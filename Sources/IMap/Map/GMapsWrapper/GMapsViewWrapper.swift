@@ -206,9 +206,11 @@ public struct GMapsViewWrapper: UIViewControllerRepresentable, @unchecked Sendab
             default:
                 lineColor = .label
             }
+            
             let roundStyle: GMSSpriteStyle = GMSSpriteStyle(
-                image: UIImage(systemName: "largecircle.fill.circle")!.withRenderingMode(.alwaysTemplate).withTintColor(.red)
+                image: UIImage(systemName: "largecircle.fill.circle")!.withTintColor(.red, renderingMode: .alwaysTemplate)
             )
+            
             let roundStrokeStyle = GMSStrokeStyle.transparentStroke(withStamp: roundStyle)
             
             let style = GMSStrokeStyle.solidColor(lineColor)
