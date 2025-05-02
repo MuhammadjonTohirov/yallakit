@@ -44,7 +44,7 @@ let package = Package(
             ],
             resources: [
                 // assets
-                .process("Assets")
+                .process("Assets.xcassets")
             ]
         ),
         .target(
