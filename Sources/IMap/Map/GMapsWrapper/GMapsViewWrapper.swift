@@ -178,6 +178,7 @@ public struct GMapsViewWrapper: UIViewControllerRepresentable, @unchecked Sendab
             })
         }
         
+        @MainActor
         func drawPolyline(onMap mapView: GMSMapView, coordinates: [RouteDataCoordinate]) {
             if isDrawing || hasDrawn {
                 return
@@ -208,7 +209,7 @@ public struct GMapsViewWrapper: UIViewControllerRepresentable, @unchecked Sendab
             }
             
             let roundStyle: GMSSpriteStyle = GMSSpriteStyle(
-                image: UIImage(systemName: "largecircle.fill.circle")!.withTintColor(.red, renderingMode: .alwaysTemplate)
+                image: UIImage.systemImageFilled(symbolName: "largecircle.fill.circle", color: .red, size: .init(width: 12, height: 12))!
             )
             
             let roundStrokeStyle = GMSStrokeStyle.transparentStroke(withStamp: roundStyle)
@@ -263,6 +264,25 @@ public extension Array {
     func chunked(into size: Int) -> [[Element]] {
         return stride(from: 0, to: count, by: size).map {
             Array(self[$0 ..< Swift.min($0 + size, count)])
+        }
+    }
+}
+
+extension UIImage {
+    
+    @MainActor
+    static func systemImageFilled(symbolName: String, color: UIColor, size: CGSize = CGSize(width: 30, height: 30)) -> UIImage? {
+        let config = UIImage.SymbolConfiguration(pointSize: size.width, weight: .regular)
+        guard let symbolImage = UIImage(systemName: symbolName, withConfiguration: config) else { return nil }
+
+        let format = UIGraphicsImageRendererFormat()
+        format.scale = UIScreen.main.scale
+        format.opaque = false
+
+        let renderer = UIGraphicsImageRenderer(size: size, format: format)
+        return renderer.image { _ in
+            color.set()
+            symbolImage.draw(in: CGRect(origin: .zero, size: size))
         }
     }
 }
