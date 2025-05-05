@@ -7,6 +7,7 @@
 
 import Foundation
 import GoogleMaps
+import Core
 
 public struct GMSServicesConfig: Sendable {
     @MainActor static var didConfig = false

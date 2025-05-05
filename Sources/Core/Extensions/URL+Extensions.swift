@@ -19,16 +19,16 @@ public extension URL {
     }
     
     nonisolated(unsafe) static var baseAPI: URL = {
-        .init(string: "https://api2.ildam.uz")!
+        .init(string: ConstantsProvider.shared.constants.baseGoApi)!
     }()
     
     nonisolated(unsafe) static var baseAPICli: URL = {
-        .init(string: "https://api.ildam.uz/cli")!
+        .init(string: ConstantsProvider.shared.constants.basePhpApi + "/cli")!
     }()
     
     /// https://api2.ildam.uz/client
     static var goIldamAPI: URL {
-        .init(string: "\(baseAPI.absoluteString)/client")!
+        .init(string: ConstantsProvider.shared.constants.baseGoApi + "/client")!
     }
     
     nonisolated(unsafe) static var keyHeader: (key: String, value: String) = {
