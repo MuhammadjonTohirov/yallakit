@@ -10,6 +10,10 @@ import Foundation
 public struct Constants: Sendable {
     public var baseGoApi: String = "https://api2.ildam.uz"
     public var basePhpApi: String = "https://api.ildam.uz"
+    
+    public var goBaseEndpoint: String = "/client"
+    public var phpBaseEndpoint: String = "/cli"
+    
     public var suiteName: String = "uz.xcoder.Ildam"
     
     public init() {}
@@ -32,6 +36,20 @@ public struct Constants: Sendable {
     public func setSuiteName(_ suiteName: String) -> Self {
         var result = self
         result.suiteName = suiteName
+        return result
+    }
+    
+    @discardableResult
+    public func setGoBaseEndpoint(_ goBaseEndpoint: String) -> Self {
+        var result = self
+        result.goBaseEndpoint = goBaseEndpoint
+        return result
+    }
+    
+    @discardableResult
+    public func setPhpBaseEndpoint(_ phpBaseEndpoint: String) -> Self {
+        var result = self
+        result.phpBaseEndpoint = phpBaseEndpoint
         return result
     }
 }

@@ -16,12 +16,12 @@ public extension URL {
     }
     
     nonisolated(unsafe) static var baseAPICli: URL {
-        .init(string: ConstantsProvider.shared.constants.basePhpApi + "/cli")!
+        .init(string: ConstantsProvider.shared.constants.basePhpApi + ConstantsProvider.shared.constants.phpBaseEndpoint)!
     }
     
     /// https://api2.ildam.uz/client
     static var goIldamAPI: URL {
-        .init(string: ConstantsProvider.shared.constants.baseGoApi + "/client")!
+        .init(string: ConstantsProvider.shared.constants.baseGoApi + ConstantsProvider.shared.constants.goBaseEndpoint)!
     }
     
     static var keyHeader: (key: String, value: String) {
