@@ -7,9 +7,16 @@
 
 import Foundation
 
+enum ConstantKeys {
+    static let goApiUrlKey = "goApiUrl"
+    static let phpApiUrlKey = "phpApiUrl"
+    static let suiteNameKey = "suiteName"
+}
+
 public struct Constants: Sendable {
     public var baseGoApi: String = "https://api2.ildam.uz"
     public var basePhpApi: String = "https://api.ildam.uz"
+    public var suiteName: String = "uz.xcoder.Ildam"
     
     public init() {}
     
@@ -26,10 +33,18 @@ public struct Constants: Sendable {
         result.basePhpApi = basePhpApi
         return result
     }
+    
+    @discardableResult
+    public func setSuiteName(_ suiteName: String) -> Self {
+        var result = self
+        result.suiteName = suiteName
+        return result
+    }
 }
 
 public struct ConstantsProvider: Sendable {
-    nonisolated(unsafe) public static var shared: ConstantsProvider = .init()
+    @MainActor
+    public static var shared: ConstantsProvider = .init()
     
     public private(set) var constants: Constants = .init()
     
