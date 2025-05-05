@@ -10,6 +10,22 @@ import Foundation
 public struct Constants: Sendable {
     public var baseGoApi: String = "https://api2.ildam.uz"
     public var basePhpApi: String = "https://api.ildam.uz"
+    
+    public init() {}
+    
+    @discardableResult
+    public func setBaseGoApi(_ baseGoApi: String) -> Self {
+        var result = self
+        result.baseGoApi = baseGoApi
+        return result
+    }
+    
+    @discardableResult
+    public func setBasePhpApi(_ basePhpApi: String) -> Self {
+        var result = self
+        result.basePhpApi = basePhpApi
+        return result
+    }
 }
 
 public struct ConstantsProvider: Sendable {
@@ -18,7 +34,7 @@ public struct ConstantsProvider: Sendable {
     public private(set) var constants: Constants = .init()
     
     mutating
-    func setConstants(_ constants: Constants) {
+    public func setConstants(_ constants: Constants) {
         self.constants = constants
     }
 }
