@@ -11,38 +11,31 @@ import UniformTypeIdentifiers
 
 public extension URL {
     
-    static func initialSetup() {
-        #if DEBUG
-        baseAPICli = .init(string: "https://test-php-gateway.ildam.uz/cli")!
-        baseAPI = .init(string: "https://test-go-gateway.ildam.uz")!
-        #endif
+    nonisolated(unsafe) static var baseAPI: URL {
+        .init(string: ConstantsProvider.shared.constants.baseGoApi)!
     }
     
-    nonisolated(unsafe) static var baseAPI: URL = {
-        .init(string: ConstantsProvider.shared.constants.baseGoApi)!
-    }()
-    
-    nonisolated(unsafe) static var baseAPICli: URL = {
+    nonisolated(unsafe) static var baseAPICli: URL {
         .init(string: ConstantsProvider.shared.constants.basePhpApi + "/cli")!
-    }()
+    }
     
     /// https://api2.ildam.uz/client
     static var goIldamAPI: URL {
         .init(string: ConstantsProvider.shared.constants.baseGoApi + "/client")!
     }
     
-    nonisolated(unsafe) static var keyHeader: (key: String, value: String) = {
+    static var keyHeader: (key: String, value: String) {
         ("secret-key", "2f52434c-3068-460d-8dbc-5c80599f2db4")
-    }()
+    }
     
     static var langHeader: (key: String, value: String) {
         ("lang", (UserSettings.shared.language ?? .russian).smallCode)
     }
     
     // not in use for now
-    nonisolated(unsafe) static var brandHeader: (key: String, value: String) = {
+    nonisolated(unsafe) static var brandHeader: (key: String, value: String) {
         ("brand-id", "2")
-    }()
+    }
     
     //"AIzaSyD0uKSmSaabl3CJRrBeQ_wpJ0uowlhqylE" - old
     //"AIzaSyC_dHd88uaz8yUlmxKbvXo7n-a7mPhgaWI" - mine
