@@ -29,7 +29,7 @@ public struct Constants: Sendable {
 }
 
 public struct ConstantsProvider: Sendable {
-    public static let shared: ConstantsProvider = .init()
+    nonisolated(unsafe) public static var shared: ConstantsProvider = .init()
     
     public private(set) var constants: Constants = .init()
     
