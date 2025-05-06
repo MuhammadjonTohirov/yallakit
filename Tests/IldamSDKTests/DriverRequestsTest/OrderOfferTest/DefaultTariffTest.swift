@@ -12,7 +12,6 @@ import XCTest
 
 final class DefaultTariffTest: XCTestCase {
     func testGetDefaultTariff_success() async {
-        UserSettings.shared.accessToken = ""
         
         let gateway = DefaultTariffGateway()
         let result = try? await gateway.getDefaultTariff()

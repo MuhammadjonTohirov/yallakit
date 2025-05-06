@@ -12,7 +12,6 @@ import XCTest
 
 final class DriverSendCondtionTest: XCTestCase {
     func test_sendOnline() async {
-        UserSettings.shared.accessToken = ""
         
         let gateway = DriverSendConditionGateway()
         let result = try? await gateway.sendCondtion()

@@ -16,7 +16,7 @@ struct DNetDriverConfigurationResponse: DNetResBody {
     let fotocontrol: Bool
     let nonstopReOfferIn: Int
     let paymentSetting: DNetResPaymentSetting
-    let reason: DNetConfigResponse
+    let reasons: DNetConfigResponse?
     let result: DNetResEnergyGroup
     let roundingCost: Int
     let roundingType: String
@@ -33,7 +33,7 @@ struct DNetDriverConfigurationResponse: DNetResBody {
         case expireTime = "expire_time"
         case fotocontrol
         case nonstopReOfferIn = "nonstop_re_offer_in"
-        case reason
+        case reasons
         case paymentSetting = "payment_setting"
         case result
         case roundingCost = "rounding_cost"

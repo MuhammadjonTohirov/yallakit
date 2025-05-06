@@ -13,7 +13,6 @@ import XCTest
 
 final class OrderUpdateStatusTest : XCTestCase {
     func test_OrderUpdateTest() async {
-        UserSettings.shared.accessToken = ""
         
         let gateway = OrderStatusUpdateGetway()
         let result = try? await gateway.orderUpdate(orderId: 1962622)

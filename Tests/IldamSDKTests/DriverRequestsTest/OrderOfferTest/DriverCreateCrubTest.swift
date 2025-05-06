@@ -12,7 +12,6 @@ import XCTest
 
 final class DriverCreateCrubTest: XCTestCase {
     func test_createOrderTest() async {
-        UserSettings.shared.accessToken = ""
         
         let gateway = CreateCrubOrderGetway()
         let result = try? await gateway.create(lat: 40.37932798676815,lng: 71.78753480970809,tariffId: 130,name: "Humans")

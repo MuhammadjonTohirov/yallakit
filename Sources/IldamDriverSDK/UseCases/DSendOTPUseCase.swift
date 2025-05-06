@@ -14,12 +14,12 @@ public protocol DSendOTPUseCaseProtocol {
 public final class DSendOTPUseCase: DSendOTPUseCaseProtocol {
     private let gateway: any DSendOTPGatewayProtocol
     
-    init(gateway: DSendOTPGatewayProtocol = DSendOTPGateway()) {
+    init(gateway: DSendOTPGatewayProtocol = DriverSendOTPGateway()) {
         self.gateway = gateway
     }
     
     public init() {
-        self.gateway = DSendOTPGateway()
+        self.gateway = DriverSendOTPGateway()
     }
     
     public func execute(username: String) async throws -> DriverOTPResponse? {

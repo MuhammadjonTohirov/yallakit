@@ -12,7 +12,7 @@ protocol DSendOTPGatewayProtocol {
     func send(phone: String) async throws -> DNetResSendOTP?
 }
 
-struct DSendOTPGateway: DSendOTPGatewayProtocol {
+struct DriverSendOTPGateway: DSendOTPGatewayProtocol {
     func send(phone: String) async throws -> DNetResSendOTP? {
         let res: NetRes<DNetResSendOTP>? = try await Network.sendThrow(request: Request(phone: phone))
         

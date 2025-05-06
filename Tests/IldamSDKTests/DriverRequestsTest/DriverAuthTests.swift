@@ -12,7 +12,7 @@ import XCTest
 
 final class DriverAuthTests: XCTestCase {
     func testExecute_sendOTP() async {
-        let gateway = DSendOTPGateway()
+        let gateway = DriverSendOTPGateway()
         let result = try? await gateway.send(phone: "998889979723")
         XCTAssertTrue(result != nil)
     }

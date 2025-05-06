@@ -13,7 +13,6 @@ import XCTest
 
 final class DriverOrderTariffConfigTest: XCTestCase {
     func testExecute_sendOTP() async {
-        UserSettings.shared.accessToken = ""
         let gateway = OrderTariffConfigurationGateway()
         let result = try? await gateway.getOrderTariffConfiguration(orderId: 1934508)
         

@@ -13,7 +13,6 @@ import XCTest
 
 final class DriverOrderAppointedTest: XCTestCase {
     func test_getAppointedOrderTest() async {
-        UserSettings.shared.accessToken = ""
         
         let gateway = GetAppointedOrderGateway()
         let result = try? await gateway.getAppointedOrder(orderId: 1962990)

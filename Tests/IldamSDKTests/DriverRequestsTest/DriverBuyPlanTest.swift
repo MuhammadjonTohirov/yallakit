@@ -13,7 +13,6 @@ import XCTest
 
 final class DriverBuyPlanTest: XCTestCase {
     func testExecute_getorderList() async {
-        UserSettings.shared.accessToken = ""
 
         let getway = DriverBuyPlanGetWay()
         

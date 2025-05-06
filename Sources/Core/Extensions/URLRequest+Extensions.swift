@@ -16,6 +16,7 @@ extension URLRequest {
         req.addValue("application/json", forHTTPHeaderField: "Content-Type")
         req.addValue("application/json", forHTTPHeaderField: "accept")
         req.addValue("IOS", forHTTPHeaderField: "User-Agent-OS")
+        req.addValue("2.2.404", forHTTPHeaderField: "User-Agent-Version")
         
         if let accessToken = UserSettings.shared.accessToken, withAuth {
             req.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")

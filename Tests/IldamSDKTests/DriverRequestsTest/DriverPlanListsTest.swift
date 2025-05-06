@@ -13,7 +13,6 @@ import XCTest
 
 final class DriverPlanListsTest: XCTestCase {
     func testExecute_getPlanLists() async {
-        UserSettings.shared.accessToken = ""
         
         let gateway = DriverPlanListGatewayGetway()
         let result = try? await gateway.getPlanLists()

@@ -12,7 +12,6 @@ import XCTest
 
 final class DriverGetConditionTest: XCTestCase {
     func test_getCondition() async {
-        UserSettings.shared.accessToken = ""
         
         let gateway = DriverGetConditionGateway()
         let result = try? await gateway.getCondition()
