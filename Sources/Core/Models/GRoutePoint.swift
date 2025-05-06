@@ -10,10 +10,7 @@ import CoreLocation
 
 public struct GRoutePoint: Codable, Identifiable, Hashable {
     /// the same order
-    public var id: String {
-        location.identifier
-    }
-    
+    public var id: Int
     public var order: Int
     public var location: CLLocation
     public var address: String
@@ -22,7 +19,8 @@ public struct GRoutePoint: Codable, Identifiable, Hashable {
         hasher.combine(self.id)
     }
     
-    public init(order: Int, location: CLLocation, address: String) {
+    public init(id: Int, order: Int, location: CLLocation, address: String) {
+        self.id = id
         self.order = order
         self.location = location
         self.address = address
@@ -37,6 +35,7 @@ public struct GRoutePoint: Codable, Identifiable, Hashable {
         case lat
         case lng
         case address
+        case id
     }
     
     public func encode(to encoder: any Encoder) throws {
@@ -45,6 +44,7 @@ public struct GRoutePoint: Codable, Identifiable, Hashable {
         try container.encode(address, forKey: .address)
         try container.encode(location.coordinate.latitude, forKey: .lat)
         try container.encode(location.coordinate.longitude, forKey: .lng)
+        try container.encode(id, forKey: .id)
     }
     
     public init(from decoder: any Decoder) throws {
@@ -54,5 +54,12 @@ public struct GRoutePoint: Codable, Identifiable, Hashable {
         let lat = try container.decode(Double.self, forKey: .lat)
         let lng = try container.decode(Double.self, forKey: .lng)
         self.location = CLLocation(latitude: lat, longitude: lng)
+        self.id = try container.decode(Int.self, forKey: .id)
+    }
+}
+
+public extension GRoutePoint {
+    var locationId: String {
+        location.identifier
     }
 }
