@@ -9,11 +9,11 @@
 import Foundation
 
 public struct AddressResponse {
-    public let lat: String
-    public let lng: String
+    public let lat: Double
+    public let lng: Double
     public let name: String
     
-    public init(lat: String, lng: String, name: String) {
+    public init(lat: Double, lng: Double, name: String) {
         self.lat = lat
         self.lng = lng
         self.name = name

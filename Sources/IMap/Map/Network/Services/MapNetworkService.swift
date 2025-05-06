@@ -7,6 +7,7 @@
 
 import Foundation
 import NetworkLayer
+import Core
 
 public struct MapNetworkService: @unchecked Sendable {
     public static let shared = MapNetworkService()

@@ -6,9 +6,30 @@
 //
 
 import Foundation
+import NetworkLayer
 
 struct NetResGetAddress: NetResBody {
-    var lat: String
-    var lng: String
+    let id: Int?
+    var lat: Double
+    var lng: Double
     var name: String
+    var distance: Double?
+    var parent: AddressParent?
+    var level: String?
+    
+    enum CodingKeys: String, CodingKey {
+        case id
+        case lat
+        case lng
+        case name = "display_name"
+        case distance
+        case level
+        case parent
+    }
+    
+    struct AddressParent: Codable {
+        var id: Int
+        var name: String?
+        var level: String?
+    }
 }
