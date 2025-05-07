@@ -19,24 +19,32 @@ struct SendFotoControlGateway: SendFotoControlGatewayProtocol {
         let response: NetRes<Bool>? = try await Network.sendThrow(request: request)
         return response?.success == true
     }
-
+    
     struct Request: URLRequestProtocol {
         let bodyItems: [SendFotoControlBodyItem]
         
-        enum CodingKeys: String, CodingKey {
-            case type
-            case photoControlId = "photo_control_id"
-            case file
+        var multipartForm: MultipartForm {
+            let parts: [MultipartForm.PartFormData] = bodyItems.flatMap { item in
+                var fields: [MultipartForm.PartFormData] = []
+                
+                fields.append(.init(name: "type", value: item.type))
+                fields.append(.init(name: "photo_control_id", value: "\(item.photoControlId)"))
+                fields.append(.init(name: "file", value: "\(item.file)"))
+                
+                return fields
+            }
+            return MultipartForm(parts: parts)
         }
         
         var url: URL {
             URL.baseAPI.appendingPathComponent("executor/photo-control")
         }
-
+        
         var body: Data? {
-            try? JSONEncoder().encode(bodyItems)
+            multipartForm.bodyData
         }
-
+        
         var method: HTTPMethod { .post }
+        
     }
 }
