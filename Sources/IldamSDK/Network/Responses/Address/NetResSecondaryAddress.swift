@@ -10,6 +10,7 @@ import Foundation
 struct NetResSecondaryAddressItem: Codable {
     let addressId: Int?
     let addressName: String?
+    let uniqueId: Int?
     let distance: Double
     let lat: Double
     let lng: Double
@@ -18,6 +19,7 @@ struct NetResSecondaryAddressItem: Codable {
     
     enum CodingKeys: String, CodingKey {
         case addressId = "address_id"
+        case uniqueId = "unique_id"
         case addressName = "address_name"
         case distance
         case lat

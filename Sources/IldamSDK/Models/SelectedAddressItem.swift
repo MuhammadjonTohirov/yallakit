@@ -9,6 +9,7 @@ import Foundation
 
 public struct SecondaryAddressItem {
     public let addressId: Int?
+    public let uniqueId: Int?
     public let addressName: String?
     public let distance: Double
     public let lat: Double
@@ -16,10 +17,11 @@ public struct SecondaryAddressItem {
     public let name: String?
     public let type: String?
     
-    public init(addressId: Int? = nil, addressName: String? = nil, distance: Double = 0, lat: Double = 0, lng: Double = 0, name: String? = nil, type: String? = nil) {
+    public init(addressId: Int? = nil, addressName: String? = nil, uniqueId: Int? = nil, distance: Double = 0, lat: Double = 0, lng: Double = 0, name: String? = nil, type: String? = nil) {
         self.addressId = addressId
         self.addressName = addressName
         self.distance = distance
+        self.uniqueId = uniqueId
         self.lat = lat
         self.lng = lng
         self.name = name
@@ -29,7 +31,7 @@ public struct SecondaryAddressItem {
 
 extension SecondaryAddressItem: Identifiable {
     public var id: Int {
-        addressId ?? 0
+        uniqueId ?? 0
     }
     
     public var distanceString: String {
@@ -53,5 +55,6 @@ extension SecondaryAddressItem {
         self.lng = response.lng
         self.name = response.name
         self.type = response.type
+        self.uniqueId = response.uniqueId
     }
 }
