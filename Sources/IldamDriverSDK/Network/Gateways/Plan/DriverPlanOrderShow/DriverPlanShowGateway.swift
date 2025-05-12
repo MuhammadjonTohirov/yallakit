@@ -13,7 +13,7 @@ protocol DriverPlanShowProtocol {
     func getPlanShow(planId: Int) async throws -> DriverPlanShowResponse?
 }
 
-struct DriverPlanShowGetway: DriverPlanShowProtocol {
+struct DriverPlanShowGateway: DriverPlanShowProtocol {
 
     func getPlanShow(planId: Int) async throws -> DriverPlanShowResponse? {
         let response: NetRes<DriverPlanShowResponse>? = try await Network.sendThrow(request: Request(planId: planId))

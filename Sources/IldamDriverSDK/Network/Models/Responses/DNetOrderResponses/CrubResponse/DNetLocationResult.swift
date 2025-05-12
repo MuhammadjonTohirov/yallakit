@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct LocationResult: Codable {
+struct DNetLocationResult: Codable {
     let orderId: Int
 }
 

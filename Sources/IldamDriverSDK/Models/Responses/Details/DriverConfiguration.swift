@@ -58,26 +58,25 @@ public struct DriverConfiguration: Codable {
         self.twoGisKey = twoGisKey
         self.waitingTime = waitingTime
     }
-
-    enum CodingKeys: String, CodingKey {
-        case autoWaitingCalc = "auto_waiting_calc"
-        case blackList = "black_list"
-        case countEfirOnExecutor = "count_efir_on_executor"
-        case energyManagement = "energy_management"
-        case expireTime = "expire_time"
-        case fotocontrol
-        case nonstopReOfferIn = "nonstop_re_offer_in"
-        case paymentSetting = "payment_setting"
-        case result
-        case roundingCost = "rounding_cost"
-        case roundingType = "rounding_type"
-        case speed
-        case supportNumber = "support_number"
-        case twoGisKey = "two_gis_key"
-        case waitingTime = "waiting_time"
+    
+    init(from network: DNetDriverConfigurationResponse) {
+        self.autoWaitingCalc = network.autoWaitingCalc
+        self.blackList = network.blackList
+        self.countEfirOnExecutor = network.countEfirOnExecutor
+        self.energyManagement = network.energyManagement
+        self.expireTime = network.expireTime
+        self.fotocontrol = network.fotocontrol
+        self.nonstopReOfferIn = network.nonstopReOfferIn
+        self.paymentSetting = PaymentSetting(from: network.paymentSetting)
+        self.result = EnergyConfiguration(from: network.result)
+        self.roundingCost = network.roundingCost
+        self.roundingType = network.roundingType
+        self.speed = network.speed
+        self.supportNumber = network.supportNumber
+        self.twoGisKey = network.twoGisKey
+        self.waitingTime = network.waitingTime
     }
 }
-
 public struct PaymentSetting: Codable {
     public let holdBalance: Int
     public let isWorking: Bool
@@ -86,7 +85,14 @@ public struct PaymentSetting: Codable {
     public let minFill: Int
     public let minWithdrawMoney: Int
 
-    public init(holdBalance: Int, isWorking: Bool, maxFill: Int, maxWithdrawMoney: Int, minFill: Int, minWithdrawMoney: Int) {
+    public init(
+        holdBalance: Int,
+        isWorking: Bool,
+        maxFill: Int,
+        maxWithdrawMoney: Int,
+        minFill: Int,
+        minWithdrawMoney: Int
+    ) {
         self.holdBalance = holdBalance
         self.isWorking = isWorking
         self.maxFill = maxFill
@@ -94,16 +100,17 @@ public struct PaymentSetting: Codable {
         self.minFill = minFill
         self.minWithdrawMoney = minWithdrawMoney
     }
-
-    enum CodingKeys: String, CodingKey {
-        case holdBalance = "hold_balance"
-        case isWorking = "is_working"
-        case maxFill = "max_fill"
-        case maxWithdrawMoney = "max_withdraw_money"
-        case minFill = "min_fill"
-        case minWithdrawMoney = "min_withdraw_money"
+    
+    init(from network: DNetResPaymentSetting) {
+        self.holdBalance = network.holdBalance
+        self.isWorking = network.isWorking
+        self.maxFill = network.maxFill
+        self.maxWithdrawMoney = network.maxWithdrawMoney
+        self.minFill = network.minFill
+        self.minWithdrawMoney = network.minWithdrawMoney
     }
 }
+
 
 public struct EnergyConfiguration: Codable {
     public let long: EnergyType
@@ -111,18 +118,23 @@ public struct EnergyConfiguration: Codable {
     public let noStandart: EnergyType
     public let short: EnergyType
 
-    public init(long: EnergyType, middle: EnergyType, noStandart: EnergyType, short: EnergyType) {
+    public init(
+        long: EnergyType,
+        middle: EnergyType,
+        noStandart: EnergyType,
+        short: EnergyType
+    ) {
         self.long = long
         self.middle = middle
         self.noStandart = noStandart
         self.short = short
     }
-
-    enum CodingKeys: String, CodingKey {
-        case long
-        case middle
-        case noStandart = "no_standart"
-        case short
+    
+    init(from network: DNetResEnergyGroup) {
+        self.long = EnergyType(from: network.long)
+        self.middle = EnergyType(from: network.middle)
+        self.noStandart = EnergyType(from: network.noStandart)
+        self.short = EnergyType(from: network.short)
     }
 }
 
@@ -138,4 +150,12 @@ public struct EnergyType: Codable {
         self.minus = minus
         self.plus = plus
     }
+    
+    init(from network: DNetResEnergy) {
+        self.cancel = network.cancel
+        self.km = network.km
+        self.minus = network.minus
+        self.plus = network.plus
+    }
 }
+

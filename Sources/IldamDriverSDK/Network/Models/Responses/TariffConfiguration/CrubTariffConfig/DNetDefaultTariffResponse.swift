@@ -7,14 +7,8 @@
 
 
 import Foundation
-import SwiftUI
-import NetworkLayer
 
-struct DNetDefaultTariffResponse: DNetResBody {
-    let result: DNetDefaultTariffResult
-}
-
-struct DNetDefaultTariffResult: Codable {
+struct DNetDefaultTariffResult: DNetResBody {
     let brand: DefaultTariffBrand
     let id: Int
     let minCityCost: Int

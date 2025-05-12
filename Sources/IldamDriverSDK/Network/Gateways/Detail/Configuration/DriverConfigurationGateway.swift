@@ -27,7 +27,6 @@ struct DriverConfigurationGateway: DriverConfigurationProtocol {
         var body: Data? {
             nil
         }
-        
         var method: HTTPMethod { .get }
     }
     

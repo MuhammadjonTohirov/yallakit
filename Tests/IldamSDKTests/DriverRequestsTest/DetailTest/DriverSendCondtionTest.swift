@@ -12,7 +12,6 @@ import XCTest
 
 final class DriverSendCondtionTest: XCTestCase {
     func test_sendOnline() async {
-        
         let gateway = DriverSendConditionGateway()
         let result = try? await gateway.sendCondtion()
         XCTAssertNotNil(result)

@@ -9,11 +9,7 @@
 import Foundation
 import NetworkLayer
 
-struct DNetOrderCancelResponse: DNetResBody {
-    let result: DNetOrderCancelResult
-}
-
-struct DNetOrderCancelResult: Codable {
+struct DNetOrderCancelResult: DNetResBody {
     let id: Int
     let status: String
 }

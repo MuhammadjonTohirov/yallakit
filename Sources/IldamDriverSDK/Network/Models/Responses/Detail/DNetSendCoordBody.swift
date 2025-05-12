@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct SendCoordsBody: Encodable {
+public struct SendCoordsBody: Encodable {
     let coords: SendCoords
     let orderCheck: OrderCheck
     

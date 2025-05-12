@@ -12,7 +12,7 @@ import XCTest
 
 final class DriverSendCoordTest: XCTestCase {
     func test_sendOnline() async {
-
+        
         let gateway = DriverSendCoordGateway()
         let result = try? await gateway.sendCoords(coords:
             SendCoordsBody(

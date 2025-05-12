@@ -10,7 +10,7 @@ import Foundation
 struct DNetSendConditionResponse: DNetResBody {
     let activeTransport: Bool
     let condition: Bool
-    let plan: DNetSendConditionPlan
+    let plan: DNetSendConditionPlan?
     
     enum CodingKeys: String, CodingKey {
         case activeTransport = "active_transport"

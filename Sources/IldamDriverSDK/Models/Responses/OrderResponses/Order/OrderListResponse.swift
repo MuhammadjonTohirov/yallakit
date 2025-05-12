@@ -9,9 +9,20 @@ import Foundation
 import NetworkLayer
 import Core
 
-public struct EtherListResponse: DNetResBody {
+public struct OrderListResponse: DNetResBody {
     public var list: [EtherList]?
     public let pagination: Pagination
+    
+    public init(list: [EtherList]? = nil, pagination: Pagination) {
+        self.list = list
+        self.pagination = pagination
+    }
+   
+    init(from network: DNetResEtherResponse) {
+        self.list = network.list.map { EtherList(from: $0) }
+        self.pagination = Pagination(from: network.pagination)
+    }
+
 }
 
 public struct EtherList: Codable {
@@ -298,28 +309,30 @@ public struct EtherListCoords: Codable {
 }
 
 public struct Pagination: Codable {
-    public let count: Int
-    public let currentPage: Int
-    public let lastPage: Int
-    public let perPage: Int
     public let total: Int
+    public let count: Int
+    public let perPage: String
+    public let currentPage: Int
     public let totalPages: Int
-    
-    public init(count: Int, currentPage: Int, lastPage: Int, perPage: Int, total: Int, totalPages: Int) {
-        self.count = count
-        self.currentPage = currentPage
-        self.lastPage = lastPage
-        self.perPage = perPage
+    public let lastPage: Int
+
+    public init(total: Int, count: Int, perPage: String, currentPage: Int, totalPages: Int, lastPage: Int) {
         self.total = total
+        self.count = count
+        self.perPage = perPage
+        self.currentPage = currentPage
         self.totalPages = totalPages
+        self.lastPage = lastPage
     }
-    
-    init(network: DNetResPagination) {
-        self.count = network.count ?? 0
-        self.currentPage = network.currentPage ?? 0
+
+    /// 🟢 ADD THIS:
+     init(from network: DNetResPagination) {
+         self.total = network.total ?? 0
+        self.count = network.count  ?? 0
+         self.perPage = "\(network.perPage ?? 0)"
+        self.currentPage = network.currentPage  ?? 0
+        self.totalPages = network.totalPages  ?? 0
         self.lastPage = network.lastPage ?? 0
-        self.perPage = network.perPage ?? 0
-        self.total = network.total ?? 0
-        self.totalPages = network.totalPages ?? 0
     }
 }
+

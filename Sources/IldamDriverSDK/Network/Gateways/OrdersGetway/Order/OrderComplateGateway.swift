@@ -12,14 +12,14 @@ import Core
 import SwiftUI
 
 protocol OrderComplateProtocol {
-    func complateOrder(orderId: Int, body: TripCalculationBody) async throws -> DNetOrderComplateResponse?
+    func complateOrder(orderId: Int, body: TripCalculationBody) async throws -> DNetOrderComplateResult?
 }
 
 struct OrderComplateGateway: OrderComplateProtocol {
-    func complateOrder(orderId: Int, body: TripCalculationBody) async throws -> DNetOrderComplateResponse? {
+    func complateOrder(orderId: Int, body: TripCalculationBody) async throws -> DNetOrderComplateResult? {
         
         let request = Request(orderId: orderId, taxiOrder: body.taxiOrder)
-        let response: NetRes<DNetOrderComplateResponse>? = try await Network.sendThrow(request: request)
+        let response: NetRes<DNetOrderComplateResult>? = try await Network.sendThrow(request: request)
         
         return response?.result
     }

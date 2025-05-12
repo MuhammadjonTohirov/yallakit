@@ -7,11 +7,7 @@
 
 import SwiftUI
 
-struct DNetOrderComplateResponse: DNetResBody {
-    let result: DNetOrderComplateResult
-}
-
-struct DNetOrderComplateResult: Codable {
+struct DNetOrderComplateResult: DNetResBody {
     let id: Int
     let status: String
     

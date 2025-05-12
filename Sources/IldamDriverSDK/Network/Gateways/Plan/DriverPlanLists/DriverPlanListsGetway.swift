@@ -10,12 +10,12 @@ import Core
 import NetworkLayer
 
 protocol DriverPlanListProtocol {
-    func getPlanLists() async throws -> EtherListResponse?
+    func getPlanLists() async throws -> [DNetResExecutorPlanResult]?
 }
 
 struct DriverPlanListGatewayGetway: DriverPlanListProtocol {
-    func getPlanLists() async throws -> EtherListResponse? {
-        let result: NetRes<EtherListResponse>? = try await Network.sendThrow(request: Request())
+    func getPlanLists() async throws -> [DNetResExecutorPlanResult]? {
+        let result: NetRes<[DNetResExecutorPlanResult]>? = try await Network.sendThrow(request: Request())
         return result?.result
         
         

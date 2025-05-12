@@ -10,7 +10,7 @@ import SwiftUI
 import NetworkLayer
  
 struct DNetResPlan: DNetResBody {
-    let result: [DNetResExecutorPlanResult]
+    let result: [DNetResExecutorPlanResult]?
 }
 
 struct DNetResExecutorPlanResult: Codable {

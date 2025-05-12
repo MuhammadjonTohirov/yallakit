@@ -14,7 +14,7 @@ import XCTest
 final class DriverBuyPlanTest: XCTestCase {
     func testExecute_getorderList() async {
 
-        let getway = DriverBuyPlanGetWay()
+        let getway = DriverBuyPlanGateway()
         
         let res = try? await getway.buyPlan(planId: 54)
         XCTAssertNotNil(res)

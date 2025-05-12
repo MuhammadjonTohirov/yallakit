@@ -12,18 +12,18 @@ import Core
 import SwiftUI
 
 protocol OrderCancelGatewayProtocol {
-    func cancelOrder(orderId: Int, reasonId: Int, comment: String) async throws -> DNetOrderCancelResponse?
+    func cancelOrder(orderId: Int, reasonId: Int, comment: String) async throws -> DNetOrderCancelResult?
 }
 
 struct OrderCancelGateway: OrderCancelGatewayProtocol {
-     func cancelOrder(orderId: Int, reasonId: Int, comment: String) async throws -> DNetOrderCancelResponse? {
+     func cancelOrder(orderId: Int, reasonId: Int, comment: String) async throws -> DNetOrderCancelResult? {
         
         let request = Request(
             orderId: orderId,
             reasonId: reasonId,
             reasonComment: comment)
         
-        let response: NetRes<DNetOrderCancelResponse>? = try await Network.sendThrow(request: request)
+        let response: NetRes<DNetOrderCancelResult>? = try await Network.sendThrow(request: request)
        
         return response?.result
     }

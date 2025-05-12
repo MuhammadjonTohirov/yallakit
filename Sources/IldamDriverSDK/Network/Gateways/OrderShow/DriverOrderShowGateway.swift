@@ -12,7 +12,7 @@ protocol DriverOrderShowGetwayProtocol {
     func getDriverOrderShow(orderId: Int) async throws -> DNetOrderShowResponse?
 }
 
-struct DriverOrderShowGetway: DriverOrderShowGetwayProtocol {
+struct DriverOrderShowGateway: DriverOrderShowGetwayProtocol {
     func getDriverOrderShow(orderId: Int) async throws -> DNetOrderShowResponse? {
         let result: NetRes<DNetOrderShowResponse>? = try await Network.sendThrow(request: Request(orderId: orderId))
         return result?.result

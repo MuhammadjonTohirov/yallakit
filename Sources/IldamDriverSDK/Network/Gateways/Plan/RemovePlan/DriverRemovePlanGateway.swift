@@ -12,7 +12,7 @@ protocol DriverRemovePlanProtocol {
     func removePlan(planId: Int) async throws -> DriverRemovePlanResponse?
 }
 
-public struct DriverRemovePlanGetway: DriverRemovePlanProtocol {
+public struct DriverRemovePlanGateway: DriverRemovePlanProtocol {
     func removePlan(planId: Int) async throws -> DriverRemovePlanResponse? {
         
         let result: NetRes<DriverRemovePlanResponse>? = try? await Network.sendThrow(request: Request(planId: planId))

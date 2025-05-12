@@ -11,7 +11,7 @@ struct DNetResRemovePlanShow: DNetResBody {
     let condition: Bool
     let plan: RemovePlanRes?
 }
-
+ 
 struct RemovePlanRes: Codable {
     let addressId: Int
     let cost: Int

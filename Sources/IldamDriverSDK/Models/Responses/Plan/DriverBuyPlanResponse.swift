@@ -9,8 +9,21 @@ import SwiftUI
 
 public struct DriverBuyPlanResponse: DNetResBody {
     public let condition: Bool
-    public let plan: BuyPlanResult
+    public let plan: BuyPlanResult?
+    
+    public init(condition: Bool, plan: BuyPlanResult?) {
+        self.condition = condition
+        self.plan = plan
+    }
+    
+    init?(network: DNetResPlan?) {
+        guard let network else { return nil }
+        self.condition = !(network.result?.isEmpty ?? true)
+        self.plan = network.result?.first.map { BuyPlanResult(network: $0) }
+    }
 }
+
+
 public struct BuyPlanResult: Codable {
     public let addressId: Int
     public let cost: Int
@@ -35,4 +48,19 @@ public struct BuyPlanResult: Codable {
         self.orderPayCost = orderPayCost
         self.orderPayPresent = orderPayPresent
     }
+    
+    init(network: DNetResExecutorPlanResult) {
+        self.addressId = network.addressId
+        self.cost = network.cost
+        self.deactivation = network.deactivation
+        self.description = network.description
+        self.id = network.id
+        self.limitTime = network.limitTime
+        self.limitUnit = network.limitUnit
+        self.name = network.name
+        self.orderPayCost = network.orderPayCost
+        self.orderPayPresent = network.orderPayPresent
+    }
+    
+    
 }

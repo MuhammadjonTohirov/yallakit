@@ -14,7 +14,7 @@ import XCTest
 final class DriverRemovePlanTest: XCTestCase {
     func testExecute_getPlanShow() async {
     
-        let gateway = DriverRemovePlanGetway()
+        let gateway = DriverRemovePlanGateway()
         let result = try? await gateway.removePlan(planId: 4)
         
         XCTAssertNotNil(result)

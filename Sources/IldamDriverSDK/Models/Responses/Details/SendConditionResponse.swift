@@ -43,16 +43,20 @@ public struct SendConditionResponse: DNetResBody {
         self.planExpire = planExpire
     }
 
-    init(from network: DNetSendConditionResponse.DNetSendConditionPlan) {
-        self.cost = network.cost
-        self.deactivation = network.deactivation
-        self.description = network.description
-        self.id = network.id
-        self.limitTime = network.limitTime
-        self.limitUnit = network.limitUnit
-        self.name = network.name
-        self.orderPayCost = network.orderPayCost
-        self.orderPayPresent = network.orderPayPresent
-        self.planExpire = network.planExpire
+    init?(from network: DNetSendConditionResponse?) {
+        guard let plan = network?.plan else {
+            return nil
+        }
+        
+        self.cost = plan.cost
+        self.deactivation = plan.deactivation
+        self.description = plan.description
+        self.id = plan.id
+        self.limitTime = plan.limitTime
+        self.limitUnit = plan.limitUnit
+        self.name = plan.name
+        self.orderPayCost = plan.orderPayCost
+        self.orderPayPresent = plan.orderPayPresent
+        self.planExpire = plan.planExpire
     }
 }

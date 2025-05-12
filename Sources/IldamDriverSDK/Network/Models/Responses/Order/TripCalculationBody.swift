@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct TripCalculationBody: Encodable {
+public struct TripCalculationBody: Encodable {
     let taxiOrder: TaxiOrder
 
     enum CodingKeys: String, CodingKey {

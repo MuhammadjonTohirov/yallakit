@@ -10,12 +10,12 @@ import NetworkLayer
 import Core
 
 protocol DefaultTariffProtocol {
-    func getDefaultTariff() async throws -> DriverDefaultTariffResponse?
+    func getDefaultTariff() async throws -> DNetDefaultTariffResult?
 }
 
 struct DefaultTariffGateway: DefaultTariffProtocol {
-    public func getDefaultTariff() async throws -> DriverDefaultTariffResponse? {
-        let result: NetRes<DriverDefaultTariffResponse>? = try await Network.sendThrow(request: Request())
+    public func getDefaultTariff() async throws -> DNetDefaultTariffResult? {
+        let result: NetRes<DNetDefaultTariffResult>? = try await Network.sendThrow(request: Request())
         return result?.result
     }
 

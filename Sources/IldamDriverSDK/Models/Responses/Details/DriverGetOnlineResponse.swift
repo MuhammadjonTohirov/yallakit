@@ -5,7 +5,7 @@
 //  Created by MuhammadAli on 30/04/25.
 //
 
-public struct GetOnlineResponse: DNetResBody {
+public struct DriverGetOnlineResponse: DNetResBody {
     public let online: Bool
     
     public init(online: Bool) {

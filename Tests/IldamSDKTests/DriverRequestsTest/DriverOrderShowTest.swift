@@ -13,7 +13,7 @@ import XCTest
 
 final class DriverOrderShowTest: XCTestCase {
     func testExecute_getorderShow() async {
-        let gateway = DriverOrderShowGetway()
+        let gateway = DriverOrderShowGateway()
         
         let result = try? await gateway.getDriverOrderShow(orderId: 1934508)
         

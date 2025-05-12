@@ -13,7 +13,7 @@ import XCTest
 
 final class DriverPlanShowTest: XCTestCase {
 func testExecute_getPlanShow() async {
-        let gateway = DriverPlanShowGetway()
+        let gateway = DriverPlanShowGateway()
         let result = try? await gateway.getPlanShow(planId: 4)
         
         XCTAssertNotNil(result)

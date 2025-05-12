@@ -14,8 +14,8 @@ public struct DriverCrubResponse: DNetResBody {
         self.orderId = orderId
     }
     
-    init(from network: LocationResult) {
-        self.orderId = network.orderId
+    init(from network: DNetCrubOrderResponse) {
+        self.orderId = network.id
     }
 }
 

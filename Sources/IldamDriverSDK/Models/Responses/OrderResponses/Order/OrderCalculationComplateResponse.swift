@@ -16,8 +16,8 @@ public struct TripCalculationResponse: DNetResBody {
         self.status = status
     }
 
-    init(from network: DNetOrderComplateResponse) {
-        self.id = network.result.id
-        self.status = network.result.status
+    init(from network: DNetOrderComplateResult) {
+        self.id = network.id
+        self.status = network.status
     }
 }

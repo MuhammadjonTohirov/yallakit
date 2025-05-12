@@ -6,7 +6,7 @@
 //
 import Foundation
 
-struct DNetDriverRegisterBody: Encodable {
+public struct DNetDriverRegisterBody: Encodable {
     let phone: String
     let givenNames: String
     let surName: String
@@ -35,6 +35,27 @@ struct DNetDriverRegisterBody: Encodable {
              driverLicenseDateExpiry = "driver_license_date_expiry",
              driverGraduate = "driver_graduate", birthday, gender,
              fatherName = "father_name"
+    }
+    
+    init(phone: String, givenNames: String, surName: String, addressId: Int, brandId: Int, modelId: Int, markId: Int, colorId: Int, driverLicenseCategories: [String], stateNumber: String, carMakeDate: Int, driverLicense: String, driverLicenseDate: String, driverLicenseDateExpiry: String, driverGraduate: String, birthday: String, gender: String, fatherName: String) {
+        self.phone = phone
+        self.givenNames = givenNames
+        self.surName = surName
+        self.addressId = addressId
+        self.brandId = brandId
+        self.modelId = modelId
+        self.markId = markId
+        self.colorId = colorId
+        self.driverLicenseCategories = driverLicenseCategories
+        self.stateNumber = stateNumber
+        self.carMakeDate = carMakeDate
+        self.driverLicense = driverLicense
+        self.driverLicenseDate = driverLicenseDate
+        self.driverLicenseDateExpiry = driverLicenseDateExpiry
+        self.driverGraduate = driverGraduate
+        self.birthday = birthday
+        self.gender = gender
+        self.fatherName = fatherName
     }
 }
 
