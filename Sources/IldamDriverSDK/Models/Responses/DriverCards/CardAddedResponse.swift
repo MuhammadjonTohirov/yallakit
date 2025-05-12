@@ -17,7 +17,7 @@ public struct CardAddedResponse {
         self.number = number
         self.phone = phone
     }
-
+    
     init(from network: DNetDriverAddCardResponse) {
         self.expiry = network.expiry
         self.key = network.key

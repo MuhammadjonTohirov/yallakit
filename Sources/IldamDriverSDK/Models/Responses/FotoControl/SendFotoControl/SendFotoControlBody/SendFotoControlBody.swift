@@ -19,7 +19,7 @@ struct SendFotoControlBody: Encodable {
     }
 }
 
- struct SendFotoControlBodyItem: Encodable {
+public struct SendFotoControlBodyItem: Encodable {
      let type: String
      let photoControlId: Int
      let file: String

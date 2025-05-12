@@ -8,7 +8,7 @@
 import Foundation
 
 // MARK: - Request Body
-struct DNetOrderRoutingPoint: Encodable {
+public struct DNetOrderRoutingPoint: Encodable {
     let lat: Double
     let lng: Double
     

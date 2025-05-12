@@ -10,15 +10,15 @@ import NetworkLayer
 import Core
 
 protocol OrderRoutingCoordsGatewayProtocol {
-    func calculateRoute(points: [DNetOrderRoutingPoint]) async throws -> OrderRoutingCoordsResponse?
+    func calculateRoute(points: [DNetOrderRoutingPoint]) async throws -> DNetOrderRoutingResponse?
 }
 
 struct OrderRoutingCoordsGateway: OrderRoutingCoordsGatewayProtocol {
-    func calculateRoute(points: [DNetOrderRoutingPoint]) async throws -> OrderRoutingCoordsResponse? {
+    func calculateRoute(points: [DNetOrderRoutingPoint]) async throws -> DNetOrderRoutingResponse? {
         let request = Request(routBody: points)
         
         let response: NetRes<DNetOrderRoutingResponse>? = try await Network.sendThrow(request: request)
-        return response?.result.map { OrderRoutingCoordsResponse(from: $0) }
+        return response?.result
     }
 
     struct Request: URLRequestProtocol {
