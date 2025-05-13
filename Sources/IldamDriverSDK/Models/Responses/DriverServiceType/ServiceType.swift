@@ -10,20 +10,20 @@ import Foundation
 public struct ServiceType {
     public let id: Int
     public let name: String
-    public let isChecked: Bool
-    public let isDefault: Bool
+    public let checked: Bool
+    public let `default`: Bool
 
     public init(id: Int, name: String, isChecked: Bool, isDefault: Bool) {
         self.id = id
         self.name = name
-        self.isChecked = isChecked
-        self.isDefault = isDefault
+        self.checked = isChecked
+        self.`default` = isDefault
     }
     
     init(from network: DNetServiceTypeItem) {
         self.id = network.id
         self.name = network.name
-        self.isChecked = network.check
-        self.isDefault = network.default
+        self.checked = network.check
+        self.`default` = network.default
     }
 }

@@ -19,7 +19,18 @@ public struct DriverCarListResponse {
     public let mark: CarInfo
     public let model: CarInfo
 
-    public init(id: Int, stateNumber: String, callsign: String, licensy: String?, yearIssue: String, fotocontrol: Bool, active: Bool, color: CarColor, mark: CarInfo, model: CarInfo) {
+    public init(
+        id: Int,
+        stateNumber: String,
+        callsign: String,
+        licensy: String?,
+        yearIssue: String,
+        fotocontrol: Bool,
+        active: Bool,
+        color: CarColor,
+        mark: CarInfo,
+        model: CarInfo
+    ) {
         self.id = id
         self.stateNumber = stateNumber
         self.callsign = callsign
@@ -31,7 +42,7 @@ public struct DriverCarListResponse {
         self.mark = mark
         self.model = model
     }
-    
+
     init(from network: DNetCarListResponse) throws {
         self.id = network.id
         self.stateNumber = network.stateNumber
@@ -41,16 +52,29 @@ public struct DriverCarListResponse {
         self.fotocontrol = network.fotocontrol
         self.active = network.active
 
-        let colorData = Data(network.color.utf8)
-        self.color = try JSONDecoder().decode(CarColor.self, from: colorData)
+        let decoder = JSONDecoder()
 
-        let markData = Data(network.mark.utf8)
-        self.mark = try JSONDecoder().decode(CarInfo.self, from: markData)
+        guard let colorData = network.color.data(using: .utf8),
+              let decodedColor = try? decoder.decode(CarColor.self, from: colorData) else {
+            throw NSError(domain: "Failed to decode CarColor", code: -1)
+        }
+        self.color = decodedColor
 
-        let modelData = Data(network.model.utf8)
-        self.model = try JSONDecoder().decode(CarInfo.self, from: modelData)
+        guard let markData = network.mark.data(using: .utf8),
+              let decodedMark = try? decoder.decode(CarInfo.self, from: markData) else {
+            throw NSError(domain: "Failed to decode CarInfo (mark)", code: -1)
+        }
+        self.mark = decodedMark
+
+        guard let modelData = network.model.data(using: .utf8),
+              let decodedModel = try? decoder.decode(CarInfo.self, from: modelData) else {
+            throw NSError(domain: "Failed to decode CarInfo (model)", code: -1)
+        }
+        self.model = decodedModel
     }
+
 }
+
 
 public struct CarInfo: Codable {
     public let id: Int
@@ -60,7 +84,8 @@ public struct CarInfo: Codable {
         self.id = id
         self.name = name
     }
-    init(network: CarInfo)  {
+
+    init(from network: DNetCarInfo) {
         self.id = network.id
         self.name = network.name
     }
@@ -76,11 +101,10 @@ public struct CarColor: Codable {
         self.color = color
         self.name = name
     }
-    
-    init(network: CarColor)  {
+
+    init(from network: DNetCarColor) {
         self.id = network.id
         self.color = network.color
         self.name = network.name
-        
     }
 }

@@ -8,26 +8,22 @@
 import Foundation
 
 public protocol GetDriverCarListUseCaseProtocol {
-    func execute() async throws -> DriverCarListResponse
+    func execute() async throws -> [DriverCarListResponse]
 }
 
 public final class GetDriverCarListUseCase: GetDriverCarListUseCaseProtocol {
-    private var gateway: DriverCardListGatewayProtocol
+    private let gateway: DriverTransportListProtocol
     
-    init(gateway: DriverCardListGatewayProtocol) {
+    init(gateway: DriverTransportListProtocol) {
         self.gateway = gateway
     }
-    
     public init() {
-        self.gateway = DriverCardListGateway()
+        self.gateway = DriverTransportListGateway()
     }
     
-    public func execute() async throws -> DriverCarListResponse {
+    public func execute() async throws -> [DriverCarListResponse] {
+        let networkList = try await gateway.fetchCarList()
         
-        guard let result = try? await gateway.fetchCardList() else {
-            throw NSError(domain: "No car list found", code: -1)
-
-        }
-        return DriverCarListResponse(from: result)
+        return try networkList.map { try DriverCarListResponse(from: $0) }
     }
 }

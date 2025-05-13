@@ -28,6 +28,6 @@ public final class DLogOutUseCase: DLogOutUseCaseProtocol {
             return false
         }
         
-        return true
+        return result
     }
 }

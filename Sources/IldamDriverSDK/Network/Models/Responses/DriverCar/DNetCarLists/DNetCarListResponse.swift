@@ -7,6 +7,10 @@
 
 import Foundation
 
+struct DNetCarListWrapperResponse: DNetResBody {
+    let result: [DNetCarListResponse]
+}
+
 struct DNetCarListResponse: Codable {
     let id: Int
     let stateNumber: String
