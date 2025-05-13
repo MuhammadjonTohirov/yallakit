@@ -86,6 +86,12 @@ enum MainNetworkRoute: URLRequestProtocol {
             ]
             
             return try? JSONSerialization.data(withJSONObject: dict)
+        case let .getAddress(lat, lng):
+            return [
+                "lat": lat,
+                "lng": lng
+            ].asData
+        
         default:
             return nil
         }
@@ -93,9 +99,9 @@ enum MainNetworkRoute: URLRequestProtocol {
     
     var method: HTTPMethod {
         switch self {
-        case .getAddress, .getMyAddresses, .loadOrderHistory, .orderDetails, .findExecutors:
+        case .getMyAddresses, .loadOrderHistory, .orderDetails, .findExecutors:
             return .get
-        case .getTariffs, .addMyAddress, .getRouteCoordinates, .getNearAddresses, .orderTaxi, .searchAddress:
+        case .getTariffs, .addMyAddress, .getRouteCoordinates, .getNearAddresses, .orderTaxi, .searchAddress, .getAddress:
             return .post
         case .updateMyAddress:
             return .put
@@ -128,3 +134,4 @@ enum MainNetworkRoute: URLRequestProtocol {
     case orderTaxi(req: NetReqOrderTaxi)
     case orderDetails(orderId: Int)
 }
+
