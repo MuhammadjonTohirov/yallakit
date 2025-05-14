@@ -133,15 +133,24 @@ public struct ValidExecutorResult: Codable {
         self.rating = network.rating
         self.fcmToken = network.fcmToken
 
-        guard let fotocontrol = network.fotocontrol,
-              let transport = network.transport,
-              let plan = network.plan else {
-            return nil
+        if let fotocontrol = network.fotocontrol {
+            self.fotocontrol = ValidExecutorFotocontrol(from: fotocontrol)
+        } else {
+            self.fotocontrol = nil
+        }
+        
+        if let transport = network.transport {
+            self.transport = ValidExecutorTransport(from: transport)
+        } else {
+            self.transport = nil
+        }
+        
+        if let plan = network.plan {
+            self.plan = ValidExecutorPlan(from: plan)
+        } else {
+            self.plan = nil
         }
 
-        self.fotocontrol = ValidExecutorFotocontrol(from: fotocontrol)
-        self.transport = ValidExecutorTransport(from: transport)
-        self.plan = ValidExecutorPlan(from: plan)
     }
 
 }
