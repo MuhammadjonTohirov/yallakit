@@ -19,6 +19,10 @@ public extension URL {
         .init(string: ConstantsProvider.shared.constants.basePhpApi + ConstantsProvider.shared.constants.phpBaseEndpoint)!
     }
     
+    nonisolated(unsafe) static var baseAPIPHP: URL {
+        .init(string: ConstantsProvider.shared.constants.basePhpApi)!
+    }
+    
     /// https://api2.ildam.uz/client
     static var goIldamAPI: URL {
         .init(string: ConstantsProvider.shared.constants.baseGoApi + ConstantsProvider.shared.constants.goBaseEndpoint)!

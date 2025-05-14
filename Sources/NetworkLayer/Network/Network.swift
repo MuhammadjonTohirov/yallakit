@@ -53,7 +53,11 @@ public struct Network {
             var result: (Data, URLResponse?)!
             
             do {
-                result = try await urlSession.data(for: request.request())
+                if #available(macOS 12.0, *) {
+                    result = try await urlSession.data(for: request.request())
+                } else {
+                    // Fallback on earlier versions
+                }
             } catch {
                 throw NetworkError.timeout
             }

@@ -15,6 +15,7 @@ public struct Constants: Sendable {
     public var phpBaseEndpoint: String = "/cli"
     
     public var suiteName: String = "uz.xcoder.Ildam"
+    public var appVersion: String = "2.2.404"
     
     public init() {}
     
@@ -50,6 +51,13 @@ public struct Constants: Sendable {
     public func setPhpBaseEndpoint(_ phpBaseEndpoint: String) -> Self {
         var result = self
         result.phpBaseEndpoint = phpBaseEndpoint
+        return result
+    }
+    
+    @discardableResult
+    public func setAppVersion(_ appVersion: String) -> Self {
+        var result = self
+        result.appVersion = appVersion
         return result
     }
 }

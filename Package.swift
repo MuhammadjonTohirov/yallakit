@@ -11,7 +11,8 @@ let package = Package(
         .library(name: "Core", targets: ["Core"]),
         .library(name: "NetworkLayer", targets: ["NetworkLayer"]),
         .library(name: "IMap", targets: ["IMap"]),
-        .library(name: "IldamSDK", targets: ["IldamSDK"])
+        .library(name: "IldamSDK", targets: ["IldamSDK"]),
+        .library(name: "IldamDriverSDK", targets: ["IldamDriverSDK"])
     ],
     dependencies: [
         // ✅ Google Maps SDK via SPM
@@ -77,9 +78,13 @@ let package = Package(
                 .linkedLibrary("z")
             ]
         ),
+        .target(
+            name: "IldamDriverSDK",
+            dependencies: ["Core", "NetworkLayer"]
+        ),
         .testTarget(
             name: "IldamSDKTests",
-            dependencies: ["IldamSDK", "NetworkLayer", "Core"]
+            dependencies: ["IldamSDK", "NetworkLayer", "Core", "IldamDriverSDK"]
         )
     ]
 )

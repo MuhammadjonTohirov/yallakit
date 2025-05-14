@@ -196,3 +196,9 @@ public extension NSAttributedString {
         AttributedString(self)
     }
 }
+extension String {
+    func decodeJSON<T: Decodable>(as type: T.Type) throws -> T {
+        let data = Data(self.utf8)
+        return try JSONDecoder().decode(T.self, from: data)
+    }
+}
