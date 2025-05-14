@@ -24,12 +24,20 @@ public struct DriverOTPResponceValidateResponse {
         self.executor = executor
     }
 
-    init(from network: DNetResValidate) {
+    init?(from network: DNetResValidate?) {
+        guard let network else { return nil }
+
         self.accessToken = network.accessToken
         self.tokenType = network.tokenType
         self.expiresIn = network.expiresIn
-        self.executor = ValidExecutorResult(from: network.executor)
+        
+        guard let executor = network.executor,
+              let validExecutor = ValidExecutorResult(from: executor) else {
+            return nil
+        }
+        self.executor = validExecutor
     }
+
 }
 
 public struct ValidExecutorResult: Codable {
@@ -95,7 +103,9 @@ public struct ValidExecutorResult: Codable {
         self.plan = plan
     }
 
-    init(from network: DNetResExecutor) {
+    init?(from network: DNetResExecutor?) {
+        guard let network else { return nil }
+
         self.id = network.id
         self.givenNames = network.givenNames
         self.surName = network.surName
@@ -122,10 +132,18 @@ public struct ValidExecutorResult: Codable {
         self.activeness = network.activeness
         self.rating = network.rating
         self.fcmToken = network.fcmToken
-        self.fotocontrol = ValidExecutorFotocontrol(from: network.fotocontrol)
-        self.transport = ValidExecutorTransport(from: network.transport)
-        self.plan = ValidExecutorPlan(from: network.plan)
+
+        guard let fotocontrol = network.fotocontrol,
+              let transport = network.transport,
+              let plan = network.plan else {
+            return nil
+        }
+
+        self.fotocontrol = ValidExecutorFotocontrol(from: fotocontrol)
+        self.transport = ValidExecutorTransport(from: transport)
+        self.plan = ValidExecutorPlan(from: plan)
     }
+
 }
 public struct ValidExecutorBrand: Codable {
     public let id: Int

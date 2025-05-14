@@ -12,7 +12,7 @@ struct DNetResValidate: DNetResBody {
     let accessToken: String
     let tokenType: String
     let expiresIn: Int
-    let executor: DNetResExecutor
+    let executor: DNetResExecutor?
     
     enum CodingKeys: String, CodingKey {
         case accessToken = "access_token"
@@ -49,9 +49,9 @@ struct DNetResExecutor: Codable {
     let activeness: Int
     let rating: String
     let fcmToken: String
-    let fotocontrol: DNetResExecutorFotocontrol
-    let transport: DNetResExecutorTransport
-    let plan: DNetResExecutorPlan
+    let fotocontrol: DNetResExecutorFotocontrol?
+    let transport: DNetResExecutorTransport?
+    let plan: DNetResExecutorPlan?
     
     enum CodingKeys: String, CodingKey {
         case id, givenNames = "given_names", surName = "sur_name", fatherName = "father_name", balance, phone
