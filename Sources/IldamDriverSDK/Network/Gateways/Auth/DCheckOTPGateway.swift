@@ -22,7 +22,7 @@ struct DCheckOTPGateway: DCheckOTPGatewayProtocol {
         let code: String
         
         var url: URL {
-            URL.baseAPIPHP.appending(path: "/auth/login")
+            URL.baseAPIPHP.appending(path: "api/auth/login")
         }
         
         var body: Data? {
