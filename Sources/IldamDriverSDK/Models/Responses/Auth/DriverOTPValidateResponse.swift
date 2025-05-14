@@ -6,7 +6,7 @@
 //
 import Foundation
 
-public struct DriverOTPResponceValidateResponse {
+public struct DriverOTPValidateResponse {
     public let accessToken: String
     public let tokenType: String
     public let expiresIn: Int
@@ -59,7 +59,7 @@ public struct ValidExecutorResult: Codable {
     public let photo: String
     public let serviceIds: [Int]
     public let addressBrand: String?
-    public let brand: ValidExecutorBrand
+    public let brand: ValidExecutorBrand?
     public let addressId: Int
     public let createdAt: String
     public let tariffCategoryId: Int
@@ -67,9 +67,9 @@ public struct ValidExecutorResult: Codable {
     public let activeness: Int
     public let rating: String
     public let fcmToken: String
-    public let fotocontrol: ValidExecutorFotocontrol
-    public let transport: ValidExecutorTransport
-    public let plan: ValidExecutorPlan
+    public let fotocontrol: ValidExecutorFotocontrol?
+    public let transport: ValidExecutorTransport?
+    public let plan: ValidExecutorPlan?
 
     public init(id: Int, givenNames: String, surName: String, fatherName: String, balance: Double, phone: String, blockNote: String?, level: Int, blockExpiry: String?, status: String, condition: Bool, online: Bool, block: Bool, birthday: String, brandId: Int, photo: String, serviceIds: [Int], addressBrand: String?, brand: ValidExecutorBrand, addressId: Int, createdAt: String, tariffCategoryId: Int, register: String, activeness: Int, rating: String, fcmToken: String, fotocontrol: ValidExecutorFotocontrol, transport: ValidExecutorTransport, plan: ValidExecutorPlan) {
         self.id = id
