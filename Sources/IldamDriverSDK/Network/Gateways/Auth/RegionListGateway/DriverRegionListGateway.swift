@@ -26,7 +26,7 @@ struct RegionListGateway: RegionListGatewayProtocol {
         return regions
     }
     struct Request: URLRequestProtocol {
-        var url: URL { URL.baseAPIPHP.appendingPathComponent("region/services") }
+        var url: URL { URL.baseAPIPHP.appendingPathComponent("api/region/services") }
         var body: Data? { nil }
         var method: HTTPMethod { .get }
     }
