@@ -11,7 +11,7 @@ public protocol RegisterAvailableUseCaseProtocol {
     func registerAvailable() async throws -> ExecutorLoginAvailable
 }
 
-public final class RegisterAvailableUseCase {
+public final class RegisterAvailableUseCase: RegisterAvailableUseCaseProtocol {
     
     private var gateway: ExecutorLoginCheckGatewayProtocol
     
