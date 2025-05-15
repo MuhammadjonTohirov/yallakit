@@ -9,13 +9,13 @@ import Foundation
 import NetworkLayer
 
 protocol RegionListGatewayProtocol {
-    func fetchRegions() async throws -> [DNetRegionItem]
+    func fetchRegions() async throws -> [DNetRegionListItem]
 }
 
 struct RegionListGateway: RegionListGatewayProtocol {
-    func fetchRegions() async throws -> [DNetRegionItem] {
+    func fetchRegions() async throws -> [DNetRegionListItem] {
         
-        guard let result: NetRes<[DNetRegionItem]> = try await Network.sendThrow(request: Request()) else {
+        guard let result: NetRes<[DNetRegionListItem]> = try await Network.sendThrow(request: Request()) else {
             throw NSError(domain: "NetworkError", code: -1, userInfo: [NSLocalizedDescriptionKey: "No response from server"])
         }
         
@@ -31,3 +31,4 @@ struct RegionListGateway: RegionListGatewayProtocol {
         var method: HTTPMethod { .get }
     }
 }
+ 
