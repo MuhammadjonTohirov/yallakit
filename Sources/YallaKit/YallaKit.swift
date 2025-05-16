@@ -3,7 +3,6 @@
 // Sources/IldamKit/IldamKit.swift
 @_exported import Core
 @_exported import NetworkLayer
-@_exported import IMap
 @_exported import IldamSDK
 
 public struct IldamKit {
