@@ -5,27 +5,25 @@
 //  Created by MuhammadAli on 15/05/25.
 //
 
+import Foundation
 
-public protocol DriverRegionListServiceUseCaseProtocol {
-    func fetchRegionList() async throws -> [ExecutorRegionServiceListResponse]
+public protocol RegionListUseCaseProtocol {
+    func execute() async throws -> [RegionListItem]
 }
-public final class DriverRegionListServiceUseCase: DriverRegionListServiceUseCaseProtocol {
-    
+
+public final class RegionListUseCase: RegionListUseCaseProtocol {
     private let gateway: RegionListGatewayProtocol
-    
+
     init(gateway: RegionListGatewayProtocol) {
         self.gateway = gateway
     }
-    
     public init() {
         self.gateway = RegionListGateway()
     }
-    
-    public func fetchRegionList() async throws -> [ExecutorRegionServiceListResponse] {
-        
-        let result = try await gateway.fetchRegions()
-        
-        return result.map(ExecutorRegionServiceListResponse.init)
+
+
+    public func execute() async throws -> [RegionListItem] {
+        let networkRegions = try await gateway.fetchRegions()
+        return networkRegions.map(RegionListItem.init)
     }
- 
 }

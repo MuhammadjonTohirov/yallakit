@@ -7,13 +7,19 @@
 
 import Foundation
 
-struct DNetRegionItem: DNetResBody {
+struct DNetRegionListItem: Codable {
     let id: Int
-    let name: DNetRegionName?
-    let services: [Int]? // or another type if services have details
-
-    struct DNetRegionName: Codable {
-        let uz: String?
-        let ru: String?
-    }
+    let name: DNetLocalizedName?
+    let services: [DNetServiceItem]?
 }
+
+struct DNetLocalizedName: Codable {
+    let uz: String?
+    let ru: String?
+}
+
+struct DNetServiceItem: Codable {
+    let id: Int
+    let name: DNetLocalizedName?
+}
+
