@@ -1,13 +1,13 @@
 //
-//  DNetExecutorLoginCheckResponse.swift
+//  ExecutorLoginAvailable.swift
 //  YallaKit
 //
-//  Created by MuhammadAli on 03/05/25.
+//  Created by MuhammadAli on 15/05/25.
 //
 
 import Foundation
 
-public struct ExecutorLoginCheckResponse: DNetResBody {
+public struct ExecutorLoginAvailable: DNetResBody {
     public let login: Bool
     public let register: Bool
     
@@ -15,9 +15,11 @@ public struct ExecutorLoginCheckResponse: DNetResBody {
         self.login = login
         self.register = register
     }
+    
     init(from network: DNetExecutorLoginCheckResponse) {
         self.login = network.login
         self.register = network.register
     }
-    
 }
+
+

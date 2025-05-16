@@ -6,7 +6,7 @@
 //
 import Foundation
 
-public struct DriverOTPResponceValidateResponse {
+public struct DriverOTPValidateResponse {
     public let accessToken: String
     public let tokenType: String
     public let expiresIn: Int
@@ -24,12 +24,20 @@ public struct DriverOTPResponceValidateResponse {
         self.executor = executor
     }
 
-    init(from network: DNetResValidate) {
+    init?(from network: DNetResValidate?) {
+        guard let network else { return nil }
+
         self.accessToken = network.accessToken
         self.tokenType = network.tokenType
         self.expiresIn = network.expiresIn
-        self.executor = ValidExecutorResult(from: network.executor)
+        
+        guard let executor = network.executor,
+              let validExecutor = ValidExecutorResult(from: executor) else {
+            return nil
+        }
+        self.executor = validExecutor
     }
+
 }
 
 public struct ValidExecutorResult: Codable {
@@ -51,7 +59,7 @@ public struct ValidExecutorResult: Codable {
     public let photo: String
     public let serviceIds: [Int]
     public let addressBrand: String?
-    public let brand: ValidExecutorBrand
+    public let brand: ValidExecutorBrand?
     public let addressId: Int
     public let createdAt: String
     public let tariffCategoryId: Int
@@ -59,9 +67,9 @@ public struct ValidExecutorResult: Codable {
     public let activeness: Int
     public let rating: String
     public let fcmToken: String
-    public let fotocontrol: ValidExecutorFotocontrol
-    public let transport: ValidExecutorTransport
-    public let plan: ValidExecutorPlan
+    public let fotocontrol: ValidExecutorFotocontrol?
+    public let transport: ValidExecutorTransport?
+    public let plan: ValidExecutorPlan?
 
     public init(id: Int, givenNames: String, surName: String, fatherName: String, balance: Double, phone: String, blockNote: String?, level: Int, blockExpiry: String?, status: String, condition: Bool, online: Bool, block: Bool, birthday: String, brandId: Int, photo: String, serviceIds: [Int], addressBrand: String?, brand: ValidExecutorBrand, addressId: Int, createdAt: String, tariffCategoryId: Int, register: String, activeness: Int, rating: String, fcmToken: String, fotocontrol: ValidExecutorFotocontrol, transport: ValidExecutorTransport, plan: ValidExecutorPlan) {
         self.id = id
@@ -95,7 +103,9 @@ public struct ValidExecutorResult: Codable {
         self.plan = plan
     }
 
-    init(from network: DNetResExecutor) {
+    init?(from network: DNetResExecutor?) {
+        guard let network else { return nil }
+
         self.id = network.id
         self.givenNames = network.givenNames
         self.surName = network.surName
@@ -122,10 +132,27 @@ public struct ValidExecutorResult: Codable {
         self.activeness = network.activeness
         self.rating = network.rating
         self.fcmToken = network.fcmToken
-        self.fotocontrol = ValidExecutorFotocontrol(from: network.fotocontrol)
-        self.transport = ValidExecutorTransport(from: network.transport)
-        self.plan = ValidExecutorPlan(from: network.plan)
+
+        if let fotocontrol = network.fotocontrol {
+            self.fotocontrol = ValidExecutorFotocontrol(from: fotocontrol)
+        } else {
+            self.fotocontrol = nil
+        }
+        
+        if let transport = network.transport {
+            self.transport = ValidExecutorTransport(from: transport)
+        } else {
+            self.transport = nil
+        }
+        
+        if let plan = network.plan {
+            self.plan = ValidExecutorPlan(from: plan)
+        } else {
+            self.plan = nil
+        }
+
     }
+
 }
 public struct ValidExecutorBrand: Codable {
     public let id: Int

@@ -27,7 +27,4 @@ public final class CreateExecutorUseCase: CreateExecutorUseCaseProtocol {
     public init() {
         self.gateway = CreateExecutorGateway()
     }
-    
-    
-    
 }

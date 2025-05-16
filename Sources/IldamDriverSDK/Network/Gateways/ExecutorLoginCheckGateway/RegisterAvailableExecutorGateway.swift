@@ -12,7 +12,7 @@ protocol ExecutorLoginCheckGatewayProtocol {
     func checkLoginStatus() async throws -> DNetExecutorLoginCheckResponse?
 }
 
-struct DriverLogInCheckGateway: ExecutorLoginCheckGatewayProtocol {
+struct RegisterAvailableExecutorGateway: ExecutorLoginCheckGatewayProtocol {
     func checkLoginStatus() async throws -> DNetExecutorLoginCheckResponse? {
         let request = Request()
         let response: NetRes<DNetExecutorLoginCheckResponse>? = try await Network.sendThrow(request: request)

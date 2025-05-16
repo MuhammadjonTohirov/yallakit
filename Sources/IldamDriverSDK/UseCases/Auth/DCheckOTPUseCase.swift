@@ -8,26 +8,24 @@
 import Foundation
 
 public protocol DCheckOTPUseCaseProtocol {
-    func execute(code: String) async throws -> DriverOTPResponceValidateResponse?
+    func execute(code: String) async throws -> DriverOTPValidateResponse?
 }
 public final class DCheckOTPUseCase: DCheckOTPUseCaseProtocol {
-    private let gateway: any DCheckOTPUseCaseProtocol
+    private let gateway: any DCheckOTPGatewayProtocol
 
-    init(gateway: DCheckOTPUseCaseProtocol = DCheckOTPGateway() as! DCheckOTPUseCaseProtocol) {
+    init(gateway: any DCheckOTPGatewayProtocol) {
         self.gateway = gateway
     }
-    public init () {
-        self.gateway = DCheckOTPGateway() as! any DCheckOTPUseCaseProtocol
-
+    public init() {
+        self.gateway = DCheckOTPGateway()
     }
-    public func execute(code: String) async throws -> DriverOTPResponceValidateResponse? {
+    public func execute(code: String) async throws -> DriverOTPValidateResponse? {
         
-        guard let result = try await gateway.execute(code: code) else {
+        guard let result = try await gateway.send(code: code) else {
             return nil
         }
-        return DriverOTPResponceValidateResponse(
-            accessToken: result.accessToken, tokenType: result.tokenType, expiresIn: result.expiresIn,
-            executor: result.executor)
+        return DriverOTPValidateResponse(from: result)
+        
     }
 }
 

@@ -14,15 +14,17 @@ protocol DCheckOTPGatewayProtocol {
 
 struct DCheckOTPGateway: DCheckOTPGatewayProtocol {
     func send(code: String) async throws -> DNetResValidate? {
+        let request = Request(code: code)
         let res: NetRes<DNetResValidate>? = try await
-        Network.sendThrow(request: Request(code: code))
+        Network.sendThrow(request: request)
+        
         return res?.result
     }
     struct Request: Codable, URLRequestProtocol {
         let code: String
         
         var url: URL {
-            URL.baseAPIPHP.appending(path: "/auth/login")
+            URL.baseAPIPHP.appending(path: "api/auth/login")
         }
         
         var body: Data? {
