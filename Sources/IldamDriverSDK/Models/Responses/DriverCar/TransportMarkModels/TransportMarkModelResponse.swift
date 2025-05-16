@@ -7,23 +7,25 @@
 
 import Foundation
 
-struct TransportMarkModelResponse: DNetResBody {
-    let id: Int
-    let name: String
-    let model: [DNetCarNameResponse]
+public struct TransportMarkModelResponse: DNetResBody {
+    public let id: Int
+    public let name: String
+    public let models: [TransportName]
     
-    public init(id: Int, name: String, model: [DNetCarNameResponse]) {
+    
+    public init(id: Int, name: String, models: [TransportName]) {
         self.id = id
         self.name = name
-        self.model = model
+        self.models = models
     }
     init(from network: DNetTransportMarkModelsResponse) {
         self.id = network.id
         self.name = network.name
-        self.model = network.models
-        
+        self.models = network.models.map { TransportName(from: $0) }
     }
-    struct TransportModel: Codable {
+
+
+    public struct TransportName: Codable {
         let id: Int
         let name: String
         
