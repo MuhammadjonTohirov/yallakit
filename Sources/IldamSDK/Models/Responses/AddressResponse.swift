@@ -8,7 +8,7 @@
 // Models/AddressResponse.swift
 import Foundation
 
-public struct AddressResponse {
+public struct AddressResponse: Sendable {
     public let id: Int?
     public var lat: Double
     public var lng: Double
@@ -27,7 +27,7 @@ public struct AddressResponse {
         self.level = level
     }
     
-    public struct AddressParent {
+    public struct AddressParent: Sendable {
         public var id: Int
         public var name: String?
         public var level: String?
