@@ -8,9 +8,9 @@
 import Foundation
 
 public struct DriverColorList {
-    let id: Int
-    let color: String
-    let name: String
+    public let id: Int
+    public let color: String
+    public let name: String
     
     public init(id: Int, color: String, name: String) {
         self.id = id
