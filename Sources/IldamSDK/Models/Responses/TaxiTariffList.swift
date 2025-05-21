@@ -18,7 +18,7 @@ public struct TaxiTariffList {
 }
 
 // MARK: - Tariff
-public struct TaxiTariff {
+public struct TaxiTariff: Sendable {
     public let id: Int
     public let name: String?
     public let description: String?
@@ -50,7 +50,7 @@ public struct TaxiTariff {
     }
 }
 
-public struct TaxiTariffCategory {
+public struct TaxiTariffCategory: Sendable {
     public let id: Int
     public let name: String
     
@@ -61,7 +61,7 @@ public struct TaxiTariffCategory {
 }
 
 // MARK: - Service
-public struct TaxiTariffService: Identifiable {
+public struct TaxiTariffService: Identifiable, Sendable {
     public var id: Int
     public let cost: Int
     public let name, costType: String
