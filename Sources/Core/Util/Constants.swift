@@ -16,8 +16,16 @@ public struct Constants: Sendable {
     
     public var suiteName: String = "uz.xcoder.Ildam"
     public var appVersion: String = "2.2.404"
+    public var secretKey: String = "2f52434c-3068-460d-8dbc-5c80599f2db4"
     
     public init() {}
+    
+    @discardableResult
+    public func setSecretKey(_ secretKey: String) -> Self {
+        var result = self
+        result.secretKey = secretKey
+        return result
+    }
     
     @discardableResult
     public func setBaseGoApi(_ baseGoApi: String) -> Self {
