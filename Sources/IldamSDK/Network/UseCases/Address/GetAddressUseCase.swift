@@ -28,6 +28,6 @@ public final class GetAddressUseCase: GetAddressUseCaseProtocol {
             return nil
         }
         
-        return AddressResponse(networkResponse: result)
+        return AddressResponse(response: result)
     }
 }

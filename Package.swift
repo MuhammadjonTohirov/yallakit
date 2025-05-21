@@ -10,13 +10,7 @@ let package = Package(
         .library(name: "YallaKit", targets: ["YallaKit"]),
         .library(name: "Core", targets: ["Core"]),
         .library(name: "NetworkLayer", targets: ["NetworkLayer"]),
-        .library(name: "IMap", targets: ["IMap"]),
         .library(name: "IldamSDK", targets: ["IldamSDK"]),
-        .library(name: "IldamDriverSDK", targets: ["IldamDriverSDK"])
-    ],
-    dependencies: [
-        // ✅ Google Maps SDK via SPM
-        .package(url: "https://github.com/googlemaps/ios-maps-sdk", from: "9.4.0")
     ],
     targets: [
         .target(
@@ -24,7 +18,6 @@ let package = Package(
             dependencies: [
                 "Core",
                 "NetworkLayer",
-                "IMap",
                 "IldamSDK"
             ]
         ),
@@ -37,54 +30,12 @@ let package = Package(
             dependencies: []
         ),
         .target(
-            name: "IMap",
-            dependencies: [
-                "Core",
-                "NetworkLayer",
-                "GoogleMapsWrapper"
-            ],
-            resources: [
-                // assets
-                .process("Assets.xcassets")
-            ]
-        ),
-        .target(
             name: "IldamSDK",
-            dependencies: ["Core", "NetworkLayer"]
-        ),
-        .target(
-            name: "GoogleMapsWrapper",
-            dependencies: [
-                .product(name: "GoogleMaps", package: "ios-maps-sdk")
-            ],
-            linkerSettings: [
-                .linkedFramework("QuartzCore"),
-                .linkedFramework("OpenGLES"),
-                .linkedFramework("CoreText"),
-                .linkedFramework("CoreLocation"),
-                .linkedFramework("CoreGraphics"),
-                .linkedFramework("CoreData"),
-                .linkedFramework("CoreImage"),
-                .linkedFramework("GLKit"),
-                .linkedFramework("ImageIO"),
-                .linkedFramework("Metal"),
-                .linkedFramework("SystemConfiguration"),
-                .linkedFramework("UIKit"),
-                .linkedFramework("Foundation"),
-                .linkedFramework("SwiftUI"),
-                .linkedFramework("CoreTelephony"),
-                .linkedFramework("Accelerate"),
-                .linkedLibrary("c++"),
-                .linkedLibrary("z")
-            ]
-        ),
-        .target(
-            name: "IldamDriverSDK",
             dependencies: ["Core", "NetworkLayer"]
         ),
         .testTarget(
             name: "IldamSDKTests",
-            dependencies: ["IldamSDK", "NetworkLayer", "Core", "IldamDriverSDK"]
+            dependencies: ["IldamSDK", "NetworkLayer", "Core"]
         )
     ]
 )
