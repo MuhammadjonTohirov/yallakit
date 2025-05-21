@@ -11,6 +11,7 @@ let package = Package(
         .library(name: "Core", targets: ["Core"]),
         .library(name: "NetworkLayer", targets: ["NetworkLayer"]),
         .library(name: "IldamSDK", targets: ["IldamSDK"]),
+        .library(name: "IldamDriverSDK", targets: ["IldamDriverSDK"])
     ],
     targets: [
         .target(
@@ -18,7 +19,8 @@ let package = Package(
             dependencies: [
                 "Core",
                 "NetworkLayer",
-                "IldamSDK"
+                "IldamSDK",
+                "IldamDriverSDK"
             ]
         ),
         .target(
@@ -31,6 +33,10 @@ let package = Package(
         ),
         .target(
             name: "IldamSDK",
+            dependencies: ["Core", "NetworkLayer"]
+        ),
+        .target(
+            name: "IldamDriverSDK",
             dependencies: ["Core", "NetworkLayer"]
         ),
         .testTarget(
