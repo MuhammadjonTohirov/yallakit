@@ -31,8 +31,9 @@ public struct TaxiTariff: Sendable {
     public let index: Int?
     public var services: [TaxiTariffService]?
     public var category: TaxiTariffCategory?
+    public var award: TaxiTariffAward?
     
-    public init(id: Int, name: String?, description: String?, photo: String?, icon: String?, cost: Float?, cityKMCost: Float?, includedKM: Double?, fixedType: Bool?, fixedPrice: Float?, secondAddress: Bool?, index: Int?, services: [TaxiTariffService]? = nil, category: TaxiTariffCategory? = nil) {
+    public init(id: Int, name: String?, description: String?, photo: String?, icon: String?, cost: Float?, cityKMCost: Float?, includedKM: Double?, fixedType: Bool?, fixedPrice: Float?, secondAddress: Bool?, index: Int?, services: [TaxiTariffService]? = nil, category: TaxiTariffCategory? = nil, award: TaxiTariffAward? = nil) {
         self.id = id
         self.name = name
         self.description = description
@@ -47,6 +48,30 @@ public struct TaxiTariff: Sendable {
         self.index = index
         self.services = services
         self.category = category
+        self.award = award
+    }
+}
+
+public struct TaxiTariffAward: Sendable {
+    public let cashOrPercentage: String
+    public let minKm: Int
+    public let minPrice: Int
+    public let value: Int
+    
+    public init(cashOrPercentage: String, minKm: Int, minPrice: Int, value: Int) {
+        self.cashOrPercentage = cashOrPercentage
+        self.minKm = minKm
+        self.minPrice = minPrice
+        self.value = value
+    }
+    
+    init?(res: NetResTaxiTariffAward?) {
+        guard let res else { return nil }
+        
+        self.cashOrPercentage = res.cashOrPercentage
+        self.minKm = res.minKm
+        self.minPrice = res.minPrice
+        self.value = res.value
     }
 }
 
@@ -100,6 +125,7 @@ extension TaxiTariff {
         self.index = res.index
         self.category = res.category.flatMap(TaxiTariffCategory.init) ?? nil
         self.services = res.services?.compactMap(TaxiTariffService.init) ?? []
+        self.award = .init(res: res.award)
     }
 }
 

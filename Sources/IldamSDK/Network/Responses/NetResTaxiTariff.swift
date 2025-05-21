@@ -31,6 +31,7 @@ struct NetResTaxiTariff: Codable {
     let index: Int?
     var services: [NetResTaxiTariffService]?
     var category: NetResTaxiTariffCategory?
+    var award: NetResTaxiTariffAward?
     
     enum CodingKeys: String, CodingKey {
         case id, name, description, photo, icon, cost
@@ -39,7 +40,21 @@ struct NetResTaxiTariff: Codable {
         case fixedType = "fixed_type"
         case fixedPrice = "fixed_price"
         case secondAddress = "second_address"
-        case index, services
+        case index, services, award
+    }
+}
+
+struct NetResTaxiTariffAward: Codable {
+    let cashOrPercentage: String
+    let minKm: Int
+    let minPrice: Int
+    let value: Int
+    
+    enum CodingKeys: String, CodingKey {
+        case cashOrPercentage = "cash_or_percentage"
+        case minKm = "min_km"
+        case minPrice = "min_price"
+        case value
     }
 }
 
