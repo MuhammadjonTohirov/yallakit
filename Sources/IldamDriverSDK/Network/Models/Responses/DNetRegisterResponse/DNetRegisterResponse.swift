@@ -7,24 +7,24 @@
 import Foundation
 
 public struct DNetDriverRegisterBody: Encodable {
-    let phone: String
-    let givenNames: String
-    let surName: String
-    let addressId: Int
-    let brandId: Int
-    let modelId: Int
-    let markId: Int
-    let colorId: Int
-    let driverLicenseCategories: [String]
-    let stateNumber: String
-    let carMakeDate: Int
-    let driverLicense: String
-    let driverLicenseDate: String
-    let driverLicenseDateExpiry: String
-    let driverGraduate: String
-    let birthday: String
-    let gender: String
-    let fatherName: String
+    public let phone: String
+    public let givenNames: String
+    public let surName: String
+    public let addressId: Int
+    public let brandId: Int
+    public let modelId: Int
+    public let markId: Int
+    public let colorId: Int
+    public let driverLicenseCategories: [String]
+    public let stateNumber: String
+    public let carMakeDate: Int
+    public let driverLicense: String
+    public let driverLicenseDate: String
+    public let driverLicenseDateExpiry: String
+    public let driverGraduate: String
+    public let birthday: String
+    public let gender: String
+    public let fatherName: String
 
     enum CodingKeys: String, CodingKey {
         case phone, surName = "sur_name", givenNames = "given_names",
@@ -37,7 +37,7 @@ public struct DNetDriverRegisterBody: Encodable {
              fatherName = "father_name"
     }
     
-    init(phone: String, givenNames: String, surName: String, addressId: Int, brandId: Int, modelId: Int, markId: Int, colorId: Int, driverLicenseCategories: [String], stateNumber: String, carMakeDate: Int, driverLicense: String, driverLicenseDate: String, driverLicenseDateExpiry: String, driverGraduate: String, birthday: String, gender: String, fatherName: String) {
+    public init(phone: String, givenNames: String, surName: String, addressId: Int, brandId: Int, modelId: Int, markId: Int, colorId: Int, driverLicenseCategories: [String], stateNumber: String, carMakeDate: Int, driverLicense: String, driverLicenseDate: String, driverLicenseDateExpiry: String, driverGraduate: String, birthday: String, gender: String, fatherName: String) {
         self.phone = phone
         self.givenNames = givenNames
         self.surName = surName
