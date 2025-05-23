@@ -94,7 +94,7 @@ struct DNetCreateExecutorResponse: Codable {
     let brand: DNetCreateNewExecutorMeBrand
     let addressId: Int
     let createdAt: String
-    let tariffCategoryId: Int
+    let tariffCategoryId: Int?
     let register: Bool
     let activeness: Int
     let rating: Int
