@@ -9,7 +9,9 @@ import Foundation
 
 @propertyWrapper public struct codableWrapper<Value: Codable> {
     public let key: String
-    public let storage: UserDefaults = UserDefaults(suiteName: ConstantsProvider.shared.constants.suiteName) ?? .standard
+    public var storage: UserDefaults {
+        UserDefaults(suiteName: ConstantsProvider.shared.constants.suiteName) ?? .standard
+    }
     
     public init(key: String, _ default: Value? = nil) {
         self.key = key
