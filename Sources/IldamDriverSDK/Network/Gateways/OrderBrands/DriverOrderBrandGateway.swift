@@ -10,14 +10,15 @@ import NetworkLayer
 import Foundation
 
 protocol DriverOrderBrandGatewayProtocol {
-    func fetchBrand() async throws -> [DNetOrderBrandsResponse]?
+    func fetchBrand() async throws -> [DriverOrderBrands]?
+    
 }
 
 struct DriverOrderBrandGateway: DriverOrderBrandGatewayProtocol {
  
-    func fetchBrand() async throws -> [DNetOrderBrandsResponse]? {
+    func fetchBrand() async throws -> [DriverOrderBrands]? {
         let request = Request()
-        let response: NetRes<[DNetOrderBrandsResponse]>? = try await Network.sendThrow(request: request)
+        let response: NetRes<[DriverOrderBrands]>? = try await Network.sendThrow(request: request)
         
         return response?.result
       }
