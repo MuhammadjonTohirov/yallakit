@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct DriverOrderBrands: DNetResBody {
+public struct DriverBrandListResponse: DNetResBody {
     public let id: Int
     public let name: String
     public let slug: String
