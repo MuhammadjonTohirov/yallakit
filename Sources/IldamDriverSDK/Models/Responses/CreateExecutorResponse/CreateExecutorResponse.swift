@@ -112,7 +112,7 @@ public struct ExecutorProfile {
         self.brand = NewExecutorBrand(from: network.brand)
         self.addressId = network.addressId
         self.createdAt = network.createdAt
-        self.tariffCategoryId = network.tariffCategoryId
+        self.tariffCategoryId = network.tariffCategoryId ?? 0
         self.register = network.register
         self.activeness = network.activeness
         self.rating = network.rating

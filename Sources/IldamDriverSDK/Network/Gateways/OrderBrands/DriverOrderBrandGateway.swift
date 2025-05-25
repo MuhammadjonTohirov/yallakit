@@ -11,6 +11,7 @@ import Foundation
 
 protocol DriverOrderBrandGatewayProtocol {
     func fetchBrand() async throws -> [DNetOrderBrandsResponse]?
+    
 }
 
 struct DriverOrderBrandGateway: DriverOrderBrandGatewayProtocol {
