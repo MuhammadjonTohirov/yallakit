@@ -85,7 +85,7 @@ public struct Network {
             }
             
             if !res.success {
-                throw NetworkError.custom(message: res.message ?? "Unknown error")
+                throw NetworkError.custom(message: res.error ?? res.message ?? "Unknown error", code: res.code ?? -1)
             }
             
             return res
