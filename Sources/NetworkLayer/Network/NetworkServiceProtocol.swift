@@ -34,6 +34,7 @@ public extension Error {
 public enum NetworkError: Error {
     case emptyResponse
     case custom(message: String, code: Int = -1)
+    case notFounded
     case unauthorized
     case timeout
     
@@ -47,12 +48,14 @@ public enum NetworkError: Error {
             return "Timeout"
         case .emptyResponse:
             return "Empty response"
+        case .notFounded:
+            return "Page not Founded"
         }
     }
     
     var code: Int {
         switch self {
-        case .custom(let message, let code):
+        case .custom(_, let code):
             return code
         case .unauthorized:
             return 401
@@ -60,6 +63,8 @@ public enum NetworkError: Error {
             return -2
         case .emptyResponse:
             return 0
+        case .notFounded:
+            return 404
         }
     }
 }
