@@ -29,7 +29,7 @@ public extension URL {
     }
     
     static var keyHeader: (key: String, value: String) {
-        ("secret-key", "2f52434c-3068-460d-8dbc-5c80599f2db4")
+        ("secret-key", ConstantsProvider.shared.constants.secretKey)
     }
     
     static var langHeader: (key: String, value: String) {
