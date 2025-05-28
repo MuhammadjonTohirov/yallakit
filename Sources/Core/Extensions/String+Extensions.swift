@@ -201,4 +201,44 @@ extension String {
         let data = Data(self.utf8)
         return try JSONDecoder().decode(T.self, from: data)
     }
+    
+}
+public extension String {
+    func carNumberFormat(_ raw: String) -> String {
+        let trimmed = raw.replacingOccurrences(of: " ", with: "").uppercased()
+
+        // Match AAA001
+        if let match = trimmed.range(of: #"^[A-Z]{3}[0-9]{3}$"#, options: .regularExpression) {
+            let part1 = String(trimmed[match].prefix(3))
+            let part2 = String(trimmed[match].suffix(3))
+            return "\(part1) \(part2)"
+        }
+
+        // Match 001AAA
+        if let match = trimmed.range(of: #"^[0-9]{3}[A-Z]{3}$"#, options: .regularExpression) {
+            let part1 = String(trimmed[match].prefix(3))
+            let part2 = String(trimmed[match].suffix(3))
+            return "\(part1) \(part2)"
+        }
+
+        // Match A001AA
+        if let match = trimmed.range(of: #"^[A-Z][0-9]{3}[A-Z]{2}$"#, options: .regularExpression) {
+            let part1 = String(trimmed[match].prefix(1))
+            let part2 = String(trimmed[match].dropFirst(1).prefix(3))
+            let part3 = String(trimmed[match].suffix(2))
+            return "\(part1) \(part2) \(part3)"
+        }
+
+        // Match AA001A
+        if let match = trimmed.range(of: #"^[A-Z]{2}[0-9]{3}[A-Z]$"#, options: .regularExpression) {
+            let part1 = String(trimmed[match].prefix(2))
+            let part2 = String(trimmed[match].dropFirst(2).prefix(3))
+            let part3 = String(trimmed[match].suffix(1))
+            return "\(part1) \(part2) \(part3)"
+        }
+
+        // If no format matches, return as-is
+        return raw
+    }
+
 }
