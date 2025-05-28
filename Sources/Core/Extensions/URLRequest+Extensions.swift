@@ -8,10 +8,10 @@
 import Foundation
 import UIKit.UIDevice
 
-public extension URLRequest {
-    static var extraHeaders: [String: String] {
-        [:]
-    }
+public struct URLRequestExtraHeaders : Sendable {
+    public static let shared: URLRequestExtraHeaders = .init()
+    
+    var extraHeaders: [String: String] = [:]
 }
 
 extension URLRequest {
@@ -34,7 +34,7 @@ extension URLRequest {
             req.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
         }
         
-        URLRequest.extraHeaders.forEach { headerItem in
+        URLRequestExtraHeaders.shared.extraHeaders.forEach { headerItem in
             req.addValue(headerItem.value, forHTTPHeaderField: headerItem.key)
         }
         return req
