@@ -8,10 +8,39 @@
 import Foundation
 import UIKit.UIDevice
 
-public struct URLRequestExtraHeaders : Sendable {
-    public static let shared: URLRequestExtraHeaders = .init()
+public struct URLRequestExtraHeaders: Sendable {
     
-    public var extraHeaders: [String: String] = [:]
+    static public var xPosition: String? {
+        get {
+            @codableWrapper(key: "xPosition")
+            var position: String?
+            
+            return position
+        }
+        
+        set {
+            @codableWrapper(key: "xPosition")
+            var position: String?
+            
+            position = newValue
+        }
+    }
+    
+    static public var lastPickedPosition: String? {
+        get {
+            @codableWrapper(key: "lastPickedPosition")
+            var position: String?
+            
+            return position
+        }
+        
+        set {
+            @codableWrapper(key: "lastPickedPosition")
+            var position: String?
+            
+            position = newValue
+        }
+    }
 }
 
 extension URLRequest {
@@ -34,8 +63,8 @@ extension URLRequest {
             req.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
         }
         
-        URLRequestExtraHeaders.shared.extraHeaders.forEach { headerItem in
-            req.addValue(headerItem.value, forHTTPHeaderField: headerItem.key)
+        if let xPosition = URLRequestExtraHeaders.lastPickedPosition ?? URLRequestExtraHeaders.xPosition {
+            req.addValue(xPosition, forHTTPHeaderField: "x-position")
         }
         return req
     }
@@ -52,6 +81,9 @@ extension URLRequest {
             req.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
         }
         
+        if let xPosition = URLRequestExtraHeaders.lastPickedPosition ?? URLRequestExtraHeaders.xPosition {
+            req.addValue(xPosition, forHTTPHeaderField: "x-position")
+        }
         return req
     }
 }
