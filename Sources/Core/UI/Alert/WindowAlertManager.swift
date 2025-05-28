@@ -167,7 +167,6 @@ struct AlertHostView: View {
                 .transition(.scale.combined(with: .opacity))
             }
         }
-//        .animation(.easeInOut(duration: 0.2), value: alertManager.isPresented)
     }
 }
 

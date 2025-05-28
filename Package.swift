@@ -1,6 +1,8 @@
 // swift-tools-version: 6.1
 import PackageDescription
 
+// Inlcude Starscream for IldamDriverSDK: https://github.com/daltoniam/Starscream
+
 let package = Package(
     name: "YallaKit",
     platforms: [
@@ -12,6 +14,9 @@ let package = Package(
         .library(name: "NetworkLayer", targets: ["NetworkLayer"]),
         .library(name: "IldamSDK", targets: ["IldamSDK"]),
         .library(name: "IldamDriverSDK", targets: ["IldamDriverSDK"])
+    ],
+    dependencies: [
+        .package(url: "https://github.com/daltoniam/Starscream", exact: "4.0.8")
     ],
     targets: [
         .target(
@@ -37,11 +42,20 @@ let package = Package(
         ),
         .target(
             name: "IldamDriverSDK",
-            dependencies: ["Core", "NetworkLayer"]
+            dependencies: [
+                "Core",
+                "NetworkLayer",
+                .product(name: "Starscream", package: "Starscream")
+            ]
         ),
         .testTarget(
             name: "IldamSDKTests",
-            dependencies: ["IldamSDK", "NetworkLayer", "Core"]
-        )
+            dependencies: [
+                "IldamSDK",
+                "NetworkLayer",
+                "Core"
+            ]
+        ),
+        
     ]
 )
