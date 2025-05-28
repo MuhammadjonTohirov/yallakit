@@ -11,7 +11,7 @@ import UIKit.UIDevice
 public struct URLRequestExtraHeaders : Sendable {
     public static let shared: URLRequestExtraHeaders = .init()
     
-    var extraHeaders: [String: String] = [:]
+    public var extraHeaders: [String: String] = [:]
 }
 
 extension URLRequest {
