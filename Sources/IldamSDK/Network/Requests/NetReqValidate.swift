@@ -14,5 +14,5 @@ import Foundation
 
 struct NetReqValidate: Codable {
     let phone: String
-    let code: Int
+    let code: String
 }

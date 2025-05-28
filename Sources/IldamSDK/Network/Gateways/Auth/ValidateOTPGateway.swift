@@ -11,11 +11,11 @@ import NetworkLayer
 import Core
 
 protocol ValidateOTPGatewayProtocol {
-    func validate(username: String, code: Int) async -> NetResValidate?
+    func validate(username: String, code: String) async -> NetResValidate?
 }
 
 struct ValidateOTPGateway: ValidateOTPGatewayProtocol {
-    func validate(username: String, code: Int) async -> NetResValidate? {
+    func validate(username: String, code: String) async -> NetResValidate? {
         let data: NetRes<NetResValidate>? = (await Network.send(request: AuthNetworkRoute.validate(req: .init(phone: username, code: code))))
         return data?.result
     }

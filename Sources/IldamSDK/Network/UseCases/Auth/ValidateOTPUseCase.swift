@@ -10,7 +10,7 @@ import Foundation
 import Core
 
 public protocol ValidateOTPUseCaseProtocol {
-    func execute(username: String, code: Int) async -> ValidationResponse?
+    func execute(username: String, code: String) async -> ValidationResponse?
 }
 
 public final class ValidateOTPUseCase: ValidateOTPUseCaseProtocol {
@@ -24,7 +24,7 @@ public final class ValidateOTPUseCase: ValidateOTPUseCaseProtocol {
         self.gateway = ValidateOTPGateway()
     }
     
-    public func execute(username: String, code: Int) async -> ValidationResponse? {
+    public func execute(username: String, code: String) async -> ValidationResponse? {
         let result = await gateway.validate(username: username, code: code)
         
         if let result = result {
