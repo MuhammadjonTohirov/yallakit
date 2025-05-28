@@ -84,17 +84,6 @@ struct DNetActiveOrderDetail: Codable {
         case tariffName = "tariff_name"
     }
 }
-struct DNetActiveDirectionToClient: Codable {
-    let distance: Double
-    let duration: Double
-    let mapType: String
-
-    enum CodingKeys: String, CodingKey {
-        case distance
-        case duration
-        case mapType = "map_type"
-    }
-}
 struct DNetActiveOrderService: Codable {
     let cost: Int
     let costType: String
@@ -106,6 +95,18 @@ struct DNetActiveOrderService: Codable {
         case name
     }
 }
+struct DNetActiveDirectionToClient: Codable {
+    let distance: Double
+    let duration: Double
+    let mapType: String
+
+    enum CodingKeys: String, CodingKey {
+        case distance
+        case duration
+        case mapType = "map_type"
+    }
+}
+
 struct DNetActiveExecutorBonus: Codable {
     let cost: Int
     let minCost: Int
