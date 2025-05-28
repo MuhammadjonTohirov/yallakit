@@ -11,7 +11,7 @@ import Core
 
 public protocol AuthServiceProtocol: Sendable {
     func sendOTP(username: String) async throws -> OTPResponse?
-    func validate(username: String, code: Int) async -> ValidationResponse?
+    func validate(username: String, code: String) async -> ValidationResponse?
     func getUserInfo() async -> UserInfoResponse?
     func updateProfile(request: ProfileUpdateRequest) async -> Bool
     func logout() async -> Bool
@@ -52,7 +52,7 @@ public final class AuthService: AuthServiceProtocol, @unchecked Sendable {
         return try await sendOTPUseCase.execute(username: username)
     }
     
-    public func validate(username: String, code: Int) async -> ValidationResponse? {
+    public func validate(username: String, code: String) async -> ValidationResponse? {
         return await validateOTPUseCase.execute(username: username, code: code)
     }
     
