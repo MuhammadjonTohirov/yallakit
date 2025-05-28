@@ -52,6 +52,9 @@ final public class UserSettings: @unchecked Sendable {
     @codableWrapper(key: "accessToken")
     public var accessToken: String?
     
+    @codableWrapper(key: "lastUserLocation")
+    public var lastUserLocation: String?
+    
     @codableWrapper(key: "refreshToken")
     public var refreshToken: String?
     

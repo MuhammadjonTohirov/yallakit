@@ -8,6 +8,12 @@
 import Foundation
 import UIKit.UIDevice
 
+public extension URLRequest {
+    static var extraHeaders: [String: String] {
+        [:]
+    }
+}
+
 extension URLRequest {
     private static let appVersion: String = {
         ConstantsProvider.shared.constants.appVersion
@@ -28,6 +34,9 @@ extension URLRequest {
             req.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
         }
         
+        URLRequest.extraHeaders.forEach { headerItem in
+            req.addValue(headerItem.value, forHTTPHeaderField: headerItem.key)
+        }
         return req
     }
     
