@@ -77,7 +77,7 @@ struct DNetOrderUpdateDetail: Codable {
     let cost: Int
     let modifPrice: Int
     let modifPriceEvent: String
-    let services: [DNetOrderSentToExecutorService]
+    let services: [DNetOrderUpdateService]
     let tariffName: String
 
     enum CodingKeys: String, CodingKey {
