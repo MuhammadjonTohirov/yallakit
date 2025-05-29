@@ -3,7 +3,8 @@
 //  YallaKit
 //
 //  Created by MuhammadAli on 27/05/25.
-//
+//    //OrderUpdateSocketResponse
+
 
 import Foundation
 
@@ -25,7 +26,10 @@ public enum WebSocketOrderChannels: String {
     
     case orderUpdate                          = "order-update" // DNetOrderUpdateResult
     case orderUpdateFromEther                 = "order-update-from-ether" // DNetOrderSentToEtherResult
-
+    
+    case statusUpdateFromPanel                = "status-update-from-panel" //DNetOrderStatusUpdateFromPanelResult ✅
+    case orderStatusUpdate                    = "order/status/update" // DNetOrderStatusUpdateFromPanelResult ✅
+ 
     case orderShow                            = "order-show" // DNetOrderShowResponse
     case orderSkip                            = "order-skip"// TODO: [Info] useless
     case orderAppointFromOffer                = "order-appoint-from-offer" // DNetOrderAppointResult
@@ -33,10 +37,7 @@ public enum WebSocketOrderChannels: String {
     
     case orderCompletedFromPanel              = "order-completed-from-panel" // DNetOrderCompletedFromPanel ✅
     case orderComplete                        = "order-complete"//DNetOrderCompletedFromPanel✅
-    
-    case statusUpdateFromPanel                = "status-update-from-panel" //DNetOrderStatusUpdateFromPanelResult ✅
-    case orderStatusUpdate                    = "order/status/update" // DNetOrderStatusUpdateFromPanelResult ✅
-    
+   
     case orderCanceledFromClient              = "order-canceled-from-client" // DNetOrderCanceledFromPanel ✅
     case orderCanceledFromPanel               = "order-canceled-from-panel" // DNetOrderCanceledFromPanel ✅
     case orderCancel                          = "order-cancel" // DNetOrderCanceledFromPanel ✅

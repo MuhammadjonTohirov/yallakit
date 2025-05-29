@@ -30,7 +30,7 @@ public protocol WebSocketChannelHandler: AnyObject {
     func onReceiveOrderRemoveFromExecutor(_ response:OrderRemoveFromAppointedExecutorResponse)
     func onReceiveOrderRemoveFromAppointedExecutor(_ response:OrderRemoveFromAppointedExecutorResponse)
     
-    func onReceiveOrderUpdate(_ response: OrderUpdateResponse)
+    func onReceiveOrderUpdate(_ response: OrderUpdateSocketResponse)
     func onReceiveOrderUpdateFromEther(_ response: OrderSentToEtherResponse)
     func onReceiveStatusUpdateFromPanel(_ response: OrderStatusUpdateFromPanelResponse)
     func onReceiveOrderStatusUpdate(_ response: OrderStatusUpdateFromPanelResponse)
