@@ -15,6 +15,43 @@ public protocol WebSocketDelegateHandler: AnyObject {
     func didConnect()
 }
 
+public protocol WebSocketChannelHandler: AnyObject {
+    func onReceiveOrdersMe(_ response: ActiveOrderListResponse)
+    func onReceiveMe(_ response: ExecutorMeResponse)
+    func onReceiveInfo(_ response: ExecutorMeResponse)
+    func onReceiveOrdersEther(_ response: [OrderSentToEtherResponse])
+    func onReceiveOrderSendToEther(_ response: [OrderSentToEtherResponse])
+    func onReceiveOrderSendToExecutorFromNonstop()
+    func onReceiveOrderSendToExecutor()
+    func onReceiveOrderAppointToExecutor()
+    func onReceiveOrderRemoveFromEther()
+    func onReceiveOrderRemoveFromExecutor()
+    func onReceiveOrderRemoveFromAppointedExecutor()
+    func onReceiveOrderUpdate()
+    func onReceiveOrderUpdateFromEther()
+    func onReceiveOrderShow()
+    func onReceiveOrderSkip()
+    func onReceiveOrderAppointFromOffer()
+    func onReceiveOrderAppoint()
+    func onReceiveOrderCompletedFromPanel()
+    func onReceiveOrderComplete()
+    func onReceiveStatusUpdateFromPanel()
+    func onReceiveOrderStatusUpdate()
+    func onReceiveOrderCanceledFromClient()
+    func onReceiveOrderCanceledFromPanel()
+    func onReceiveOrderCancel()
+    func onReceiveTariffConfigs()
+    func onReceiveCurbDefault()
+    func onReceiveCurbCreate()
+    func onReceiveBalanceIncome()
+    func onReceiveBalanceExpense()
+    func onReceiveBalance()
+    func onReceiveFotocontrol()
+    func onReceiveGetCondition()
+    func onReceiveCondition()
+    func onReceivePanelCondition()
+}
+
 public final class WebSocketManager: WebSocketDelegate {
     @MainActor public static let shared = WebSocketManager()
     private var socket: WebSocket?
