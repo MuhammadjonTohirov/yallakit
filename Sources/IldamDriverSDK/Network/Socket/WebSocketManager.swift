@@ -101,26 +101,28 @@ public final class WebSocketManager: WebSocketDelegate {
 
         case .disconnected(let reason, let code):
             isConnected = false
-            print("[WebSocket] Disconnected: \(reason) (code: \(code))")
+            Logging.l("[WebSocket] Disconnected: \(reason) (code: \(code))")
             delegate?.didDisconnect(error: WSError(type: .serverError, message: reason, code: code))
 
         case .text(let text):
             handleIncoming(text: text)
         case .binary(let data):
-            print("[WebSocket] Received binary data of size: \(data.count)")
+            Logging.l("[WebSocket] Received binary data of size: \(data.count)")
 
         case .error(let error):
             isConnected = false
-            print("[WebSocket] Error: \(String(describing: error))")
+            Logging.l("[WebSocket] Error: \(String(describing: error))")
             delegate?.didDisconnect(error: error)
 
         case .cancelled:
             isConnected = false
-            print("[WebSocket] Connection cancelled")
+            Logging.l("[WebSocket] Connection cancelled")
             delegate?.didDisconnect(error: nil)
 
-        case .pong(_), .ping(_), .viabilityChanged(_), .reconnectSuggested(_), .peerClosed:
+        case .pong(_), .ping(_), .reconnectSuggested(_), .peerClosed:
             break
+        case .viabilityChanged(let changed):
+            Logging.l(tag: "IldamDriverSDK", "[WebSocket] Viability changed: \(changed)")
         }
     }
 }
@@ -132,7 +134,7 @@ extension WebSocketManager {
         do {
             let base = try decoder.decode(SocketBase.self, from: jsonData)
             guard let channel = WebSocketOrderChannels(rawValue: base.channel) else {
-                print("❓ Unknown channel: \(base.channel)")
+                Logging.l("❓ Unknown channel: \(base.channel)")
                 return
             }
 
@@ -170,11 +172,11 @@ extension WebSocketManager {
             case .getCondition, .condition, .panelCondition:
                 try decodeAndDelegate(jsonData, type: DNetGetConditionResponse.self, for: channel)
             case .orderSkip:
-                print("ℹ️ Ignoring channel: \(channel.rawValue)")
+                Logging.l("[WebSocket] ℹ️ Ignoring channel: \(channel.rawValue)")
             }
 
         } catch {
-            print("⚠️ Decoding error: \(error)")
+            Logging.l("[WebSocket] ⚠️ Decoding error: \(error)")
         }
     }
 
