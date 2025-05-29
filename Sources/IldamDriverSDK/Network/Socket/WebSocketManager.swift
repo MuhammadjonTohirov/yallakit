@@ -29,9 +29,10 @@ public protocol WebSocketChannelHandler: AnyObject {
     func onReceiveOrderRemoveFromEther(_ response: OrderRemoveFromAppointedExecutorResponse)
     func onReceiveOrderRemoveFromExecutor(_ response:OrderRemoveFromAppointedExecutorResponse)
     func onReceiveOrderRemoveFromAppointedExecutor(_ response:OrderRemoveFromAppointedExecutorResponse)
-    
-    func onReceiveOrderUpdate(_ response: OrderUpdateResponse)
-    func onReceiveOrderUpdateFromEther(_ response: OrderListResponse)
+
+    func onReceiveOrderUpdate(_ response: OrderUpdateSocketResponse)
+    func onReceiveOrderUpdateFromEther(_ response: OrderSentToEtherResponse)
+
     func onReceiveStatusUpdateFromPanel(_ response: OrderStatusUpdateFromPanelResponse)
     func onReceiveOrderStatusUpdate(_ response: OrderStatusUpdateFromPanelResponse)
 
@@ -158,7 +159,9 @@ extension WebSocketManager {
                 try decodeAndDelegate(jsonData, type: DNetExecutorMeResponse.self, for: channel)
             case .ordersEther:
                 try decodeAndDelegate(jsonData, type: DNetResEtherResponse.self, for: channel)
-            case .orderSendToEther, .orderUpdateFromEther:
+            case .orderSendToEther:
+                try decodeAndDelegate(jsonData, type: DNetOrderSentToEtherResult.self, for: channel)
+            case .orderUpdateFromEther:
                 try decodeAndDelegate(jsonData, type: DNetOrderSentToEtherResult.self, for: channel)
             case .orderSendToExecutor, .orderSendToExecutorFromNonstop, .orderAppointToExecutor:
                 try decodeAndDelegate(jsonData, type: DNetOrderSentToExecutorResult.self, for: channel)
@@ -197,7 +200,6 @@ extension WebSocketManager {
         let result: SocketRes = try decoder.decode(SocketRes<T>.self, from: data)
         delegate?.didReceive(channel: channel, message: result)
         
-        
         switch channel {
         case .me:
             if let response = result.result as? DNetExecutorMeResponse {
@@ -228,8 +230,8 @@ extension WebSocketManager {
                 channelDelegate?.onReceiveOrdersEther(OrderListResponse(from: response))
             }
         case .orderUpdateFromEther:
-            if let response = result.result as? DNetResEtherResponse {
-                channelDelegate?.onReceiveOrderUpdateFromEther(OrderListResponse(from: response))
+            if let response = result.result as? DNetOrderSentToEtherResult {
+                channelDelegate?.onReceiveOrderUpdateFromEther(.init(from: response))
             }
         case .orderSendToExecutor:
             if let response = result.result as? DNetOrderSentToExecutorResult {
@@ -257,8 +259,70 @@ extension WebSocketManager {
             }
         case .orderUpdate:
             if let response = result.result as? DNetOrderUpdateResult {
-                
+                channelDelegate?.onReceiveOrderUpdate(.init(from: response))
             }
+        case .orderShow:
+            if let response = result.result as? DNetOrderShowResponse {
+                channelDelegate?.onReceiveOrderShow(.init(from: response))
+            }
+        case .orderAppointFromOffer:
+            if let response = result.result as? DNetOrderAppointResult {
+                channelDelegate?.onReceiveOrderAppointFromOffer(try .init(from: response))
+            }
+        case .orderAppoint:
+            if let response = result.result as? DNetOrderAppointResult {
+                channelDelegate?.onReceiveOrderAppointFromOffer(try .init(from: response))
+            }
+        case .orderCompletedFromPanel:
+            if let response = result.result as? DNetOrderCompletedFromPanel {
+                channelDelegate?.onReceiveOrderCompletedFromPanel(try .init(from: response))
+            }
+        case .statusUpdateFromPanel:
+            if let response = result.result as? DNetOrderStatusUpdateFromPanelResult {
+                channelDelegate?.onReceiveStatusUpdateFromPanel(try .init(from: response))
+            }
+        case .orderStatusUpdate:
+            if let response = result.result as? DNetOrderStatusUpdateFromPanelResult {
+                channelDelegate?.onReceiveStatusUpdateFromPanel(try .init(from: response))
+            }
+        case .orderCanceledFromClient:
+            if let response = result.result as? DNetOrderCanceledFromPanel {
+                channelDelegate?.onReceiveOrderCanceledFromClient(try .init(from: response))
+            }
+        case .orderCanceledFromPanel:
+            if let response = result.result as? DNetOrderCanceledFromPanel {
+                channelDelegate?.onReceiveOrderCanceledFromClient(try .init(from: response))
+            }
+        case .orderCancel:
+            if let response = result.result as? DNetOrderCanceledFromPanel {
+                channelDelegate?.onReceiveOrderCanceledFromClient(try .init(from: response))
+            }
+        case .tariffConfigs:
+            if let response = result.result as? DNetOrderTariffConfigResponse {
+                channelDelegate?.onReceiveTariffConfigs(.init(from: response))
+            }
+        case .curbDefault:
+            if let response = result.result as? DNetDefaultTariffResult {
+                channelDelegate?.onReceiveCurbDefault(.init(from: response))
+            }
+        case .curbCreate:
+            if let response = result.result as? DNetCrubOrderResponse {
+                channelDelegate?.onReceiveCurbCreate(.init(from: response))
+            }
+        case .getCondition:
+            if let response = result.result as? DNetGetConditionResponse {
+                channelDelegate?.onReceiveGetCondition(.init(from: response))
+            }
+        case .panelCondition:
+            if let response = result.result as? DNetGetConditionResponse {
+                channelDelegate?.onReceiveGetCondition(.init(from: response))
+            }
+        case .condition:
+            if let response = result.result as? DNetGetConditionResponse {
+                channelDelegate?.onReceiveGetCondition(.init(from: response))
+            }
+        case .orderSkip:
+            break
         default:
             break
         }
