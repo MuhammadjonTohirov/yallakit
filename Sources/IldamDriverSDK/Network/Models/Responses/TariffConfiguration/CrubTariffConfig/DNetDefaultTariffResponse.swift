@@ -9,7 +9,7 @@
 import Foundation
 
 struct DNetDefaultTariffResult: DNetResBody {
-    let brand: DefaultTariffBrand
+    let brand: DNetDefaultTariffBrand
     let id: Int
     let minCityCost: Int
     let minOutCityCost: Int
@@ -24,7 +24,7 @@ struct DNetDefaultTariffResult: DNetResBody {
     }
 }
 
-struct DefaultTariffBrand: Codable {
+struct DNetDefaultTariffBrand: Codable {
     let id: Int
     let name: String
 }

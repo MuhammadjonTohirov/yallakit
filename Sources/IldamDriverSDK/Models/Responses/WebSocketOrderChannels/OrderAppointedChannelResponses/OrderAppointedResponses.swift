@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct OrderAppointedResponses: DNetResBody {
+public struct OrderAppointedResponse: DNetResBody {
     public let id: Int
     public let status: String?
     
