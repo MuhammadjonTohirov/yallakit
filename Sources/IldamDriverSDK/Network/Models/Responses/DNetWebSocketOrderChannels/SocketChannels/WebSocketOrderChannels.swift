@@ -14,6 +14,7 @@ public enum WebSocketOrderChannels: String {
     
     case ordersEther                          = "orders-ether" // DNetResEtherResponse
     case orderSendToEther                     = "order-send-to-ether" // DNetOrderSentToEtherResult
+    
     case orderSendToExecutorFromNonstop       = "order-send-to-executor-from-nonstop" // DNetOrderSentToExecutorResult
     case orderSendToExecutor                  = "order-send-to-executor" // DNetOrderSentToExecutorResult
     case orderAppointToExecutor               = "order-appoint-to-executor" // DNetOrderSentToExecutorResult
