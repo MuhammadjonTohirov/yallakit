@@ -20,7 +20,7 @@ public protocol WebSocketChannelHandler: AnyObject {
     func onReceiveMe(_ response: ExecutorMeResponse)
     func onReceiveInfo(_ response: ExecutorMeResponse)
     
-    func onReceiveOrdersEther(_ response: [OrderSentToEtherResponse])
+    func onReceiveOrdersEther(_ response: OrderListResponse)
     func onReceiveOrderSendToEther(_ response: [OrderSentToExecutorResponse])
     func onReceiveOrderSendToExecutorFromNonStop(_ response: OrderSentToExecutorResponse )
     func onReceiveOrderSendToExecutor(_ response: OrderSentToExecutorResponse)
@@ -31,7 +31,7 @@ public protocol WebSocketChannelHandler: AnyObject {
     func onReceiveOrderRemoveFromAppointedExecutor(_ response:OrderRemoveFromAppointedExecutorResponse)
     
     func onReceiveOrderUpdate(_ response: OrderUpdateResponse)
-    func onReceiveOrderUpdateFromEther(_ response: OrderSentToEtherResponse)
+    func onReceiveOrderUpdateFromEther(_ response: OrderListResponse)
     func onReceiveStatusUpdateFromPanel(_ response: OrderStatusUpdateFromPanelResponse)
     func onReceiveOrderStatusUpdate(_ response: OrderStatusUpdateFromPanelResponse)
 
@@ -73,6 +73,7 @@ public final class WebSocketManager: WebSocketDelegate {
     private let encoder = JSONEncoder()
 
     public weak var delegate: WebSocketDelegateHandler?
+    public weak var channelDelegate: WebSocketChannelHandler?
 
     private init() {}
 
@@ -193,8 +194,74 @@ extension WebSocketManager {
     }
 
     private func decodeAndDelegate<T: DNetResBody>(_ data: Data, type: T.Type, for channel: WebSocketOrderChannels) throws {
-        let res = try decoder.decode(SocketRes<T>.self, from: data)
-        delegate?.didReceive(channel: channel, message: res)
+        let result: SocketRes = try decoder.decode(SocketRes<T>.self, from: data)
+        delegate?.didReceive(channel: channel, message: result)
+        
+        
+        switch channel {
+        case .me:
+            if let response = result.result as? DNetExecutorMeResponse {
+                channelDelegate?.onReceiveMe(.init(from: response))
+            }
+        case .info:
+            if let response = result.result as? DNetExecutorMeResponse {
+                channelDelegate?.onReceiveInfo(.init(from: response))
+            }
+        case .balanceIncome:
+            if let response = result.result as? DNetExecutorMeResponse {
+                channelDelegate?.onReceiveInfo(.init(from: response))
+            }
+        case .balance:
+            if let response = result.result as? DNetExecutorMeResponse {
+                channelDelegate?.onReceiveInfo(.init(from: response))
+            }
+        case .balanceExpense:
+            if let response = result.result as? DNetExecutorMeResponse {
+                channelDelegate?.onReceiveInfo(.init(from: response))
+            }
+        case .fotocontrol:
+            if let response = result.result as? DNetExecutorMeResponse {
+                channelDelegate?.onReceiveInfo(.init(from: response))
+            }
+        case .ordersEther:
+            if let response = result.result as? DNetResEtherResponse {
+                channelDelegate?.onReceiveOrdersEther(OrderListResponse(from: response))
+            }
+        case .orderUpdateFromEther:
+            if let response = result.result as? DNetResEtherResponse {
+                channelDelegate?.onReceiveOrderUpdateFromEther(OrderListResponse(from: response))
+            }
+        case .orderSendToExecutor:
+            if let response = result.result as? DNetOrderSentToExecutorResult {
+                channelDelegate?.onReceiveOrderSendToExecutor(.init(from: response))
+            }
+        case .orderSendToExecutorFromNonstop:
+            if let response = result.result as? DNetOrderSentToExecutorResult {
+                channelDelegate?.onReceiveOrderSendToExecutor(.init(from: response))
+            }
+        case .orderAppointToExecutor:
+            if let response = result.result as? DNetOrderSentToExecutorResult {
+                channelDelegate?.onReceiveOrderSendToExecutor(.init(from: response))
+            }
+        case .orderRemoveFromAppointedExecutor:
+            if let response = result.result as? DNetOrderRemoveFromAppointedExecutor {
+                channelDelegate?.onReceiveOrderRemoveFromAppointedExecutor(try .init(from: response))
+            }
+        case .orderRemoveFromEther:
+            if let response = result.result as? DNetOrderRemoveFromAppointedExecutor {
+                channelDelegate?.onReceiveOrderRemoveFromAppointedExecutor(try .init(from: response))
+            }
+        case .orderRemoveFromExecutor:
+            if let response = result.result as? DNetOrderRemoveFromAppointedExecutor {
+                channelDelegate?.onReceiveOrderRemoveFromAppointedExecutor(try .init(from: response))
+            }
+        case .orderUpdate:
+            if let response = result.result as? DNetOrderUpdateResult {
+                
+            }
+        default:
+            break
+        }
     }
     
     private struct SocketBase: Decodable {
