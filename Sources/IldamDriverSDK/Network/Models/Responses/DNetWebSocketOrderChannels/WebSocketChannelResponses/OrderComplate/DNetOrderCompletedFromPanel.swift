@@ -7,6 +7,6 @@
 
 import Foundation
 
-struct DNetOrderCompletedFromPanel: Codable {
+struct DNetOrderCompletedFromPanel: DNetResBody {
     let id: Int
 }

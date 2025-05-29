@@ -6,6 +6,6 @@
 //
 import Foundation
 
-struct DNetOrderCanceledFromPanel: Codable {
+struct DNetOrderCanceledFromPanel: DNetResBody {
     let id: Int
 }

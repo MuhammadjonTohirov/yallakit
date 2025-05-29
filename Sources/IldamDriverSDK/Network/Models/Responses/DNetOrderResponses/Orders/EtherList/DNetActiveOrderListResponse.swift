@@ -7,7 +7,7 @@
 
 import Foundation
 // MARK: - Network Response
-struct DNetActiveOrderListResponse: Codable {
+struct DNetActiveOrderListResponse: DNetResBody {
     let list: [DNetActiveOrder]
     let pagination: DNetActiveOrderPagination
 

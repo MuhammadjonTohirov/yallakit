@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum WebSocketOrderChannels: String {
+public enum WebSocketOrderChannels: String {
     case ordersMe                             = "orders-me" // DNetActiveOrderListResponse
     case me                                   = "me" // DNetExecutorMeResponse
     case info                                 = "info" // DNetExecutorMeResponse
