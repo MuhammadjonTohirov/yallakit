@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct CreateExecutorResponse {
+public struct CreateExecutorResponse: Codable, Sendable {
     public let accessToken: String
     public let tokenType: String
     public let expiresIn: Int
@@ -29,7 +29,7 @@ public struct CreateExecutorResponse {
 }
 
 
-public struct ExecutorProfile {
+public struct ExecutorProfile: Codable, Sendable {
     public let id: Int
     public let givenNames: String
     public let surName: String
@@ -124,7 +124,7 @@ public struct ExecutorProfile {
         self.plan = network.plan.map { NewExecutorPlan(from: $0) }
     }
     
-    public struct NewExecutorBrand: Codable {
+    public struct NewExecutorBrand: Codable, Sendable {
         public let id: Int
         public let name: String
         public let slug: String
@@ -142,7 +142,7 @@ public struct ExecutorProfile {
         }
     }
     
-    public struct NewExecutorFotoControl: Codable {
+    public struct NewExecutorFotoControl: Codable, Sendable {
         public let fotocontrolStatus: Bool
         public let moderatorStatus: String?
         
@@ -156,7 +156,7 @@ public struct ExecutorProfile {
         }
     }
     
-    public struct NewExecutorPlan: Codable {
+    public struct NewExecutorPlan: Codable, Sendable {
         let id: Int
         let name: NewExecutorLocalizedText
         let description: NewExecutorLocalizedText
@@ -192,7 +192,7 @@ public struct ExecutorProfile {
         }
         
     }
-    public struct NewExecutorLocalizedText: Codable {
+    public struct NewExecutorLocalizedText: Codable, Sendable {
         public let uz: String
         public let ru: String
         
