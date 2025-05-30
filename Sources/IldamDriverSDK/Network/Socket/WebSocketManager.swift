@@ -15,7 +15,7 @@ public protocol WebSocketDelegateHandler: AnyObject {
     func didConnect()
 }
 
-public protocol WebSocketChannelHandler: AnyObject {
+public protocol WebSocketChannelHandler: AnyObject, Sendable {
     func onReceiveOrdersMe(_ response: ActiveOrderListResponse)
     func onReceiveMe(_ response: ExecutorMeResponse)
     func onReceiveInfo(_ response: ExecutorMeResponse)
@@ -65,7 +65,7 @@ public protocol WebSocketChannelHandler: AnyObject {
     func onReceivePanelCondition(_ response:DriverGetConditionResponse)
 }
 
-public final class WebSocketManager: WebSocketDelegate {
+public final class WebSocketManager: WebSocketDelegate, @unchecked Sendable {
     @MainActor public static let shared = WebSocketManager()
     private var socket: WebSocket?
     private var isConnected: Bool = false
@@ -74,7 +74,12 @@ public final class WebSocketManager: WebSocketDelegate {
     private let encoder = JSONEncoder()
 
     public weak var delegate: WebSocketDelegateHandler?
-    public weak var channelDelegate: WebSocketChannelHandler?
+    
+    private var listeners = NSHashTable<AnyObject>.weakObjects()
+    private var listenerObjects: [any WebSocketChannelHandler] {
+        listeners.allObjects.compactMap({$0 as? WebSocketChannelHandler})
+    }
+    private let listenersQueue = DispatchQueue(label: "WebSocketChannelHandler.listeners", attributes: .concurrent)
 
     private init() {}
 
@@ -137,6 +142,23 @@ public final class WebSocketManager: WebSocketDelegate {
             break
         case .viabilityChanged(let changed):
             Logging.l(tag: "IldamDriverSDK", "[WebSocket] Viability changed: \(changed)")
+        }
+    }
+    
+    public func subscribeSocketChannelHandler(_ listener: WebSocketChannelHandler) {
+        listenersQueue.async(flags: .barrier) {
+            if self.listeners.contains(listener) {
+                return
+            }
+            debugPrint("WebSocketManager", "Listener", listener.self)
+            self.listeners.add(listener)
+        }
+    }
+    
+    public func removeListener(_ listener: WebSocketChannelHandler) {
+        debugPrint("WebSocketManager", "Remove Listener", listener.self)
+        listenersQueue.async(flags: .barrier) {
+            self.listeners.remove(listener)
         }
     }
 }
@@ -203,123 +225,180 @@ extension WebSocketManager {
         switch channel {
         case .me:
             if let response = result.result as? DNetExecutorMeResponse {
-                channelDelegate?.onReceiveMe(.init(from: response))
+                listenerObjects.forEach({$0.onReceiveMe(.init(from: response))})
             }
         case .info:
             if let response = result.result as? DNetExecutorMeResponse {
-                channelDelegate?.onReceiveInfo(.init(from: response))
+                listenerObjects.forEach({$0.onReceiveInfo(.init(from: response))})
             }
         case .balanceIncome:
             if let response = result.result as? DNetExecutorMeResponse {
-                channelDelegate?.onReceiveInfo(.init(from: response))
+                listenerObjects.forEach({$0.onReceiveBalanceIncome(.init(from: response))})
             }
         case .balance:
             if let response = result.result as? DNetExecutorMeResponse {
-                channelDelegate?.onReceiveInfo(.init(from: response))
+                listenerObjects.forEach({$0.onReceiveBalance(.init(from: response))})
             }
         case .balanceExpense:
             if let response = result.result as? DNetExecutorMeResponse {
-                channelDelegate?.onReceiveInfo(.init(from: response))
+                listenerObjects.forEach({$0.onReceiveBalanceExpense(.init(from: response))})
             }
         case .fotocontrol:
             if let response = result.result as? DNetExecutorMeResponse {
-                channelDelegate?.onReceiveInfo(.init(from: response))
+                listenerObjects.forEach({$0.onReceiveInfo(.init(from: response))})
             }
         case .ordersEther:
             if let response = result.result as? DNetResEtherResponse {
-                channelDelegate?.onReceiveOrdersEther(OrderListResponse(from: response))
+                listenerObjects.forEach({$0.onReceiveOrdersEther(.init(from: response))})
             }
         case .orderUpdateFromEther:
             if let response = result.result as? DNetOrderSentToEtherResult {
-                channelDelegate?.onReceiveOrderUpdateFromEther(.init(from: response))
+                listenerObjects.forEach({$0.onReceiveOrderUpdateFromEther(.init(from: response))})
             }
         case .orderSendToExecutor:
             if let response = result.result as? DNetOrderSentToExecutorResult {
-                channelDelegate?.onReceiveOrderSendToExecutor(.init(from: response))
+                listenerObjects.forEach({$0.onReceiveOrderSendToExecutor(.init(from: response))})
             }
         case .orderSendToExecutorFromNonstop:
             if let response = result.result as? DNetOrderSentToExecutorResult {
-                channelDelegate?.onReceiveOrderSendToExecutor(.init(from: response))
+                listenerObjects.forEach({$0.onReceiveOrderSendToExecutorFromNonStop(.init(from: response))})
             }
         case .orderAppointToExecutor:
             if let response = result.result as? DNetOrderSentToExecutorResult {
-                channelDelegate?.onReceiveOrderSendToExecutor(.init(from: response))
+                listenerObjects.forEach({$0.onReceiveOrderAppointToExecutor(.init(from: response))})
             }
         case .orderRemoveFromAppointedExecutor:
             if let response = result.result as? DNetOrderRemoveFromAppointedExecutor {
-                channelDelegate?.onReceiveOrderRemoveFromAppointedExecutor(try .init(from: response))
+                let _response: OrderRemoveFromAppointedExecutorResponse = try .init(from: response)
+                listenerObjects.forEach({
+                    $0.onReceiveOrderRemoveFromAppointedExecutor(_response)
+                })
             }
         case .orderRemoveFromEther:
             if let response = result.result as? DNetOrderRemoveFromAppointedExecutor {
-                channelDelegate?.onReceiveOrderRemoveFromAppointedExecutor(try .init(from: response))
+                let _response: OrderRemoveFromAppointedExecutorResponse = try .init(from: response)
+                listenerObjects.forEach({
+                    $0.onReceiveOrderRemoveFromEther(_response)
+                })
             }
         case .orderRemoveFromExecutor:
             if let response = result.result as? DNetOrderRemoveFromAppointedExecutor {
-                channelDelegate?.onReceiveOrderRemoveFromAppointedExecutor(try .init(from: response))
+                let _response: OrderRemoveFromAppointedExecutorResponse = try .init(from: response)
+                listenerObjects.forEach({
+                    $0.onReceiveOrderRemoveFromExecutor(_response)
+                })
             }
         case .orderUpdate:
             if let response = result.result as? DNetOrderUpdateResult {
-                channelDelegate?.onReceiveOrderUpdate(.init(from: response))
+                let _response: OrderUpdateSocketResponse = .init(from: response)
+                listenerObjects.forEach({
+                    $0.onReceiveOrderUpdate(_response)
+                })
             }
         case .orderShow:
             if let response = result.result as? DNetOrderShowResponse {
-                channelDelegate?.onReceiveOrderShow(.init(from: response))
+                let _response: OrderShowResponse = .init(from: response)
+                listenerObjects.forEach({
+                    $0.onReceiveOrderShow(_response)
+                })
             }
         case .orderAppointFromOffer:
             if let response = result.result as? DNetOrderAppointResult {
-                channelDelegate?.onReceiveOrderAppointFromOffer(try .init(from: response))
+                let _response: OrderAppointedResponse = try .init(from: response)
+                listenerObjects.forEach({
+                    $0.onReceiveOrderAppointFromOffer(_response)
+                })
             }
         case .orderAppoint:
             if let response = result.result as? DNetOrderAppointResult {
-                channelDelegate?.onReceiveOrderAppointFromOffer(try .init(from: response))
+                let _response: OrderAppointedResponse = try .init(from: response)
+                listenerObjects.forEach({
+                    $0.onReceiveOrderAppoint(_response)
+                })
             }
         case .orderCompletedFromPanel:
             if let response = result.result as? DNetOrderCompletedFromPanel {
-                channelDelegate?.onReceiveOrderCompletedFromPanel(try .init(from: response))
+                let _response: OrderCompletedFromPanel = try .init(from: response)
+                listenerObjects.forEach({
+                    $0.onReceiveOrderCompletedFromPanel(_response)
+                })
             }
         case .statusUpdateFromPanel:
             if let response = result.result as? DNetOrderStatusUpdateFromPanelResult {
-                channelDelegate?.onReceiveStatusUpdateFromPanel(try .init(from: response))
+                let _response: OrderStatusUpdateFromPanelResponse = try .init(from: response)
+                listenerObjects.forEach({
+                    $0.onReceiveStatusUpdateFromPanel(_response)
+                })
             }
         case .orderStatusUpdate:
             if let response = result.result as? DNetOrderStatusUpdateFromPanelResult {
-                channelDelegate?.onReceiveStatusUpdateFromPanel(try .init(from: response))
+                let _response: OrderStatusUpdateFromPanelResponse = try .init(from: response)
+                listenerObjects.forEach({
+                    $0.onReceiveOrderStatusUpdate(_response)
+                })
             }
         case .orderCanceledFromClient:
             if let response = result.result as? DNetOrderCanceledFromPanel {
-                channelDelegate?.onReceiveOrderCanceledFromClient(try .init(from: response))
+                let _response: OrderCanceledFromPanelResponse = try .init(from: response)
+                listenerObjects.forEach({
+                    $0.onReceiveOrderCanceledFromClient(_response)
+                })
             }
         case .orderCanceledFromPanel:
             if let response = result.result as? DNetOrderCanceledFromPanel {
-                channelDelegate?.onReceiveOrderCanceledFromClient(try .init(from: response))
+                let _response: OrderCanceledFromPanelResponse = try .init(from: response)
+                listenerObjects.forEach({
+                    $0.onReceiveOrderCanceledFromPanel(_response)
+                })
             }
         case .orderCancel:
             if let response = result.result as? DNetOrderCanceledFromPanel {
-                channelDelegate?.onReceiveOrderCanceledFromClient(try .init(from: response))
+                let _response: OrderCanceledFromPanelResponse = try .init(from: response)
+                listenerObjects.forEach({
+                    $0.onReceiveOrderCancel(_response)
+                })
             }
         case .tariffConfigs:
             if let response = result.result as? DNetOrderTariffConfigResponse {
-                channelDelegate?.onReceiveTariffConfigs(.init(from: response))
+                let _response: OrderTariffConfigurationResponse = .init(from: response)
+                listenerObjects.forEach({
+                    $0.onReceiveTariffConfigs(_response)
+                })
             }
         case .curbDefault:
             if let response = result.result as? DNetDefaultTariffResult {
-                channelDelegate?.onReceiveCurbDefault(.init(from: response))
+                let _response: DriverDefaultTariffResponse = .init(from: response)
+                listenerObjects.forEach({
+                    $0.onReceiveCurbDefault(_response)
+                })
             }
         case .curbCreate:
             if let response = result.result as? DNetCrubOrderResponse {
-                channelDelegate?.onReceiveCurbCreate(.init(from: response))
+                let _response: DriverCrubResponse = .init(from: response)
+                listenerObjects.forEach({
+                    $0.onReceiveCurbCreate(_response)
+                })
             }
         case .getCondition:
             if let response = result.result as? DNetGetConditionResponse {
-                channelDelegate?.onReceiveGetCondition(.init(from: response))
+                let _response: DriverGetConditionResponse = .init(from: response)
+                listenerObjects.forEach({
+                    $0.onReceiveGetCondition(_response)
+                })
             }
         case .panelCondition:
             if let response = result.result as? DNetGetConditionResponse {
-                channelDelegate?.onReceiveGetCondition(.init(from: response))
+                let _response: DriverGetConditionResponse = .init(from: response)
+                listenerObjects.forEach({
+                    $0.onReceivePanelCondition(_response)
+                })
             }
         case .condition:
             if let response = result.result as? DNetGetConditionResponse {
-                channelDelegate?.onReceiveGetCondition(.init(from: response))
+                let _response: DriverGetConditionResponse = .init(from: response)
+                listenerObjects.forEach({
+                    $0.onReceiveCondition(_response)
+                })
             }
         case .orderSkip:
             break
