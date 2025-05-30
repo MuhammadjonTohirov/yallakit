@@ -9,8 +9,8 @@ import Foundation
 
 public protocol WebSocketChannelHandler: AnyObject, Sendable {
     func onReceiveOrdersMe(_ response: ActiveOrderListResponse)
-    func onReceiveMe(_ response: ExecutorMeResponse)
-    func onReceiveInfo(_ response: ExecutorMeResponse)
+    func onReceiveMe(_ response: ExecutorMeInfo)
+    func onReceiveInfo(_ response: ExecutorMeInfo)
     
     func onReceiveOrdersEther(_ response: OrderListResponse)
     func onReceiveOrderSendToEther(_ response: [OrderSentToExecutorResponse])
@@ -46,11 +46,11 @@ public protocol WebSocketChannelHandler: AnyObject, Sendable {
     func onReceiveCurbDefault(_ response: DriverDefaultTariffResponse)
     func onReceiveCurbCreate(_ response:  DriverCrubResponse)
     
-    func onReceiveBalanceIncome(_ response: ExecutorMeResponse)
-    func onReceiveBalanceExpense(_ response: ExecutorMeResponse)
-    func onReceiveBalance(_ response: ExecutorMeResponse)
+    func onReceiveBalanceIncome(_ response: ExecutorMeInfo)
+    func onReceiveBalanceExpense(_ response: ExecutorMeInfo)
+    func onReceiveBalance(_ response: ExecutorMeInfo)
     
-    func onReceiveFotocontrol(_ response: ExecutorMeResponse)
+    func onReceiveFotocontrol(_ response: ExecutorMeInfo)
     
     func onReceiveGetCondition(_ response: DriverGetConditionResponse)
     func onReceiveCondition(_ response:DriverGetConditionResponse)
@@ -59,8 +59,8 @@ public protocol WebSocketChannelHandler: AnyObject, Sendable {
 
 public extension WebSocketChannelHandler {
     func onReceiveOrdersMe(_ response: ActiveOrderListResponse) {}
-    func onReceiveMe(_ response: ExecutorMeResponse) {}
-    func onReceiveInfo(_ response: ExecutorMeResponse) {}
+    func onReceiveMe(_ response: ExecutorMeInfo) {}
+    func onReceiveInfo(_ response: ExecutorMeInfo) {}
     
     func onReceiveOrdersEther(_ response: OrderListResponse) {}
     func onReceiveOrderSendToEther(_ response: [OrderSentToExecutorResponse]) {}
@@ -96,11 +96,11 @@ public extension WebSocketChannelHandler {
     func onReceiveCurbDefault(_ response: DriverDefaultTariffResponse) {}
     func onReceiveCurbCreate(_ response:  DriverCrubResponse) {}
     
-    func onReceiveBalanceIncome(_ response: ExecutorMeResponse) {}
-    func onReceiveBalanceExpense(_ response: ExecutorMeResponse) {}
-    func onReceiveBalance(_ response: ExecutorMeResponse) {}
+    func onReceiveBalanceIncome(_ response: ExecutorMeInfo) {}
+    func onReceiveBalanceExpense(_ response: ExecutorMeInfo) {}
+    func onReceiveBalance(_ response: ExecutorMeInfo) {}
     
-    func onReceiveFotocontrol(_ response: ExecutorMeResponse) {}
+    func onReceiveFotocontrol(_ response: ExecutorMeInfo) {}
     
     func onReceiveGetCondition(_ response: DriverGetConditionResponse) {}
     func onReceiveCondition(_ response:DriverGetConditionResponse) {}
