@@ -8,7 +8,7 @@
 import Foundation
 
 public protocol ExecutorMeUseCaseProtocol {
-    func fetchMe() async throws -> ExecutorMeResponse
+    func fetchMe() async throws -> ExecutorMeInfo
 }
 
 public final class ExecutorMeUseCase: ExecutorMeUseCaseProtocol {
@@ -23,11 +23,11 @@ public final class ExecutorMeUseCase: ExecutorMeUseCaseProtocol {
         self.gateway = ExecutorMeGateway()
     }
     
-    public func fetchMe() async throws -> ExecutorMeResponse {
+    public func fetchMe() async throws -> ExecutorMeInfo {
         guard let res = try await gateway.getExecutorMe() else {
             throw NSError(domain: "Sending fetchMe failed", code: -1)
         }
         
-        return ExecutorMeResponse(from: res)
+        return ExecutorMeInfo(from: res)
     }
 }

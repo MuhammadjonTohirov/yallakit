@@ -63,7 +63,7 @@ struct DNetDriverRegisterResponse: DNetResBody {
     let accessToken: String
     let tokenType: String
     let expiresIn: Int
-    let executor: DNetCreateExecutorResponse
+    let executor: DNetCreateExecutorResponse?
 
     enum CodingKeys: String, CodingKey {
         case accessToken = "access_token"
@@ -72,109 +72,113 @@ struct DNetDriverRegisterResponse: DNetResBody {
         case executor
     }
 }
-struct DNetCreateExecutorResponse: Codable {
-    let id: Int
-    let givenNames: String
-    let surName: String
-    let fatherName: String
-    let phone: String
-    let balance: Double?
-    let blockNote: String?
-    let level: Int
-    let blockExpiry: String?
-    let status: String
-    let condition: Bool?
-    let online: Bool?
-    let block: Bool?
-    let birthday: String
-    let brandId: Int
-    let photo: String
-    let serviceIds: [Int]
-    let addressBrand: String?
-    let brand: DNetCreateNewExecutorMeBrand
-    let addressId: Int
-    let createdAt: String
-    let tariffCategoryId: Int?
-    let register: Bool
-    let activeness: Int
-    let rating: Int
-    let fcmToken: String?
-    let fotocontrol: DNetCreateNewExecutorFotocontrol
-    let plan: DNetCreateNewExecutorPlan?
 
-    enum CodingKeys: String, CodingKey {
-        case id
-        case givenNames = "given_names"
-        case surName = "sur_name"
-        case fatherName = "father_name"
-        case phone
-        case balance
-        case blockNote = "block_note"
-        case level
-        case blockExpiry = "block_expiry"
-        case status
-        case condition
-        case online
-        case block
-        case birthday
-        case brandId = "brand_id"
-        case photo
-        case serviceIds = "service_ids"
-        case addressBrand = "address_brand"
-        case brand
-        case addressId = "address_id"
-        case createdAt = "created_at"
-        case tariffCategoryId = "tariff_category_id"
-        case register
-        case activeness
-        case rating
-        case fcmToken = "fcm_token"
-        case fotocontrol
-        case plan
+extension DNetDriverRegisterResponse {
+    struct DNetCreateExecutorResponse: Codable {
+        let id: Int
+        let givenNames: String
+        let surName: String
+        let fatherName: String
+        let phone: String
+        let balance: Double?
+        let blockNote: String?
+        let level: Int
+        let blockExpiry: String?
+        let status: String
+        let condition: Bool?
+        let online: Bool?
+        let block: Bool?
+        let birthday: String
+        let brandId: Int
+        let photo: String
+        let serviceIds: [Int]
+        let addressBrand: String?
+        let brand: DNetCreateNewExecutorMeBrand
+        let addressId: Int
+        let createdAt: String
+        let tariffCategoryId: Int?
+        let register: Bool
+        let activeness: Int
+        let rating: Int
+        let fcmToken: String?
+        let fotocontrol: DNetCreateNewExecutorFotocontrol
+        let plan: DNetCreateNewExecutorPlan?
+
+        enum CodingKeys: String, CodingKey {
+            case id
+            case givenNames = "given_names"
+            case surName = "sur_name"
+            case fatherName = "father_name"
+            case phone
+            case balance
+            case blockNote = "block_note"
+            case level
+            case blockExpiry = "block_expiry"
+            case status
+            case condition
+            case online
+            case block
+            case birthday
+            case brandId = "brand_id"
+            case photo
+            case serviceIds = "service_ids"
+            case addressBrand = "address_brand"
+            case brand
+            case addressId = "address_id"
+            case createdAt = "created_at"
+            case tariffCategoryId = "tariff_category_id"
+            case register
+            case activeness
+            case rating
+            case fcmToken = "fcm_token"
+            case fotocontrol
+            case plan
+        }
     }
-}
 
-struct DNetCreateNewExecutorMeBrand: Codable {
-    let id: Int
-    let name: String
-    let slug: String
-}
-
-struct DNetCreateNewExecutorFotocontrol: Codable {
-    let fotocontrolStatus: Bool
-    let moderatorStatus: String?
-
-    enum CodingKeys: String, CodingKey {
-        case fotocontrolStatus = "fotocontrol_status"
-        case moderatorStatus = "moderator_status"
+    struct DNetCreateNewExecutorMeBrand: Codable {
+        let id: Int
+        let name: String
+        let slug: String
     }
-}
 
-struct DNetCreateNewExecutorPlan: Codable {
-    let id: Int
-    let name: DNetCreateExecutorLocalizedText
-    let description: DNetCreateExecutorLocalizedText
-    let cost: Int
-    let limitTime: Int
-    let planExpire: Int
-    let deactivation: Bool
-    let orderPayCost: Int
-    let orderPayPresent: Int
+    struct DNetCreateNewExecutorFotocontrol: Codable {
+        let fotocontrolStatus: Bool
+        let moderatorStatus: String?
 
-    enum CodingKeys: String, CodingKey {
-        case id
-        case name
-        case description
-        case cost
-        case limitTime = "limit_time"
-        case planExpire = "plan_expire"
-        case deactivation
-        case orderPayCost = "order_pay_cost"
-        case orderPayPresent = "order_pay_present"
+        enum CodingKeys: String, CodingKey {
+            case fotocontrolStatus = "fotocontrol_status"
+            case moderatorStatus = "moderator_status"
+        }
     }
-}
 
-struct DNetCreateExecutorLocalizedText: Codable {
-    let uz: String
-    let ru: String
+    struct DNetCreateNewExecutorPlan: Codable {
+        let id: Int
+        let name: DNetCreateExecutorLocalizedText
+        let description: DNetCreateExecutorLocalizedText
+        let cost: Int
+        let limitTime: Int
+        let planExpire: Int
+        let deactivation: Bool
+        let orderPayCost: Int
+        let orderPayPresent: Int
+
+        enum CodingKeys: String, CodingKey {
+            case id
+            case name
+            case description
+            case cost
+            case limitTime = "limit_time"
+            case planExpire = "plan_expire"
+            case deactivation
+            case orderPayCost = "order_pay_cost"
+            case orderPayPresent = "order_pay_present"
+        }
+    }
+
+    struct DNetCreateExecutorLocalizedText: Codable {
+        let uz: String
+        let ru: String
+    }
+
 }

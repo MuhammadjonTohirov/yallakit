@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct ExecutorMeResponse {
+public struct ExecutorMeInfo: Codable, Sendable {
     public let id: Int
     public let phone: String
     public let photo: String
@@ -99,7 +99,7 @@ public struct ExecutorMeResponse {
     }
 }
 
-public struct ExecutorBrand: Codable {
+public struct ExecutorBrand: Codable, Sendable {
     public let id: Int
     public let name: String
     public let slug: String
@@ -117,7 +117,7 @@ public struct ExecutorBrand: Codable {
     }
 }
 
-public struct ExecutorFotoControl: Codable {
+public struct ExecutorFotoControl: Codable, Sendable {
     public let fotocontrolStatus: Bool
     public let moderatorStatus: String?
     
@@ -131,7 +131,7 @@ public struct ExecutorFotoControl: Codable {
     }
 }
 
-public struct ExecutorTransport: Codable {
+public struct ExecutorTransport: Codable, Sendable {
     public let callsign: String
     public let color: ExecutorCarColor
     public let mark: ExecutorCarMark
@@ -155,7 +155,7 @@ public struct ExecutorTransport: Codable {
     }
 }
 
-public struct ExecutorCarColor: Codable {
+public struct ExecutorCarColor: Codable, Sendable {
     public let color: String
     public let id: Int
     public let name: String
@@ -172,7 +172,7 @@ public struct ExecutorCarColor: Codable {
     }
 }
 
-public struct ExecutorCarMark: Codable {
+public struct ExecutorCarMark: Codable, Sendable {
     public let id: Int
     public let name: String
     
@@ -187,7 +187,7 @@ public struct ExecutorCarMark: Codable {
     }
 }
 
-public struct ExecutorCarModel: Codable {
+public struct ExecutorCarModel: Codable, Sendable {
     public let id: Int
     public let name: String
     
@@ -202,7 +202,7 @@ public struct ExecutorCarModel: Codable {
     }
 }
 
-public struct ExecutorService: Codable {
+public struct ExecutorService: Codable, Sendable {
     public let id: Int
     public let name: String
     
@@ -216,7 +216,7 @@ public struct ExecutorService: Codable {
         self.name = network.name
     }
 }
-public struct ExecutorPlan: Codable {
+public struct ExecutorPlan: Codable, Sendable {
     let id: Int
     let name: ExecutorLocalizedText
     let description: ExecutorLocalizedText
@@ -253,7 +253,7 @@ public struct ExecutorPlan: Codable {
     
 }
 
-public struct ExecutorLocalizedText: Codable {
+public struct ExecutorLocalizedText: Codable, Sendable {
     public let uz: String
     public let ru: String
     
