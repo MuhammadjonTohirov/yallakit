@@ -20,6 +20,14 @@ final class ScrollableUIBottomSheet: UIView {
     private var lastContentOffset: CGPoint = .zero
     private var lastBodyYOffset: CGFloat = .zero
     private var isDecelerating: Bool = false
+    
+    var onExpanded: () -> Void = {}
+    var onCollapsed: () -> Void = {}
+    
+    var isExpanded: Bool {
+        self.yOffsetShift > 0
+    }
+    
     init(content: @escaping () -> any Content) {
         self.content = UIHostingController(
             rootView: AnyView(content())
@@ -219,18 +227,13 @@ extension ScrollableUIBottomSheet: UIScrollViewDelegate {
         
         let isClosing = change < 0
         
-        let minYOffset: CGFloat = max(100, frame.height - self.scrollView.scrollView.contentSize.height)
-        let maxYOffset = initialYOffset
-        
         self.layoutIfNeeded()
         
         func animate() {
             if !isClosing {
-                self.yOffsetShift = maxYOffset - minYOffset
-                self.updateScrollViewFrame()
+                expand()
             } else {
-                self.yOffsetShift = 0
-                self.updateScrollViewFrame()
+                collapse()
             }
         }
         
@@ -246,12 +249,60 @@ extension ScrollableUIBottomSheet: UIScrollViewDelegate {
                 onFinishAnimate()
             })
         } else {
-            UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut) {
+            UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut) { [weak self] in
+                if self == nil { return }
                 animate()
             } completion: { _ in
                 onFinishAnimate()
             }
-
+        }
+    }
+    
+    func expand(animate: Bool = false) {
+        func expand() {
+            let minYOffset: CGFloat = max(100, frame.height - self.scrollView.scrollView.contentSize.height)
+            let maxYOffset = initialYOffset
+            
+            self.yOffsetShift = maxYOffset - minYOffset
+            self.updateScrollViewFrame()
+        }
+        
+        if #available(iOS 18, *) {
+            UIView.animate(.spring(duration: 0.3), changes: {
+                expand()
+            }) { [weak self] in
+                self?.onExpanded()
+            }
+        } else {
+            UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut, animations: { [weak self] in
+                guard self != nil else { return }
+                expand()
+            }, completion: {[weak self] _ in
+                self?.onExpanded()
+            })
+        }
+    }
+    
+    func collapse(animate: Bool = false) {
+        func collapse() {
+            self.yOffsetShift = 0
+            self.updateScrollViewFrame()
+        }
+        
+        if #available(iOS 18, *) {
+            UIView.animate(.spring(duration: animate ? 0.3 : 0), changes: {
+                collapse()
+            }) { [weak self] in
+                self?.onCollapsed()
+            }
+        } else {
+            UIView.animate(withDuration: animate ? 0.3 : 0, delay: 0, options: .curveEaseInOut, animations: {
+                [weak self] in
+                    guard self != nil else { return }
+                    collapse()
+            }, completion: {[weak self] _ in
+                self?.onCollapsed()
+            })
         }
     }
 }

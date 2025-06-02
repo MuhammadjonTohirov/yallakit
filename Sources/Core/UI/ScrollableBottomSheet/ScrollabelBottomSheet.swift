@@ -8,26 +8,43 @@
 import Foundation
 import SwiftUI
 
-public struct ScrollableBottomSheet: UIViewRepresentable {
-    public typealias Content = View
+struct ScrollableBottomSheet: UIViewRepresentable {
+    typealias Content = View
     var body: () -> any Content
+    var expand: Bool = false
+    var expanded: () -> Void
+    var collapsed: () -> Void
     
-    public init(content: @escaping () -> any Content) {
+    init(
+        content: @escaping () -> any Content,
+        expanded: @escaping () -> Void = {},
+        collapsed: @escaping () -> Void = {}
+    ) {
         self.body = content
+        self.expanded = expanded
+        self.collapsed = collapsed
     }
     
-    public func makeUIView(context: Context) -> some UIView {
+    func makeUIView(context: Context) -> some UIView {
         let view = ScrollableUIBottomSheet(content: body)
         print(#function, "Make")
+        view.onExpanded = expanded
+        view.onCollapsed = collapsed
+        
         return view
     }
     
     
-    public func updateUIView(_ uiView: UIViewType, context: Context) {
-        let view = uiView as? ScrollableUIBottomSheet
-        view?.setContent(body)
-        view?.setNeedsLayout()
-        print(#function, "Update")
+    func updateUIView(_ uiView: UIViewType, context: Context) {
+        guard let view = uiView as? ScrollableUIBottomSheet else { return }
+        view.setContent(body)
+        view.setNeedsLayout()
+        
+        if expand {
+            view.isExpanded ? () : view.expand(animate: true)
+        } else {
+            view.isExpanded ? view.collapse(animate: true) : ()
+        }
     }
 }
 
