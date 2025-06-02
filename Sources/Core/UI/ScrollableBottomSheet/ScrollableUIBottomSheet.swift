@@ -12,21 +12,20 @@ import SwiftUI
 final class ScrollableUIBottomSheet: UIView {
     typealias Content = View
     var scrollView: VerticalScrollView = .init()
-    lazy var yOffset: CGFloat = initialYOffset
+    lazy var yOffset: CGFloat = maxYOffset
     var yOffsetShift: CGFloat = .zero
-    var initialYOffset: CGFloat = 500
+    
+    var maxYOffset: CGFloat = 500
+    
     var content: UIHostingController<AnyView>
     private var handleView = UIView()
     private var lastContentOffset: CGPoint = .zero
     private var lastBodyYOffset: CGFloat = .zero
-    private var isDecelerating: Bool = false
     
     var onExpanded: () -> Void = {}
     var onCollapsed: () -> Void = {}
     
-    var isExpanded: Bool {
-        self.yOffsetShift > 0
-    }
+    var isExpanded: Bool = false
     
     init(content: @escaping () -> any Content) {
         self.content = UIHostingController(
@@ -73,14 +72,23 @@ final class ScrollableUIBottomSheet: UIView {
     }
     
     func setContent(_ content: @escaping () -> any Content) {
-        clearBody()
+        self.clearBody()
+        self.scrollView.contentView.subviews.forEach({$0.removeFromSuperview()})
+        
         self.content.rootView = AnyView(content())
-        self.content.view.setNeedsDisplay()
-        self.content.view.setNeedsLayout()
-        initView()
-        updateScrollViewFrame()
+        self.initView()
     }
+
+    private var minHeight: CGFloat = .zero
     
+    func setMinHeight(_ height: CGFloat) {
+        guard minHeight != height else { return }
+        
+        self.minHeight = height
+        self.maxYOffset = self.frame.height - height
+        debugPrint("Min height", minHeight, maxYOffset, self.frame.height)
+    }
+
     func setupView() {
         handleView.backgroundColor = .systemGray4
         handleView.layer.cornerRadius = 3
@@ -117,33 +125,48 @@ final class ScrollableUIBottomSheet: UIView {
     }
     
     func updateScrollViewFrame() {
-        
-        let maxPossibleScrollViewHeight: CGFloat = scrollView.scrollView.contentSize.height - 1
         let maxPossibleScrollContentHeight: CGFloat = frame.height - 100
-        let maxY = frame.height - maxPossibleScrollViewHeight
-        let _maxY = min(maxY, initialYOffset)
-        let y = max(initialYOffset - yOffsetShift, _maxY)
+
+        let y = (maxYOffset - yOffsetShift).limitBottom(100).limitTop(maxYOffset)
+        let minOffsetY: CGFloat = 100
+        let maxOffsetY: CGFloat = maxYOffset
+        
         let height = frame.height - 100
-        
-        let minContentHeight = max(scrollView.scrollView.contentSize.height, maxPossibleScrollContentHeight)
-        
         scrollView
             .frame = .init(
                 x: 0,
-                y: y,
+                y: isExpanded ? minOffsetY : maxOffsetY,
                 width: frame.width,
                 height: height
             )
+        debugPrint("UpdateFrame", scrollView.frame, isExpanded)
+        let minContentHeight = max(scrollView.scrollView.contentSize.height, maxPossibleScrollContentHeight + 1)
+        
+        scrollView.scrollView.contentSize.height = minContentHeight
+        
         let handleHeight: CGFloat = 6
         let width: CGFloat = 32
         handleView.frame = .init(
             x: scrollView.frame.width / 2 - width / 2,
-            y: scrollView.frame.origin.y + 8 + scrollView.contentView.frame.origin.y,
+            y: scrollView.frame.origin.y + 8,
             width: width,
             height: handleHeight
         )
         
-        scrollView.scrollView.contentSize.height = minContentHeight
+        scrollView.backgroundColor = .systemBackground
+        scrollView.contentView.backgroundColor = .systemBackground
+    }
+    
+    private func updateTransition(by shift: CGFloat) {
+        let maxPossibleScrollViewHeight: CGFloat = scrollView.scrollView.contentSize.height - 1
+
+        let maxY = frame.height - maxPossibleScrollViewHeight
+        let _maxY = min(maxY, maxYOffset)
+        let y = max(maxYOffset - shift, _maxY)
+        
+        scrollView.frame.origin.y = y
+        
+        handleView.frame.origin.y = scrollView.frame.origin.y + 8
     }
     
     private func setupConstraints() {
@@ -166,7 +189,7 @@ extension ScrollableUIBottomSheet: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let deltaY = scrollView.contentOffset.y
         let minYOffset: CGFloat = max(100, frame.height - scrollView.contentSize.height)
-        let maxYOffset = initialYOffset
+        let maxYOffset = maxYOffset
         
         let maxShift = abs(maxYOffset - minYOffset).rounded(.down)
 
@@ -176,15 +199,11 @@ extension ScrollableUIBottomSheet: UIScrollViewDelegate {
             let sh2 = maxShift
             yOffsetShift = min(sh1, sh2)
             scrollView.contentOffset = .zero
-            updateScrollViewFrame()
+            updateTransition(by: yOffsetShift)
         } else {
             if !isScrollingUp {
                 scrollView.contentOffset = .zero
             }
-        }
-        
-        if isDecelerating {
-            tryFinalizeOpenClose()
         }
     }
     
@@ -192,18 +211,41 @@ extension ScrollableUIBottomSheet: UIScrollViewDelegate {
         debugPrint("Scrollview", "will begin dragging")
         lastContentOffset = scrollView.contentOffset
         lastBodyYOffset = self.scrollView.frame.origin.y
-        isDecelerating = false
     }
     
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        debugPrint("Scrollview", "did end dragging")
-        tryFinalizeOpenClose()
+        debugPrint("Scrollview", "did end dragging", decelerate)
+        if !decelerate {
+            onEndScrollInteraction()
+        }
     }
     
     func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
         debugPrint("Scrollview", "will begin decelerating")
-        isDecelerating = true
-        tryFinalizeOpenClose()
+        onEndScrollInteraction()
+    }
+    
+    private func onEndScrollInteraction() {
+        
+        let velo = scrollView.scrollView.panGestureRecognizer.velocity(in: self)
+        
+        guard self.scrollView.frame.origin.y != lastBodyYOffset else { return }
+        let isUp = self.scrollView.frame.origin.y < lastBodyYOffset
+        let diff = abs(self.scrollView.frame.origin.y - lastBodyYOffset)
+        debugPrint(isUp, diff, velo)
+        
+        if isUp {
+            (diff > 100 || abs(velo.y) > 300) ? expand(animate: true) : collapse(animate: true)
+            return
+        }
+        
+        if !isUp {
+            if diff > 100 || velo.y > 300 {
+                collapse(animate: true)
+            } else {
+                expand(animate: true)
+            }
+        }
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
@@ -215,95 +257,43 @@ extension ScrollableUIBottomSheet: UIScrollViewDelegate {
         debugPrint("Scrollview", "did scrolls to top")
     }
     
-    func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
-        debugPrint("Scrollview", "did end scrolling animation")
-        tryFinalizeOpenClose()
-    }
-    
-    private func tryFinalizeOpenClose() {
-        let offsetY = self.scrollView.frame.origin.y
-        let change = lastBodyYOffset - offsetY
-        if change == 0 { return }
-        
-        let isClosing = change < 0
-        
-        self.layoutIfNeeded()
-        
-        func animate() {
-            if !isClosing {
-                expand()
-            } else {
-                collapse()
-            }
-        }
-        
-        func onFinishAnimate() {
-            self.scrollView.scrollView.isScrollEnabled = true
-        }
-        
-        if #available(iOS 18, *) {
-            self.scrollView.scrollView.stopScrollingAndZooming()
-            UIView.animate(.spring(duration: 0.3), changes: {
-                animate()
-            }, completion: {
-                onFinishAnimate()
-            })
-        } else {
-            UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut) { [weak self] in
-                if self == nil { return }
-                animate()
-            } completion: { _ in
-                onFinishAnimate()
-            }
-        }
-    }
-    
     func expand(animate: Bool = false) {
         func expand() {
-            let minYOffset: CGFloat = max(100, frame.height - self.scrollView.scrollView.contentSize.height)
-            let maxYOffset = initialYOffset
+            let minYOffset: CGFloat = 100
+            let maxYOffset = maxYOffset
             
             self.yOffsetShift = maxYOffset - minYOffset
-            self.updateScrollViewFrame()
+            debugPrint("expand", yOffsetShift)
+            updateTransition(by: yOffsetShift)
         }
+        self.scrollView.scrollView.isScrollEnabled = false
         
-        if #available(iOS 18, *) {
-            UIView.animate(.spring(duration: 0.3), changes: {
-                expand()
-            }) { [weak self] in
-                self?.onExpanded()
-            }
-        } else {
-            UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut, animations: { [weak self] in
-                guard self != nil else { return }
-                expand()
-            }, completion: {[weak self] _ in
-                self?.onExpanded()
-            })
-        }
+        UIView.animate(withDuration: 0.33, delay: 0, options: .beginFromCurrentState, animations: { [weak self] in
+            guard self != nil else { return }
+            expand()
+        }, completion: {[weak self] _ in
+            self?.onExpanded()
+            self?.isExpanded = true
+            self?.scrollView.scrollView.isScrollEnabled = true
+        })
     }
     
     func collapse(animate: Bool = false) {
         func collapse() {
             self.yOffsetShift = 0
-            self.updateScrollViewFrame()
+            self.updateTransition(by: yOffsetShift)
         }
         
-        if #available(iOS 18, *) {
-            UIView.animate(.spring(duration: animate ? 0.3 : 0), changes: {
+        self.scrollView.scrollView.isScrollEnabled = false
+        UIView.animate(withDuration: animate ? 0.33 : 0, delay: 0, options: .beginFromCurrentState, animations: {
+            [weak self] in
+                guard self != nil else { return }
                 collapse()
-            }) { [weak self] in
-                self?.onCollapsed()
-            }
-        } else {
-            UIView.animate(withDuration: animate ? 0.3 : 0, delay: 0, options: .curveEaseInOut, animations: {
-                [weak self] in
-                    guard self != nil else { return }
-                    collapse()
-            }, completion: {[weak self] _ in
-                self?.onCollapsed()
-            })
-        }
+        }, completion: {[weak self] _ in
+            self?.onCollapsed()
+            self?.isExpanded = false
+            self?.scrollView.scrollView.isScrollEnabled = true
+        })
     }
 }
 
