@@ -8,14 +8,14 @@
 import Foundation
 import SwiftUI
 
-struct ScrollableBottomSheet: UIViewRepresentable {
-    typealias Content = View
+public struct ScrollableBottomSheet: UIViewRepresentable {
+    public typealias Content = View
     var body: () -> any Content
     var minimumHeight: CGFloat = 200
     var expanded: () -> Void
     var collapsed: () -> Void
     
-    init(
+    public init(
         minHeight: CGFloat = 200,
         content: @escaping () -> any Content,
         expanded: @escaping () -> Void = {},
@@ -27,7 +27,7 @@ struct ScrollableBottomSheet: UIViewRepresentable {
         self.collapsed = collapsed
     }
     
-    func makeUIView(context: Context) -> some UIView {
+    public func makeUIView(context: Context) -> some UIView {
         let view = ScrollableUIBottomSheet(content: body)
         print(#function, "Make")
         view.onExpanded = expanded
@@ -37,7 +37,7 @@ struct ScrollableBottomSheet: UIViewRepresentable {
     }
     
     
-    func updateUIView(_ uiView: UIViewType, context: Context) {
+    public func updateUIView(_ uiView: UIViewType, context: Context) {
         guard let view = uiView as? ScrollableUIBottomSheet else { return }
         view.setMinHeight(minimumHeight)
         view.setContent(body)

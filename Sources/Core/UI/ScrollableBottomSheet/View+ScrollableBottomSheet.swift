@@ -12,6 +12,7 @@ public struct ScrollableBottomSheetModifier: ViewModifier {
     public typealias BodyContent = View
     
     @Binding var isExpanded: Bool
+    var height: CGFloat = 200
     
     var sheetContent: () -> any BodyContent
     
@@ -24,11 +25,13 @@ public struct ScrollableBottomSheetModifier: ViewModifier {
         ZStack {
             content
             ScrollableBottomSheet(
-                content: sheetContent) {
-                    isExpanded = true
-                } collapsed: {
-                    isExpanded = false
-                }
+                minHeight: height,
+                content: sheetContent
+            ) {
+                isExpanded = true
+            } collapsed: {
+                isExpanded = false
+            }
         }
     }
 }
