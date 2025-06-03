@@ -238,7 +238,7 @@ public extension String {
         }
 
         // If no format matches, return as-is
-        return raw
+        return self
     }
 
 }
