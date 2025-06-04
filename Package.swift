@@ -53,7 +53,8 @@ let package = Package(
             dependencies: [
                 "IldamSDK",
                 "NetworkLayer",
-                "Core"
+                "Core",
+                "IldamDriverSDK"
             ]
         ),
         

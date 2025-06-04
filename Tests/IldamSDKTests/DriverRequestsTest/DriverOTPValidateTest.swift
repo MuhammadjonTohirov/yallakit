@@ -14,8 +14,10 @@ import XCTest
 final class DriverOTPValidateTest: XCTestCase {
     func testExecute_sendOTP() async {
         let gateway = DCheckOTPGateway()
-        let result = try? await gateway.send(code: "42223")
+        let result = try? await gateway.send(code: "23035")
         
-        XCTAssertTrue(result != nil)
+        print(result)
+        
+        XCTAssertNotNil(result)
     }
 }

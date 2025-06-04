@@ -27,9 +27,9 @@ public struct DriverOTPValidateResponse {
     init?(from network: DNetResValidate?) {
         guard let network else { return nil }
 
-        self.accessToken = network.accessToken
-        self.tokenType = network.tokenType
-        self.expiresIn = network.expiresIn
+        self.accessToken = network.accessToken ?? ""
+        self.tokenType = network.tokenType ?? ""
+        self.expiresIn = network.expiresIn ?? 0
         
         guard let executor = network.executor,
               let validExecutor = ValidExecutorResult(from: executor) else {
@@ -191,10 +191,10 @@ public struct ValidExecutorResult: Codable {
         self.blockNote = network.blockNote
         self.blockExpiry = network.blockExpiry
         self.addressBrand = network.addressBrand
-        self.brand = network.brand.flatMap(ValidExecutorBrand.init(from:))
-        self.fotocontrol = network.fotocontrol.flatMap(ValidExecutorFotocontrol.init(from:))
-        self.transport = network.transport.flatMap(ValidExecutorTransport.init(from:))
-        self.plan = network.plan.flatMap(ValidExecutorPlan.init(from:))
+        self.brand = ValidExecutorBrand.init(from:network.brand)
+        self.fotocontrol = ValidExecutorFotocontrol.init(from:network.fotocontrol)
+        self.transport = ValidExecutorTransport.init(from:network.transport)
+        self.plan = ValidExecutorPlan.init(from:network.plan)
     }
 }
 public struct ValidExecutorBrand: Codable {
@@ -208,14 +208,19 @@ public struct ValidExecutorBrand: Codable {
         self.slug = slug
     }
 
-    init(from network: DNetResExecutorBrand) {
-        self.id = network.id
-        self.name = network.name
-        self.slug = network.slug
+    init?(from network: DNetResExecutorBrand?) {
+        guard
+            let id = network?.id,
+            let name = network?.name,
+            let slug = network?.slug else { return nil }
+        
+        self.id = id
+        self.name = name
+        self.slug = slug
     }
 }
 public struct ValidExecutorFotocontrol: Codable {
-    public let fotocontrolStatus: Bool
+    public let fotocontrolStatus: Bool?
     public let moderatorStatus: String?
 
     public init(fotocontrolStatus: Bool, moderatorStatus: String?) {
@@ -223,9 +228,12 @@ public struct ValidExecutorFotocontrol: Codable {
         self.moderatorStatus = moderatorStatus
     }
 
-    init(from network: DNetResExecutorFotocontrol) {
-        self.fotocontrolStatus = network.fotocontrolStatus
-        self.moderatorStatus = network.moderatorStatus
+    init?(from network: DNetResExecutorFotocontrol?) {
+        guard let fotocontrolStatus = network?.fotocontrolStatus,
+              let moderatorStatus = network?.moderatorStatus else { return nil }
+        
+        self.fotocontrolStatus = fotocontrolStatus
+        self.moderatorStatus = moderatorStatus
     }
 }
 public struct ValidExecutorTransport: Codable {
@@ -243,12 +251,21 @@ public struct ValidExecutorTransport: Codable {
         self.callsign = callsign
     }
 
-    init(from network: DNetResExecutorTransport) {
-        self.mark = ValidExecutorTransportMark(from: network.mark)
-        self.model = ValidExecutorTransportModel(from: network.model)
-        self.stateNumber = network.stateNumber
-        self.color = ValidExecutorTransportColor(from: network.color)
-        self.callsign = network.callsign
+    init?(from network: DNetResExecutorTransport?) {
+        guard let network = network,
+              let stateNumber = network.stateNumber,
+              let callsign = network.callsign,
+              let mark = ValidExecutorTransportMark(from: network.mark),
+              let model = ValidExecutorTransportModel(from: network.model),
+              let color = ValidExecutorTransportColor(from: network.color) else {
+            return nil
+        }
+        
+        self.mark = mark
+        self.model = model
+        self.stateNumber = stateNumber
+        self.color = color
+        self.callsign = callsign
     }
 }
 public struct ValidExecutorTransportMark: Codable {
@@ -260,12 +277,15 @@ public struct ValidExecutorTransportMark: Codable {
         self.name = name
     }
 
-    init(from network: ExecutorTransportMark) {
-        self.id = network.id
-        self.name = network.name
+    init?(from network: ExecutorTransportMark?) {
+        guard let id = network?.id,
+              let name = network?.name
+        else {return nil}
+        
+        self.id = id
+        self.name = name
     }
 }
-
 public struct ValidExecutorTransportModel: Codable {
     public let id: Int
     public let name: String
@@ -275,12 +295,16 @@ public struct ValidExecutorTransportModel: Codable {
         self.name = name
     }
 
-    init(from network: ExecutorTransportModel) {
-        self.id = network.id
-        self.name = network.name
+    init?(from network: ExecutorTransportModel?) {  // Note the optional parameter
+        guard let network = network,
+              let id = network.id,
+              let name = network.name else {
+            return nil
+        }
+        self.id = id
+        self.name = name
     }
 }
-
 public struct ValidExecutorTransportColor: Codable {
     public let id: Int
     public let color: String
@@ -292,12 +316,19 @@ public struct ValidExecutorTransportColor: Codable {
         self.name = name
     }
 
-    init(from network: ExecutorTransportColor) {
-        self.id = network.id
-        self.color = network.color
-        self.name = network.name
+    init?(from network: ExecutorTransportColor?) {
+        guard let network = network,
+              let id = network.id,
+              let color = network.color,
+              let name = network.name else {
+            return nil
+        }
+        self.id = id
+        self.color = color
+        self.name = name
     }
 }
+
 public struct ValidExecutorPlan: Codable {
     public let id: Int
     public let name: ValidExecutorPlanName
@@ -308,8 +339,8 @@ public struct ValidExecutorPlan: Codable {
     public let deactivation: Bool
     public let orderPayCost: Int
     public let orderPayPresent: Int
-
-    public init(id: Int, name: ValidExecutorPlanName, description: ValidExecutorPlanDescription, cost: Int, limitTime: Int, planExpire: Int, deactivation: Bool, orderPayCost: Int, orderPayPresent: Int) {
+    
+    init(id: Int, name: ValidExecutorPlanName, description: ValidExecutorPlanDescription, cost: Int, limitTime: Int, planExpire: Int, deactivation: Bool, orderPayCost: Int, orderPayPresent: Int) {
         self.id = id
         self.name = name
         self.description = description
@@ -320,17 +351,29 @@ public struct ValidExecutorPlan: Codable {
         self.orderPayCost = orderPayCost
         self.orderPayPresent = orderPayPresent
     }
-
-    init(from network: DNetResExecutorPlan) {
-        self.id = network.id
-        self.name = ValidExecutorPlanName(from: network.name)
-        self.description = ValidExecutorPlanDescription(from: network.description)
-        self.cost = network.cost
-        self.limitTime = network.limitTime
-        self.planExpire = network.planExpire
-        self.deactivation = network.deactivation
-        self.orderPayCost = network.orderPayCost
-        self.orderPayPresent = network.orderPayPresent
+    init?(from network: DNetResExecutorPlan?) {
+        guard let network = network,
+              let id = network.id,
+              let cost = network.cost,
+              let lineLimitTime = network.limitTime,
+              let planExpire = network.planExpire,
+              let deactivation = network.deactivation,
+              let orderPayCost = network.orderPayCost,
+              let orderPayPresent = network.orderPayPresent,
+              let name = ValidExecutorPlanName(from: network.name),
+              let description = ValidExecutorPlanDescription(from: network.description) else {
+            return nil
+        }
+        
+        self.id = id
+        self.name = name
+        self.description = description
+        self.cost = cost
+        self.limitTime = lineLimitTime
+        self.planExpire = planExpire
+        self.deactivation = deactivation
+        self.orderPayCost = orderPayCost
+        self.orderPayPresent = orderPayPresent
     }
 }
 
@@ -343,23 +386,35 @@ public struct ValidExecutorPlanName: Codable {
         self.ru = ru
     }
 
-    init(from network: DNetExecutorPlanName) {
-        self.uz = network.uz
-        self.ru = network.ru
+    init?(from network: DNetExecutorPlanName?) {
+        
+        guard
+            let uz = network?.uz,
+            let ru = network?.ru
+        
+        else {return nil}
+        
+        self.uz = uz
+        self.ru = ru
     }
 }
 
 public struct ValidExecutorPlanDescription: Codable {
     public let uz: String
     public let ru: String
-
+   
     public init(uz: String, ru: String) {
         self.uz = uz
         self.ru = ru
     }
-
-    init(from network: DNetExecutorPlanDescription) {
-        self.uz = network.uz
-        self.ru = network.ru
+    
+    init?(from network: DNetExecutorPlanDescription?) {
+        guard let network = network,
+              let uz = network.uz,
+              let ru = network.ru else {
+            return nil
+        }
+        self.uz = uz
+        self.ru = ru
     }
 }
