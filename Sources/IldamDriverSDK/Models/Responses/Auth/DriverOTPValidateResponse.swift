@@ -10,7 +10,7 @@ public struct DriverOTPValidateResponse {
     public let accessToken: String
     public let tokenType: String
     public let expiresIn: Int
-    public let executor: ValidExecutorResult
+    public let executor: ValidExecutorResult?
 
     public init(
         accessToken: String,
@@ -42,29 +42,27 @@ public struct DriverOTPValidateResponse {
 
 public struct ValidExecutorResult: Codable {
     // Required properties
-    public let id: Int
-    public let givenNames: String
-    public let surName: String
-    public let balance: Double
-    public let phone: String
-    public let level: Int
-    public let status: String
-    public let condition: Bool
-    public let online: Bool
-    public let block: Bool
-    public let birthday: String
-    public let brandId: Int
-    public let photo: String
-    public let serviceIds: [Int]
-    public let addressId: Int
-    public let createdAt: String
-    public let tariffCategoryId: Int
-    public let register: String
-    public let activeness: Int
-    public let rating: String
+    public let id: Int?
+    public let givenNames: String?
+    public let surName: String?
+    public let balance: Double?
+    public let phone: String?
+    public let level: Int?
+    public let status: String?
+    public let condition: Bool?
+    public let online: Bool?
+    public let block: Bool?
+    public let birthday: String?
+    public let brandId: Int?
+    public let photo: String?
+    public let serviceIds: [Int]?
+    public let addressId: Int?
+    public let createdAt: String?
+    public let tariffCategoryId: Int?
+    public let register: String?
+    public let activeness: Int?
+    public let rating: String?
     public let fcmToken: String
-    
-    // Optional properties
     public let fatherName: String?
     public let blockNote: String?
     public let blockExpiry: String?
