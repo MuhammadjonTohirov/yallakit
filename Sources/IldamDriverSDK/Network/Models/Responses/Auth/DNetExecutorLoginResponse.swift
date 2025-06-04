@@ -6,9 +6,9 @@
 //
 import Foundation
 
-struct DNetExecutorLoginResponse: DNetResBody {
-    let expiresIn: Int
-    let executor: DNetAuthMeResponse
+struct DNetExecutorLoginResponse: DNetResBody {  
+    let expiresIn: Int?
+    let executor: DNetAuthMeResponse?
 
     enum CodingKeys: String, CodingKey {
         case expiresIn = "expires_in"
@@ -17,34 +17,34 @@ struct DNetExecutorLoginResponse: DNetResBody {
 }
 
 struct DNetAuthMeResponse: Codable {
-    let id: Int
-    let givenNames: String
-    let surName: String
-    let fatherName: String
-    let phone: String
-    let balance: Double
+    let id: Int?
+    let givenNames: String?
+    let surName: String?
+    let fatherName: String?
+    let phone: String?
+    let balance: Double?
     let blockNote: String?
-    let level: Int
+    let level: Int?
     let blockExpiry: String?
-    let status: String
-    let condition: Bool
-    let online: Bool
-    let block: Bool
-    let birthday: String
-    let brandId: Int
-    let photo: String
-    let serviceIds: [Int]
+    let status: String?
+    let condition: Bool?
+    let online: Bool?
+    let block: Bool?
+    let birthday: String?
+    let brandId: Int?
+    let photo: String?
+    let serviceIds: [Int]?
     let addressBrand: String?
-    let brand: DNetAuthMeBrand
-    let addressId: Int
-    let createdAt: String
-    let tariffCategoryId: Int
-    let register: String
-    let activeness: Int
-    let rating: String
-    let fcmToken: String
-    let fotocontrol: DNetAuthMeFotocontrol
-    let transport: DNetAuthMeTransport
+    let brand: DNetAuthMeBrand?
+    let addressId: Int?
+    let createdAt: String?
+    let tariffCategoryId: Int?
+    let register: String?
+    let activeness: Int?
+    let rating: String?
+    let fcmToken: String?
+    let fotocontrol: DNetAuthMeFotocontrol?
+    let transport: DNetAuthMeTransport?
     let plan: DNetAuthMePlan?
 
     enum CodingKeys: String, CodingKey {
@@ -81,14 +81,14 @@ struct DNetAuthMeResponse: Codable {
 }
 
 struct DNetAuthMeBrand: Codable {
-    let id: Int
-    let name: String
-    let slug: String
+    let id: Int?
+    let name: String?
+    let slug: String?
 }
 
 struct DNetAuthMeFotocontrol: Codable {
-    let fotocontrolStatus: Bool
-    let moderatorStatus: String
+    let fotocontrolStatus: Bool?
+    let moderatorStatus: String?
 
     enum CodingKeys: String, CodingKey {
         case fotocontrolStatus = "fotocontrol_status"
@@ -97,11 +97,11 @@ struct DNetAuthMeFotocontrol: Codable {
 }
 
 struct DNetAuthMeTransport: Codable {
-    let mark: DNetAuthMeTransportInfo
-    let model: DNetAuthMeTransportInfo
-    let stateNumber: String
-    let color: DNetAuthMeTransportColor
-    let callsign: String
+    let mark: DNetAuthMeTransportInfo?
+    let model: DNetAuthMeTransportInfo?
+    let stateNumber: String?
+    let color: DNetAuthMeTransportColor?
+    let callsign: String?
 
     enum CodingKeys: String, CodingKey {
         case mark
@@ -113,26 +113,26 @@ struct DNetAuthMeTransport: Codable {
 }
 
 struct DNetAuthMeTransportInfo: Codable {
-    let id: Int
-    let name: String
+    let id: Int?
+    let name: String?
 }
 
 struct DNetAuthMeTransportColor: Codable {
-    let id: Int
-    let color: String
-    let name: String
+    let id: Int?
+    let color: String?
+    let name: String?
 }
 
 struct DNetAuthMePlan: Codable {
-    let id: Int
-    let name: DNetAuthMeLocalizedText
-    let description: DNetAuthMeLocalizedText
-    let cost: Int
-    let limitTime: Int
-    let planExpire: Int
-    let deactivation: Bool
-    let orderPayCost: Int
-    let orderPayPresent: Int
+    let id: Int?
+    let name: DNetAuthMeLocalizedText?
+    let description: DNetAuthMeLocalizedText?
+    let cost: Int?
+    let limitTime: Int?
+    let planExpire: Int?
+    let deactivation: Bool?
+    let orderPayCost: Int?
+    let orderPayPresent: Int?
 
     enum CodingKeys: String, CodingKey {
         case id
@@ -148,6 +148,6 @@ struct DNetAuthMePlan: Codable {
 }
 
 struct DNetAuthMeLocalizedText: Codable {
-    let uz: String
-    let ru: String
+    let uz: String?
+    let ru: String?
 }
