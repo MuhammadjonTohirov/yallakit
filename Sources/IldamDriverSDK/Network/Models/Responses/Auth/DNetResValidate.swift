@@ -23,32 +23,32 @@ struct DNetResValidate: DNetResBody {
     
 }
 struct DNetResExecutor: Codable {
-    let id: Int
-    let givenNames: String
-    let surName: String
-    let fatherName: String
-    let balance: Double
-    let phone: String
+    let id: Int?
+    let givenNames: String?
+    let surName: String?
+    let fatherName: String?
+    let balance: Double?
+    let phone: String?
     let blockNote: String?
-    let level: Int
+    let level: Int?
     let blockExpiry: String?
-    let status: String
-    let condition: Bool
-    let online: Bool
-    let block: Bool
-    let birthday: String
-    let brandId: Int
-    let photo: String
-    let serviceIds: [Int]
+    let status: String?
+    let condition: Bool?
+    let online: Bool?
+    let block: Bool?
+    let birthday: String?
+    let brandId: Int?
+    let photo: String?
+    let serviceIds: [Int]?
     let addressBrand: String?
-    let brand: DNetResExecutorBrand
-    let addressId: Int
-    let createdAt: String
-    let tariffCategoryId: Int
-    let register: String
-    let activeness: Int
-    let rating: String
-    let fcmToken: String
+    let brand: DNetResExecutorBrand?
+    let addressId: Int?
+    let createdAt: String?
+    let tariffCategoryId: Int?
+    let register: String?
+    let activeness: Int?
+    let rating: String?
+    let fcmToken: String?
     let fotocontrol: DNetResExecutorFotocontrol?
     let transport: DNetResExecutorTransport?
     let plan: DNetResExecutorPlan?
