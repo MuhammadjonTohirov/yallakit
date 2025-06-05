@@ -101,8 +101,8 @@ struct DNetExecutorService: Codable {
 }
 struct DNetExecutorPlan: Codable {
     let id: Int?
-    let name: DNetExecutorLocalizedText?
-    let description: DNetExecutorLocalizedText?
+    let name: String?
+    let description: String?
     let cost: Int?
     let limitTime: Int?
     let planExpire: Int?
@@ -121,9 +121,4 @@ struct DNetExecutorPlan: Codable {
         case orderPayCost = "order_pay_cost"
         case orderPayPresent = "order_pay_present"
     }
-}
-
-struct DNetExecutorLocalizedText: Codable {
-    let uz: String?
-    let ru: String?
 }

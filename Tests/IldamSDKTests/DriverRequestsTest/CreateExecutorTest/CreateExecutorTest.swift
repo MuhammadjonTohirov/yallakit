@@ -12,11 +12,11 @@ import XCTest
 
 final class CreateExecutorTest: XCTestCase {
     func test_fetchColor() async {
-        UserSettings.shared.accessToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI1IiwianRpIjoiZGEyMjhlYjAwMTJmOWJiNDNiMjFlYzdhM2IyMzU4M2ZhYzlmOGU5MDY1YThlNDNmNzI0Njc1ZTU1MGM1ZDI1OTA0Y2YwN2Y5MjlmNDhjMDMiLCJpYXQiOjE3NDYyNDg5MTQuNjA1OTIzLCJuYmYiOjE3NDYyNDg5MTQuNjA1OTI0LCJleHAiOjE3Nzc3ODQ5MTQuNTk5MTU3LCJzdWIiOiIxMjQ3OSIsInNjb3BlcyI6WyJleGVjdXRvciJdfQ.F_ku_U5Q_ycQFjV1GItvoEOU0SJhvjaJqZvI9v5hzmmYHmaVyg6-D49LZQuiQczQGfGXLc3L4VRCTeuU8N_fFKduB7bJfSKcU_9XEEmZoc-47QQbik0r95BqIuqRpZ60ibXcYwDMGbo-o_BmnlSeXusO1jgqAAGVXpn-mdGQClwpWxHQ-_7gvBwQ_-izG2UQS7DohM_dZIsd1yPgRI7SJyehiLlLHg_PEm0voPVrC40Z1AQUl-yOh8jN5IHc0IWiX5RT15-1nb3CWYhgr2j-y310O77VwZgimmDqxHU_C2LueBicLCLvmX4bKIvXtmRbwnmEpb-DvSjJdy6rGi1j92R-VYFuAZLenWa3j39wt2kKipsVH7sdulDOZOJoBANzRvd6_V3nfy-BVe2J17t0KRCuSnj1bWz6qc4cenTYNgnWdc4uf1D3B2xymT1VNBzEh6YXvGfkUrwKIiIoJXvJwmixkl2u8qAEn3FZZzJAvs62CvLME2eKiwWX1caPPetxWgKaDp8qaJtQwBhcngO10DgDD0IJRRu60RtdoyfqdYK87_c8oUDLmiiRaQVXLR-3tFwjxf2mcwcRUSTxcn3cEXhVqF4dCusIdnT5uwMuZPlhh-ba6B1svzNpHecoJ-D9q9Jc_-EC6ARM2Vw6o8AAEZKMbhqJb-QYGB2jgbH4MOA"
-        
+        UserSettings.shared.accessToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI1IiwianRpIjoiMjQ3MTUzZTI1NjNkZDZiMmI2MWEyNTQ0YzdmZDBjYjkyN2YxYWEwYWM4OWZjNjZlZGIxZWY5MDJlZTZkMjljMDM1MWEyMTc1YjhjZjUxMzMiLCJpYXQiOjE3NDkxMDg1ODYuOTUyNjI1LCJuYmYiOjE3NDkxMDg1ODYuOTUyNjI3LCJleHAiOjE3ODA2NDQ1ODYuOTQ4NzIzLCJzdWIiOiIxMjQ3OSIsInNjb3BlcyI6WyJleGVjdXRvciJdfQ.kHEuqSY90Uez6QSOktVHZhDgbTPx4myMKMg_qdEE7bBV0McsOnjKV_9i-xGRFqj18uOPUQnRXJxKEHVfFz7GX1Yvm-DnNallz8xuFQQLUoYvrJbLHMdZW9mWz8JXNqriPb1oZ3tRj36aHe_Mr3vhtoMEi45yqEWeDp-P-6UiiMalnU4IBVYUcip_zfl4cdBenwGfE1wnXeGhc-z4zxNLKLknVghrxqILdFOF4P3GCHS19UZHOgE2eeb8LK5ocbJ08hr_TMBo_pA899yOM_mvos-44D7RKIlXBhzEL--b4RXTqREv_1yM4ujFhMepM9nBavQtV4vfkcvwffKML7p1yPi6eelaIiviup4dKIs3E-k7R7QHetnMMwXhVtVlwggfrHrTE7hXCML4zsofv3wqyA3lN1C_zrmkJRJSvvArMQ58C_7OvRw52eK5Vx9ws2PfoF1WZ-rGoEh8oVWj_AuBms7Dew1SK-J6ZDfdN0pYkGBx3jXGLTd8_BNXu_Da8DonmrDRjVhyCp5CuojKqDGGlRl17D6ihOCWZMZp8AFV-r8HtaiwLnUsmdHYbd0jMUaBOpc4EbKuK-xsTWXV0cQoE6cforyqGI_5WVO1KUfccHlm3rPCwp7NvUN4VALpqvRB8bsZX9cKP2PlWt0dXbSOzdYxDeIpYyfYEcDBfse4G6g"
+
         let gateway = CreateExecutorGateway()
         let result = try? await gateway.register(body: DNetDriverRegisterBody(
-            phone: "+998999928655",
+            phone: "+99899992355",
             givenNames: "Hikmatulloh",
             surName: "Hakimov",
             addressId: 5,
@@ -27,7 +27,7 @@ final class CreateExecutorTest: XCTestCase {
             driverLicenseCategories: [],
             stateNumber: "60A101s11",
             carMakeDate: 2030,
-            driverLicense: "asssss5sssssssssssssss",
+            driverLicense: "adasss5sssssssssssssss",
             driverLicenseDate: "2010-05-03",
             driverLicenseDateExpiry: "2010-05-03",
             driverGraduate: "1058451",
@@ -35,6 +35,7 @@ final class CreateExecutorTest: XCTestCase {
             gender: "MALE",
             fatherName: "dsf"
         ))
+        print("Register: ", result?.executor?.givenNames)
         XCTAssertNotNil(result)
         
     }

@@ -159,8 +159,8 @@ extension CreateExecutorResponse {
         
         public struct NewExecutorPlan: Codable, Sendable {
             let id: Int
-            let name: NewExecutorLocalizedText
-            let description: NewExecutorLocalizedText
+            let name: String
+            let description: String
             let cost: Int
             let limitTime: Int
             let planExpire: Int
@@ -168,7 +168,7 @@ extension CreateExecutorResponse {
             let orderPayCost: Int
             let orderPayPresent: Int
             
-            public init(id: Int, name: NewExecutorLocalizedText, description: NewExecutorLocalizedText, cost: Int, limitTime: Int, planExpire: Int, deactivation: Bool, orderPayCost: Int, orderPayPresent: Int) {
+            public init(id: Int, name: String, description: String, cost: Int, limitTime: Int, planExpire: Int, deactivation: Bool, orderPayCost: Int, orderPayPresent: Int) {
                 self.id = id
                 self.name = name
                 self.description = description
@@ -181,8 +181,8 @@ extension CreateExecutorResponse {
             }
             init(from network: DNetDriverRegisterResponse.DNetCreateNewExecutorPlan) {
                 self.id = network.id
-                self.name =  NewExecutorLocalizedText(uz: network.name.uz, ru: network.name.ru)
-                self.description =  NewExecutorLocalizedText(uz: network.description.uz, ru: network.description.ru)
+                self.name = network.name
+                self.description =  network.description
                 self.cost = network.cost
                 self.limitTime = network.limitTime
                 self.planExpire = network.planExpire
@@ -192,19 +192,6 @@ extension CreateExecutorResponse {
                 
             }
             
-        }
-        public struct NewExecutorLocalizedText: Codable, Sendable {
-            public let uz: String
-            public let ru: String
-            
-            public init(uz: String, ru: String) {
-                self.uz = uz
-                self.ru = ru
-            }
-            init(from network: DNetDriverRegisterResponse.DNetCreateExecutorLocalizedText) {
-                self.uz = network.uz
-                self.ru = network.ru
-            }
         }
     }
 }
