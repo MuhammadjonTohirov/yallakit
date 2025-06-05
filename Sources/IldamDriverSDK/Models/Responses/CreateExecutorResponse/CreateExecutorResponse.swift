@@ -152,8 +152,8 @@ extension CreateExecutorResponse {
                 self.moderatorStatus = moderatorStatus
             }
             init(from network: DNetExecutorFotoControl) {
-                self.fotocontrolStatus = network.fotocontrolStatus
-                self.moderatorStatus = network.moderatorStatus
+                self.fotocontrolStatus = network.fotocontrolStatus ?? false
+                self.moderatorStatus = network.moderatorStatus ?? ""
             }
         }
         

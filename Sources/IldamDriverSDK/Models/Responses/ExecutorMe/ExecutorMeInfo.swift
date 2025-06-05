@@ -7,37 +7,67 @@
 
 import Foundation
 
-public struct ExecutorMeInfo: Codable, Sendable {
-    public let id: Int
-    public let phone: String
-    public let photo: String
-    public let givenNames: String
-    public let surName: String
-    public let fatherName: String
-    public let birthday: String
-    public let rating: Int
-    public let online: Bool
-    public let status: String
-    public let level: Int
-    public let register: String
-    public let balance: Double
-    public let block: Bool
+public struct ExecutorMeInfo: DNetResBody {
+    
+    public let id: Int?
+    public let phone: String?
+    public let photo: String?
+    public let givenNames: String?
+    public let surName: String?
+    public let fatherName: String?
+    public let birthday: String?
+    public let rating: Int?
+    public let online: Bool?
+    public let status: String?
+    public let level: Int?
+    public let register: String?
+    public let balance: Double?
+    public let block: Bool?
     public let blockNote: String?
     public let blockExpiry: String?
-    public let condition: Bool
-    public let createdAt: String
-    public let addressId: Int
-    public let activeness: Int
-    public let priareted: Int
-    public let appVer: String
-    public let appVersions: String
-    public let brand: ExecutorBrand
-    public let fotocontrol: ExecutorFotoControl
-    public let transport: ExecutorTransport
-    public let executorServices: [ExecutorService]
-    public let plan: ExecutorPlan? // null-able
+    public let condition: Bool?
+    public let createdAt: String?
+    public let addressId: Int?
+    public let activeness: Int?
+    public let priareted: Int?
+    public let appVer: String?
+    public let appVersions: String?
+    public let brand: ExecutorBrand?
+    public let fotocontrol: ExecutorFotoControl?
+    public let transport: ExecutorTransport?
+    public let executorServices: [ExecutorService]?
+    public let plan: ExecutorPlan?
     
-    public init(id: Int, phone: String, photo: String, givenNames: String, surName: String, fatherName: String, birthday: String, rating: Int, online: Bool, status: String, level: Int, register: String, balance: Double, block: Bool, blockNote: String?, blockExpiry: String?, condition: Bool, createdAt: String, addressId: Int, activeness: Int, priareted: Int, appVer: String, appVersions: String, brand: ExecutorBrand, fotocontrol: ExecutorFotoControl, transport: ExecutorTransport, executorServices: [ExecutorService], plan: ExecutorPlan?) {
+    public init(
+        id: Int,
+        phone: String,
+        photo: String,
+        givenNames: String,
+        surName: String,
+        fatherName: String,
+        birthday: String,
+        rating: Int,
+        online: Bool,
+        status: String,
+        level: Int,
+        register: String,
+        balance: Double,
+        block: Bool,
+        blockNote: String?,
+        blockExpiry: String?,
+        condition: Bool,
+        createdAt: String,
+        addressId: Int,
+        activeness: Int,
+        priareted: Int,
+        appVer: String,
+        appVersions: String,
+        brand: ExecutorBrand,
+        fotocontrol: ExecutorFotoControl,
+        transport: ExecutorTransport,
+        executorServices: [ExecutorService],
+        plan: ExecutorPlan?
+    ) {
         self.id = id
         self.phone = phone
         self.photo = photo
@@ -67,35 +97,36 @@ public struct ExecutorMeInfo: Codable, Sendable {
         self.executorServices = executorServices
         self.plan = plan
     }
-    init(from network: DNetExecutorMeResponse) {
-        self.id = network.id
-        self.phone = network.phone
-        self.photo = network.photo
-        self.givenNames = network.givenNames
-        self.surName = network.surName
-        self.fatherName = network.fatherName
-        self.birthday = network.birthday
-        self.rating = network.rating
-        self.online = network.online
-        self.status = network.status
-        self.level = network.level
-        self.register = network.register
-        self.balance = network.balance
-        self.block = network.block
-        self.blockNote = network.blockNote
-        self.blockExpiry = network.blockExpiry
-        self.condition = network.condition
-        self.createdAt = network.createdAt
-        self.addressId = network.addressId
-        self.activeness = network.activeness
-        self.priareted = network.priareted
-        self.appVer = network.appVer
-        self.appVersions = network.appVersions
-        self.brand = ExecutorBrand(from: network.brand)
-        self.fotocontrol = ExecutorFotoControl(from: network.fotocontrol)
-        self.transport = ExecutorTransport(from: network.transport)
-        self.executorServices = network.executorService.map { ExecutorService(from: $0) }
-        self.plan = network.plan.map { ExecutorPlan(from: $0) }
+    
+    init(from network: DNetExecutorMeResponse?) {
+        self.id = network?.id
+        self.phone = network?.phone
+        self.photo = network?.photo
+        self.givenNames = network?.givenNames
+        self.surName = network?.surName
+        self.fatherName = network?.fatherName
+        self.birthday = network?.birthday
+        self.rating = network?.rating
+        self.online = network?.online
+        self.status = network?.status
+        self.level = network?.level
+        self.register = network?.register
+        self.balance = network?.balance
+        self.block = network?.block
+        self.blockNote = network?.blockNote ?? ""
+        self.blockExpiry = network?.blockExpiry ?? ""
+        self.condition = network?.condition
+        self.createdAt = network?.createdAt
+        self.addressId = network?.addressId
+        self.activeness = network?.activeness
+        self.priareted = network?.priareted
+        self.appVer = network?.appVer
+        self.appVersions = network?.appVersions
+        self.brand = network?.brand.map { ExecutorBrand(from: $0) }
+        self.fotocontrol = network?.fotocontrol.map { ExecutorFotoControl(from: $0) }
+        self.transport = network?.transport.map { ExecutorTransport(from: $0) }
+        self.executorServices = network?.executorService?.map { ExecutorService(from: $0) }
+        self.plan = network?.plan.map { ExecutorPlan(from: $0) }
     }
 }
 
@@ -110,24 +141,25 @@ public struct ExecutorBrand: Codable, Sendable {
         self.slug = slug
     }
     
-    init(from network: DNetExecutorBrand) {
-        self.id = network.id
-        self.name = network.name
-        self.slug = network.slug
+    init(from network: DNetExecutorBrand?) {
+        self.id = network?.id ?? 0
+        self.name = network?.name ?? ""
+        self.slug = network?.slug ?? ""
     }
 }
 
 public struct ExecutorFotoControl: Codable, Sendable {
-    public let fotocontrolStatus: Bool
+    public let fotocontrolStatus: Bool?
     public let moderatorStatus: String?
     
     public init(fotocontrolStatus: Bool, moderatorStatus: String?) {
         self.fotocontrolStatus = fotocontrolStatus
         self.moderatorStatus = moderatorStatus
     }
-    init(from network: DNetExecutorFotoControl) {
-        self.fotocontrolStatus = network.fotocontrolStatus
-        self.moderatorStatus = network.moderatorStatus
+    
+    init(from network: DNetExecutorFotoControl?) {
+        self.fotocontrolStatus = network?.fotocontrolStatus ?? false
+        self.moderatorStatus = network?.moderatorStatus
     }
 }
 
@@ -146,12 +178,12 @@ public struct ExecutorTransport: Codable, Sendable {
         self.stateNumber = stateNumber
     }
     
-    init(from network: DNetExecutorTransport) {
-        self.callsign = network.callsign
-        self.color = ExecutorCarColor(from: network.color)
-        self.mark = ExecutorCarMark(from: network.mark)
-        self.model = ExecutorCarModel(from: network.model)
-        self.stateNumber = network.stateNumber
+    init(from network: DNetExecutorTransport?) {
+        self.callsign = network?.callsign ?? ""
+        self.color = ExecutorCarColor(from: network?.color)
+        self.mark = ExecutorCarMark(from: network?.mark)
+        self.model = ExecutorCarModel(from: network?.model)
+        self.stateNumber = network?.stateNumber ?? ""
     }
 }
 
@@ -165,10 +197,11 @@ public struct ExecutorCarColor: Codable, Sendable {
         self.id = id
         self.name = name
     }
-    init(from network: DNetExecutorColor) {
-        self.color = network.color
-        self.id = network.id
-        self.name = network.name
+    
+    init(from network: DNetExecutorColor?) {
+        self.color = network?.color ?? ""
+        self.id = network?.id ?? 0
+        self.name = network?.name ?? ""
     }
 }
 
@@ -181,9 +214,9 @@ public struct ExecutorCarMark: Codable, Sendable {
         self.name = name
     }
     
-    init(from network: DNetExecutorMark) {
-        self.id = network.id
-        self.name = network.name
+    init(from network: DNetExecutorMark?) {
+        self.id = network?.id ?? 0
+        self.name = network?.name ?? ""
     }
 }
 
@@ -196,9 +229,9 @@ public struct ExecutorCarModel: Codable, Sendable {
         self.name = name
     }
     
-    init(from network: DNetExecutorModel) {
-        self.id = network.id
-        self.name = network.name
+    init(from network: DNetExecutorModel?) {
+        self.id = network?.id ?? 0
+        self.name = network?.name ?? ""
     }
 }
 
@@ -211,23 +244,34 @@ public struct ExecutorService: Codable, Sendable {
         self.name = name
     }
     
-    init(from network: DNetExecutorService) {
-        self.id = network.id
-        self.name = network.name
+    init(from network: DNetExecutorService?) {
+        self.id = network?.id ?? 0
+        self.name = network?.name ?? ""
     }
 }
-public struct ExecutorPlan: Codable, Sendable {
-    let id: Int
-    let name: ExecutorLocalizedText
-    let description: ExecutorLocalizedText
-    let cost: Int
-    let limitTime: Int
-    let planExpire: Int
-    let deactivation: Bool
-    let orderPayCost: Int
-    let orderPayPresent: Int
 
-    public init(id: Int, name: ExecutorLocalizedText, description: ExecutorLocalizedText, cost: Int, limitTime: Int, planExpire: Int, deactivation: Bool, orderPayCost: Int, orderPayPresent: Int) {
+public struct ExecutorPlan: Codable, Sendable {
+    public let id: Int
+    public let name: ExecutorLocalizedText
+    public let description: ExecutorLocalizedText
+    public let cost: Int
+    public let limitTime: Int
+    public let planExpire: Int
+    public let deactivation: Bool
+    public let orderPayCost: Int
+    public let orderPayPresent: Int
+    
+    public init(
+        id: Int,
+        name: ExecutorLocalizedText,
+        description: ExecutorLocalizedText,
+        cost: Int,
+        limitTime: Int,
+        planExpire: Int,
+        deactivation: Bool,
+        orderPayCost: Int,
+        orderPayPresent: Int
+    ) {
         self.id = id
         self.name = name
         self.description = description
@@ -238,19 +282,24 @@ public struct ExecutorPlan: Codable, Sendable {
         self.orderPayCost = orderPayCost
         self.orderPayPresent = orderPayPresent
     }
-    init(from network: DNetExecutorPlan) {
-        self.id = network.id
-        self.name =  ExecutorLocalizedText(uz: network.name.uz, ru: network.name.ru)
-        self.description =  ExecutorLocalizedText(uz: network.description.uz, ru: network.description.ru)
-        self.cost = network.cost
-        self.limitTime = network.limitTime
-        self.planExpire = network.planExpire
-        self.deactivation = network.deactivation
-        self.orderPayCost = network.orderPayCost
-        self.orderPayPresent = network.orderPayPresent
-        
-    }
     
+    init(from network: DNetExecutorPlan?) {
+        self.id = network?.id ?? 0
+        self.name = ExecutorLocalizedText(
+            uz: network?.name?.uz ?? "",
+            ru: network?.name?.ru ?? ""
+        )
+        self.description = ExecutorLocalizedText(
+            uz: network?.description?.uz ?? "",
+            ru: network?.description?.ru ?? ""
+        )
+        self.cost = network?.cost ?? 0
+        self.limitTime = network?.limitTime ?? 0
+        self.planExpire = network?.planExpire ?? 0
+        self.deactivation = network?.deactivation ?? false
+        self.orderPayCost = network?.orderPayCost ?? 0
+        self.orderPayPresent = network?.orderPayPresent ?? 0
+    }
 }
 
 public struct ExecutorLocalizedText: Codable, Sendable {
@@ -261,8 +310,9 @@ public struct ExecutorLocalizedText: Codable, Sendable {
         self.uz = uz
         self.ru = ru
     }
-    init(from network: DNetExecutorLocalizedText) {
-        self.uz = network.uz
-        self.ru = network.ru
+    
+    init(from network: DNetExecutorLocalizedText?) {
+        self.uz = network?.uz ?? ""
+        self.ru = network?.ru ?? ""
     }
 }
