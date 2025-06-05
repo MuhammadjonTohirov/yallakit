@@ -252,8 +252,8 @@ public struct ExecutorService: Codable, Sendable {
 
 public struct ExecutorPlan: Codable, Sendable {
     public let id: Int
-    public let name: ExecutorLocalizedText
-    public let description: ExecutorLocalizedText
+    public let name: String
+    public let description: String
     public let cost: Int
     public let limitTime: Int
     public let planExpire: Int
@@ -263,8 +263,8 @@ public struct ExecutorPlan: Codable, Sendable {
     
     public init(
         id: Int,
-        name: ExecutorLocalizedText,
-        description: ExecutorLocalizedText,
+        name: String,
+        description: String,
         cost: Int,
         limitTime: Int,
         planExpire: Int,
@@ -285,14 +285,8 @@ public struct ExecutorPlan: Codable, Sendable {
     
     init(from network: DNetExecutorPlan?) {
         self.id = network?.id ?? 0
-        self.name = ExecutorLocalizedText(
-            uz: network?.name?.uz ?? "",
-            ru: network?.name?.ru ?? ""
-        )
-        self.description = ExecutorLocalizedText(
-            uz: network?.description?.uz ?? "",
-            ru: network?.description?.ru ?? ""
-        )
+        self.name = network?.name ?? ""
+        self.description = network?.description ?? "" 
         self.cost = network?.cost ?? 0
         self.limitTime = network?.limitTime ?? 0
         self.planExpire = network?.planExpire ?? 0
@@ -300,19 +294,7 @@ public struct ExecutorPlan: Codable, Sendable {
         self.orderPayCost = network?.orderPayCost ?? 0
         self.orderPayPresent = network?.orderPayPresent ?? 0
     }
+
 }
 
-public struct ExecutorLocalizedText: Codable, Sendable {
-    public let uz: String
-    public let ru: String
-    
-    public init(uz: String, ru: String) {
-        self.uz = uz
-        self.ru = ru
-    }
-    
-    init(from network: DNetExecutorLocalizedText?) {
-        self.uz = network?.uz ?? ""
-        self.ru = network?.ru ?? ""
-    }
-}
+

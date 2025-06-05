@@ -331,8 +331,8 @@ public struct ValidExecutorTransportColor: Codable {
 
 public struct ValidExecutorPlan: Codable {
     public let id: Int
-    public let name: ValidExecutorPlanName
-    public let description: ValidExecutorPlanDescription
+    public let name: String
+    public let description: String
     public let cost: Int
     public let limitTime: Int
     public let planExpire: Int
@@ -340,7 +340,7 @@ public struct ValidExecutorPlan: Codable {
     public let orderPayCost: Int
     public let orderPayPresent: Int
     
-    init(id: Int, name: ValidExecutorPlanName, description: ValidExecutorPlanDescription, cost: Int, limitTime: Int, planExpire: Int, deactivation: Bool, orderPayCost: Int, orderPayPresent: Int) {
+    init(id: Int, name: String, description: String, cost: Int, limitTime: Int, planExpire: Int, deactivation: Bool, orderPayCost: Int, orderPayPresent: Int) {
         self.id = id
         self.name = name
         self.description = description
@@ -360,8 +360,8 @@ public struct ValidExecutorPlan: Codable {
               let deactivation = network.deactivation,
               let orderPayCost = network.orderPayCost,
               let orderPayPresent = network.orderPayPresent,
-              let name = ValidExecutorPlanName(from: network.name),
-              let description = ValidExecutorPlanDescription(from: network.description) else {
+              let name = network.name,
+              let description = network.description else {
             return nil
         }
         
@@ -377,44 +377,4 @@ public struct ValidExecutorPlan: Codable {
     }
 }
 
-public struct ValidExecutorPlanName: Codable {
-    public let uz: String
-    public let ru: String
-
-    public init(uz: String, ru: String) {
-        self.uz = uz
-        self.ru = ru
-    }
-
-    init?(from network: DNetExecutorPlanName?) {
-        
-        guard
-            let uz = network?.uz,
-            let ru = network?.ru
-        
-        else {return nil}
-        
-        self.uz = uz
-        self.ru = ru
-    }
-}
-
-public struct ValidExecutorPlanDescription: Codable {
-    public let uz: String
-    public let ru: String
-   
-    public init(uz: String, ru: String) {
-        self.uz = uz
-        self.ru = ru
-    }
-    
-    init?(from network: DNetExecutorPlanDescription?) {
-        guard let network = network,
-              let uz = network.uz,
-              let ru = network.ru else {
-            return nil
-        }
-        self.uz = uz
-        self.ru = ru
-    }
-}
+ 

@@ -154,8 +154,8 @@ extension DNetDriverRegisterResponse {
 
     struct DNetCreateNewExecutorPlan: Codable {
         let id: Int
-        let name: DNetCreateExecutorLocalizedText
-        let description: DNetCreateExecutorLocalizedText
+        let name: String
+        let description: String
         let cost: Int
         let limitTime: Int
         let planExpire: Int
@@ -176,9 +176,6 @@ extension DNetDriverRegisterResponse {
         }
     }
 
-    struct DNetCreateExecutorLocalizedText: Codable {
-        let uz: String
-        let ru: String
-    }
+ 
 
 }

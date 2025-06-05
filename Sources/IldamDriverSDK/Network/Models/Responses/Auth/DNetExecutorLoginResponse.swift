@@ -125,8 +125,8 @@ struct DNetAuthMeTransportColor: Codable {
 
 struct DNetAuthMePlan: Codable {
     let id: Int?
-    let name: DNetAuthMeLocalizedText?
-    let description: DNetAuthMeLocalizedText?
+    let name: String?
+    let description: String?
     let cost: Int?
     let limitTime: Int?
     let planExpire: Int?
@@ -145,9 +145,4 @@ struct DNetAuthMePlan: Codable {
         case orderPayCost = "order_pay_cost"
         case orderPayPresent = "order_pay_present"
     }
-}
-
-struct DNetAuthMeLocalizedText: Codable {
-    let uz: String?
-    let ru: String?
 }

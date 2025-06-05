@@ -269,8 +269,8 @@ public struct AuthMeExecutorTransportColor {
 
 public struct AuthMeExecutorPlan {
     public let id: Int
-    public let name: AuthMeExecutorLocalizedText
-    public let description: AuthMeExecutorLocalizedText
+    public let name: String
+    public let description: String
     public let cost: Int
     public let limitTime: Int
     public let planExpire: Int
@@ -278,7 +278,7 @@ public struct AuthMeExecutorPlan {
     public let orderPayCost: Int
     public let orderPayPresent: Int
     
-    public init(id: Int, name: AuthMeExecutorLocalizedText, description: AuthMeExecutorLocalizedText, cost: Int, limitTime: Int, planExpire: Int, deactivation: Bool, orderPayCost: Int, orderPayPresent: Int) {
+    public init(id: Int, name: String, description: String, cost: Int, limitTime: Int, planExpire: Int, deactivation: Bool, orderPayCost: Int, orderPayPresent: Int) {
         self.id = id
         self.name = name
         self.description = description
@@ -292,8 +292,8 @@ public struct AuthMeExecutorPlan {
     
     init?(from network: DNetAuthMePlan?) {
         guard let network = network,
-              let name = AuthMeExecutorLocalizedText(from: network.name),
-              let description = AuthMeExecutorLocalizedText(from: network.description) else {
+              let name = network.name,
+              let description = network.description else {
             return nil
         }
         
@@ -309,22 +309,4 @@ public struct AuthMeExecutorPlan {
     }
 }
 
-public struct AuthMeExecutorLocalizedText {
-    public let uz: String
-    public let ru: String
-    
-    public init(uz: String, ru: String) {
-        self.uz = uz
-        self.ru = ru
-    }
-    
-    init?(from network: DNetAuthMeLocalizedText?) {
-        guard let network = network,
-              let uz = network.uz,
-              let ru = network.ru else {
-            return nil
-        }
-        self.uz = uz
-        self.ru = ru
-    }
-}
+ 

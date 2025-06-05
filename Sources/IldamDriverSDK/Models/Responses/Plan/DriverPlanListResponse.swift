@@ -44,7 +44,7 @@ public struct DriverPlanListResponse {
     }
 
     // Internal init from network
-    init(from network: DNetResExecutorPlanResult) {
+    init(from network: DNetPlanListRes) {
         self.addressId = network.addressId
         self.cost = network.cost
         self.deactivation = network.deactivation

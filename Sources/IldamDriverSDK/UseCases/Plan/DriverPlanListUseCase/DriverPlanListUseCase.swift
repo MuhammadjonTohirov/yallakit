@@ -12,6 +12,7 @@ public protocol DriverPlanListUseCaseProtocol {
 }
 
 public final class DriverPlanListUseCase: DriverPlanListUseCaseProtocol {
+    
     private let gateway: DriverPlanListProtocol
     
     init(gateway: DriverPlanListProtocol) {
