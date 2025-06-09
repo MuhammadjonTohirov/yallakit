@@ -35,7 +35,7 @@ public struct DriverPlan: Codable {
         self.orderPayCost = orderPayCost
         self.orderPayPresent = orderPayPresent
     }
-    init(from network: DNetResExecutorPlanResult) {
+    init(from network: DNetPlanListRes) {
         self.addressId = network.addressId
         self.cost = network.cost
         self.deactivation = network.deactivation

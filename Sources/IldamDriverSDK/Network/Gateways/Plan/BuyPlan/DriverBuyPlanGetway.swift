@@ -9,12 +9,14 @@ import Foundation
 import NetworkLayer
 
 protocol DriverBuyPlanProtocol {
-    func buyPlan(planId: Int) async throws -> DriverBuyPlanResponse?
+    func buyPlan(planId: Int) async throws -> DNetPlanRes?
 }
 
-public struct DriverBuyPlanGateway: DriverBuyPlanProtocol {
-    public func buyPlan(planId: Int) async throws -> DriverBuyPlanResponse? {
-        let result: NetRes<DriverBuyPlanResponse>? = try await Network.sendThrow(request: Request(planId: planId))
+struct DriverBuyPlanGateway: DriverBuyPlanProtocol {
+     func buyPlan(planId: Int) async throws -> DNetPlanRes? {
+         
+        let result: NetRes<DNetPlanRes>? = try await Network.sendThrow(request: Request(planId: planId))
+         
         return result?.result
     }
     
