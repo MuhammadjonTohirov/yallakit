@@ -9,11 +9,11 @@ import Foundation
 import NetworkLayer
 import Core
 
-public struct OrderListResponse: DNetResBody,Sendable {
-    public var list: [EtherList]
-    public let pagination: Pagination
+public struct OrderListResponse: Codable, Sendable {
+    public var list: [EtherList]?
+    public var pagination: Pagination?
     
-    public init(list: [EtherList], pagination: Pagination) {
+    public init(list: [EtherList]? = nil, pagination: Pagination?) {
         self.list = list
         self.pagination = pagination
     }
@@ -170,7 +170,6 @@ public struct EtherList: Codable, Sendable {
 }
 
 public struct EtherListBrand: Codable, Sendable {
-    
     public let addressName: String
     public let name: String
     public let serviceName: String
@@ -270,6 +269,7 @@ public struct EtherListExecutorCompensation: Codable, Sendable {
         self.cost = cost
     }
 }
+
 public struct EtherListExecutorCoverBonus: Codable, Sendable {
     public let calculationType: String
     public let cost: Int
