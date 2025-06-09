@@ -198,8 +198,9 @@ extension WebSocketManager {
                 listenerObjects.forEach({$0.onReceiveInfo(.init(from: response))})
             }
         case .ordersEther:
-            if let response = result.result as? DNetResEtherResponse {
-                listenerObjects.forEach({$0.onReceiveOrdersEther(.init(from: response))})
+            if let response = result.result as? DNetResEtherResponse,
+               let orderList = OrderListResponse(from: response) {
+                listenerObjects.forEach { $0.onReceiveOrdersEther(orderList) }
             }
         case .orderUpdateFromEther:
             if let response = result.result as? DNetOrderSentToEtherResult {

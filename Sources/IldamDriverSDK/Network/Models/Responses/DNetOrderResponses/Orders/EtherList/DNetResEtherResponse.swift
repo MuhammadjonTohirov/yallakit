@@ -10,8 +10,8 @@ import SwiftUI
 import NetworkLayer
 
 struct DNetResEtherResponse: NetResBody {
-    let list: [DNetResEtherList]
-    let pagination: DNetResPagination
+    let list: [DNetResEtherList]?
+    let pagination: DNetResPagination?
 
     enum CodingKeys: String, CodingKey {
         case list
@@ -20,22 +20,22 @@ struct DNetResEtherResponse: NetResBody {
 }
 
 struct DNetResEtherList: Codable {
-    let addressId: Int
-    let brand: DNetResEtherOrderBrand
-    let counterparty: Bool
-    let createdAt: Int
-    let detail: DNetResEtherOrderDetail
-    let directionToClient: DNetResEtherDirectionToClient
-    let executorBonus: DNetResEtherExecutorBonus
+    let addressId: Int?
+    let brand: DNetResEtherOrderBrand?
+    let counterparty: Bool?
+    let createdAt: Int?
+    let detail: DNetResEtherOrderDetail?
+    let directionToClient: DNetResEtherDirectionToClient?
+    let executorBonus: DNetResEtherExecutorBonus?
     let executorCompensation: DNetResEtherExecutorCompensation?
-    let executorCoverBonus: DNetResEtherExecutorCoverBonus
-    let fixedPrice: Bool
-    let id: Int
-    let paymentType: String
-    let routes: [DNetResEtherOrderRoute]
-    let service: String
-    let status: String
-    let useTheBonus: Bool
+    let executorCoverBonus: DNetResEtherExecutorCoverBonus?
+    let fixedPrice: Bool?
+    let id: Int?
+    let paymentType: String?
+    let routes: [DNetResEtherOrderRoute]?
+    let service: String?
+    let status: String?
+    let useTheBonus: Bool?
 
     enum CodingKeys: String, CodingKey {
         case addressId = "address_id"
@@ -58,9 +58,9 @@ struct DNetResEtherList: Codable {
 }
 
 struct DNetResEtherOrderBrand: Codable {
-    let addressName: String
-    let name: String
-    let serviceName: String
+    let addressName: String?
+    let name: String?
+    let serviceName: String?
     
     enum CodingKeys: String, CodingKey {
         case addressName = "address_name"
@@ -77,7 +77,7 @@ struct DNetResEtherOrderDetail: Codable {
     let modifPrice: Double?
     let modifPriceEvent: String?
     let services: [DNetResEtherOrderService]?
-    let tariffName: String
+    let tariffName: String?
 
     enum CodingKeys: String, CodingKey {
         case approxDistance = "approx_distance"
@@ -93,9 +93,9 @@ struct DNetResEtherOrderDetail: Codable {
 
 
 struct DNetResEtherDirectionToClient: Codable {
-    let distance: Double
-    let duration: Double
-    let mapType: String
+    let distance: Double?
+    let duration: Double?
+    let mapType: String?
 
     enum CodingKeys: String, CodingKey {
         case distance
@@ -105,10 +105,10 @@ struct DNetResEtherDirectionToClient: Codable {
 }
 
 struct DNetResEtherExecutorBonus: Codable {
-    let cost: Int
-    let minCost: Int
-    let minKm: Int
-    let status: Bool
+    let cost: Int?
+    let minCost: Int?
+    let minKm: Int?
+    let status: Bool?
 
     enum CodingKeys: String, CodingKey {
         case cost
@@ -119,9 +119,9 @@ struct DNetResEtherExecutorBonus: Codable {
 }
 
 struct DNetResEtherExecutorCompensation: Codable {
-    let minCost: Double
-    let minKm: Double
-    let cost: Double
+    let minCost: Double?
+    let minKm: Double?
+    let cost: Double?
     
     enum CodingKeys: String, CodingKey {
         case minCost = "min_cost"
@@ -131,9 +131,9 @@ struct DNetResEtherExecutorCompensation: Codable {
 }
 
 struct DNetResEtherExecutorCoverBonus: Codable {
-    let calculationType: String
-    let cost: Int
-    let status: Bool
+    let calculationType: String?
+    let cost: Int?
+    let status: Bool?
 
     enum CodingKeys: String, CodingKey {
         case calculationType = "calculation_type"
@@ -144,9 +144,9 @@ struct DNetResEtherExecutorCoverBonus: Codable {
 
 
 struct DNetResEtherOrderRoute: Codable {
-    let coords: DNetResEtherCoords
-    let lavel1: String
-    let level2: String
+    let coords: DNetResEtherCoords?
+    let lavel1: String?
+    let level2: String?
     
     enum CodingKeys: String, CodingKey {
         case coords
@@ -156,8 +156,8 @@ struct DNetResEtherOrderRoute: Codable {
 }
 
 struct DNetResEtherCoords: Codable {
-    let lat: Double
-    let lng: Double
+    let lat: Double?
+    let lng: Double?
 
     enum CodingKeys: String, CodingKey {
         case lat
@@ -184,9 +184,9 @@ struct DNetResPagination: Codable {
 }
 
 struct DNetResEtherOrderService: Codable {
-    let cost: Int
-    let costType: String
-    let name: String
+    let cost: Int?
+    let costType: String?
+    let name: String?
 
     enum CodingKeys: String, CodingKey {
         case cost
