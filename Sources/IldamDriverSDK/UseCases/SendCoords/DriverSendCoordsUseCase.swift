@@ -16,8 +16,11 @@ public final class DriverSendCoordUseCase: DriverSendCoordUseCaseProtocol {
     
     private let gateway: DriverSendCoordProtocol
     
-    init(gateway: DriverSendCoordProtocol = DriverSendCoordGateway()) {
+    init(gateway: DriverSendCoordProtocol) {
         self.gateway = gateway
+    }
+    public init() {
+        self.gateway = DriverSendCoordGateway()
     }
 
     public func sendLocationWithoutOrder(lat: Double, lng: Double, heading: Double, speed: Double) async throws -> Bool {
