@@ -17,12 +17,28 @@ public struct OrderListResponse: Codable, Sendable {
         self.list = list
         self.pagination = pagination
     }
-   
-    init(from network: DNetResEtherResponse) {
-        self.list = network.list.map { EtherList(from: $0) }
-        if let pagination = network.pagination {
-            self.pagination = Pagination(from: pagination)
-        }
+    
+    init?(from network: DNetResEtherResponse?) {
+        guard let network = network else { return nil }
+        
+        self.list = network.list?.compactMap { EtherList(from: $0) } ?? []
+        
+        let networkPagination = network.pagination ?? DNetResPagination(
+            count: 0,
+            currentPage: 0,
+            lastPage: 0,
+            perPage: 0,
+            total: 0,
+            totalPages: 0
+        )
+        self.pagination = Pagination(
+            total: networkPagination.total ?? 0,
+            count: networkPagination.count ?? 0,
+            perPage: "\(networkPagination.perPage ?? 0)",
+            currentPage: networkPagination.currentPage ?? 0,
+            totalPages: networkPagination.totalPages ?? 0,
+            lastPage: networkPagination.lastPage ?? 0
+        )
     }
 }
 
@@ -44,69 +60,78 @@ public struct EtherList: Codable, Sendable {
     public let status: String?
     public let useTheBonus: Bool
     
-    init(from network: DNetResEtherList) {
-        self.addressId = network.addressId
+    init?(from network: DNetResEtherList?) {
+        guard let network = network else { return nil }
+        
+        self.addressId = network.addressId ?? 0
         self.brand = EtherListBrand(
-            addressName: network.brand.addressName,
-            name: network.brand.name,
-            serviceName: network.brand.serviceName
+            addressName: network.brand?.addressName ?? "",
+            name: network.brand?.name ?? "",
+            serviceName: network.brand?.serviceName ?? ""
         )
         self.counterparty = network.counterparty
-        self.createdAt = network.createdAt
-        self.detail = EtherListDetail(
-            approxTotalPrice: network.detail.approxTotalPrice,
-            cost: network.detail.cost,
-            modifPrice: network.detail.modifPrice,
-            modifPriceEvent: network.detail.modifPriceEvent,
-            services: network.detail.services?.map { service in
-                EtherListOrderService(
-                    cost: service.cost,
-                    costType: service.costType,
-                    name: service.name
-                )
-            },
-            tariffName: network.detail.tariffName
-        )
-        self.directionToClient = EtherListDirectionToClient(
-            from: DNetResEtherDirectionToClient(
-                distance: network.directionToClient.distance,
-                duration: network.directionToClient.duration,
-                mapType: network.directionToClient.mapType)
-        )
-        self.executorBonus = EtherListExecutorBonus(from: DNetResEtherExecutorBonus(
-            cost: network.executorBonus.cost,
-            minCost: network.executorBonus.minCost,
-            minKm: network.executorBonus.minKm,
-            status: network.executorBonus.status))
-        self.executorCompensation = network.executorCompensation.map { compensation in
-            EtherListExecutorCompensation(from: DNetResEtherExecutorCompensation(
-                minCost: compensation.minCost,
-                minKm: compensation.minKm,
-                cost: compensation.cost))
-        }
-        
-        self.executorCoverBonus = EtherListExecutorCoverBonus(from: DNetResEtherExecutorCoverBonus(
-            calculationType: network.executorCoverBonus.calculationType,
-            cost: network.executorCoverBonus.cost,
-            status: network.executorCoverBonus.status))
-        
-        self.fixedPrice = network.fixedPrice
-        self.id = network.id
-        self.paymentType = network.paymentType
-        self.routes = network.routes.map { route in
-            EtherListOrderRoute(
-                coords: EtherListCoords(
-                    lat: route.coords.lat,
-                    lng: route.coords.lng
-                ),
-                lavel1: route.lavel1,
-                level2: route.level2
+        self.createdAt = network.createdAt ?? 0
+        self.detail = network.detail.map { detail in
+            EtherListDetail(
+                approxTotalPrice: detail.approxTotalPrice ?? 0,
+                cost: detail.cost ?? 0,
+                modifPrice: detail.modifPrice ?? 0,
+                modifPriceEvent: detail.modifPriceEvent ?? "",
+                services: detail.services?.map { service in
+                    EtherListOrderService(
+                        cost: service.cost ?? 0,
+                        costType: service.costType ?? "",
+                        name: service.name ?? ""
+                    )
+                } ?? [],
+                tariffName: detail.tariffName ?? ""
             )
         }
+        self.directionToClient = network.directionToClient.map { direction in
+            EtherListDirectionToClient(
+                distance: direction.distance ?? 0,
+                duration: direction.duration ?? 0,
+                mapType: direction.mapType ?? ""
+            )
+        }
+        self.executorBonus = EtherListExecutorBonus(
+            cost: network.executorBonus?.cost ?? 0,
+            minCost: network.executorBonus?.minCost ?? 0,
+            minKm: network.executorBonus?.minKm ?? 0,
+            status: network.executorBonus?.status ?? false
+        )
+        self.executorCompensation = network.executorCompensation.map { compensation in
+            EtherListExecutorCompensation(
+                minCost: compensation.minCost ?? 0,
+                minKm: compensation.minKm ?? 0,
+                cost: compensation.cost ?? 0
+            )
+        }
+        self.executorCoverBonus = network.executorCoverBonus.map { coverBonus in
+            EtherListExecutorCoverBonus(
+                calculationType: coverBonus.calculationType ?? "",
+                cost: coverBonus.cost ?? 0,
+                status: coverBonus.status ?? false
+            )
+        }
+        self.fixedPrice = network.fixedPrice ?? false
+        self.id = network.id ?? 0
+        self.paymentType = network.paymentType ?? ""
+        self.routes = network.routes?.map { route in
+            EtherListOrderRoute(
+                coords: EtherListCoords(
+                    lat: route.coords?.lat ?? 0,
+                    lng: route.coords?.lng ?? 0
+                ),
+                lavel1: route.lavel1 ?? "",
+                level2: route.level2 ?? ""
+            )
+        } ?? []
         self.service = network.service
         self.status = network.status
-        self.useTheBonus = network.useTheBonus
+        self.useTheBonus = network.useTheBonus ?? false
     }
+    
     public init(
         addressId: Int,
         brand: EtherListBrand,
@@ -123,25 +148,25 @@ public struct EtherList: Codable, Sendable {
         routes: [EtherListOrderRoute],
         service: String?,
         status: String?,
-        sourceType: String?,
-        useTheBonus: Bool) {
-            self.addressId = addressId
-            self.brand = brand
-            self.counterparty = counterparty
-            self.createdAt = createdAt
-            self.detail = detail
-            self.directionToClient = directionToClient
-            self.executorBonus = executorBonus
-            self.executorCompensation = executorCompensation
-            self.executorCoverBonus = executorCoverBonus
-            self.fixedPrice = fixedPrice
-            self.id = id
-            self.paymentType = paymentType
-            self.routes = routes
-            self.service = service
-            self.status = status
-            self.useTheBonus = useTheBonus
-        }
+        useTheBonus: Bool
+    ) {
+        self.addressId = addressId
+        self.brand = brand
+        self.counterparty = counterparty
+        self.createdAt = createdAt
+        self.detail = detail
+        self.directionToClient = directionToClient
+        self.executorBonus = executorBonus
+        self.executorCompensation = executorCompensation
+        self.executorCoverBonus = executorCoverBonus
+        self.fixedPrice = fixedPrice
+        self.id = id
+        self.paymentType = paymentType
+        self.routes = routes
+        self.service = service
+        self.status = status
+        self.useTheBonus = useTheBonus
+    }
 }
 
 public struct EtherListBrand: Codable, Sendable {
@@ -154,10 +179,11 @@ public struct EtherListBrand: Codable, Sendable {
         self.name = name
         self.serviceName = serviceName
     }
+    
     init(from network: DNetResEtherOrderBrand) {
-        self.addressName = network.addressName
-        self.name = network.name
-        self.serviceName = network.serviceName
+        self.addressName = network.addressName ?? ""
+        self.name = network.name ?? ""
+        self.serviceName = network.serviceName ?? ""
     }
 }
 
@@ -167,9 +193,16 @@ public struct EtherListDetail: Codable, Sendable {
     public let modifPrice: Double?
     public let modifPriceEvent: String?
     public let services: [EtherListOrderService]?
-    public let tariffName: String
+    public let tariffName: String?
     
-    public init(approxTotalPrice: Double?, cost: Double?, modifPrice: Double?, modifPriceEvent: String?, services: [EtherListOrderService]?, tariffName: String) {
+    public init(
+        approxTotalPrice: Double,
+        cost: Double,
+        modifPrice: Double,
+        modifPriceEvent: String,
+        services: [EtherListOrderService],
+        tariffName: String
+    ) {
         self.approxTotalPrice = approxTotalPrice
         self.cost = cost
         self.modifPrice = modifPrice
@@ -177,17 +210,23 @@ public struct EtherListDetail: Codable, Sendable {
         self.services = services
         self.tariffName = tariffName
     }
-    init(from network: DNetResEtherOrderDetail) {
-        self.approxTotalPrice = network.approxTotalPrice
-        self.cost = network.cost
-        self.modifPrice = network.modifPrice
-        self.modifPriceEvent = network.modifPriceEvent
-        self.services = network.services?.map {
-            EtherListOrderService(from: $0)
-        }
-        self.tariffName = network.tariffName
+    
+    init(from network: DNetResEtherOrderDetail?) {
+        self.approxTotalPrice = network?.approxTotalPrice ?? 0
+        self.cost = network?.cost ?? 0
+        self.modifPrice = network?.modifPrice ?? 0
+        self.modifPriceEvent = network?.modifPriceEvent ?? ""
+        self.services = network?.services?.compactMap {
+            EtherListOrderService(
+                cost: $0.cost ?? 0,
+                costType: $0.costType ?? "",
+                name: $0.name ?? ""
+            )
+        } ?? []
+        self.tariffName = network?.tariffName ?? ""
     }
 }
+
 public struct EtherListDirectionToClient: Codable, Sendable {
     public let distance: Double
     public let duration: Double
@@ -198,12 +237,14 @@ public struct EtherListDirectionToClient: Codable, Sendable {
         self.duration = duration
         self.mapType = mapType
     }
+    
     init(from network: DNetResEtherDirectionToClient) {
-        self.distance = network.distance
-        self.duration = network.duration
-        self.mapType = network.mapType
+        self.distance = network.distance ?? 0
+        self.duration = network.duration ?? 0
+        self.mapType = network.mapType ?? ""
     }
 }
+
 public struct EtherListExecutorCompensation: Codable, Sendable {
     public let minCost: Double
     public let minKm: Double
@@ -215,12 +256,20 @@ public struct EtherListExecutorCompensation: Codable, Sendable {
         self.cost = cost
     }
     
-    init(from network: DNetResEtherExecutorCompensation) {
-        self.minCost = network.minCost
-        self.minKm = network.minKm
-        self.cost = network.cost
+    init?(from network: DNetResEtherExecutorCompensation?) {
+        guard
+            let minCost = network?.minCost,
+            let minKm = network?.minKm,
+            let cost = network?.cost
+                
+        else {return nil}
+        
+        self.minCost = minCost
+        self.minKm = minKm
+        self.cost = cost
     }
 }
+
 public struct EtherListExecutorCoverBonus: Codable, Sendable {
     public let calculationType: String
     public let cost: Int
@@ -231,10 +280,15 @@ public struct EtherListExecutorCoverBonus: Codable, Sendable {
         self.cost = cost
         self.status = status
     }
-    init(from network: DNetResEtherExecutorCoverBonus) {
-        self.calculationType = network.calculationType
-        self.cost = network.cost
-        self.status = network.status
+    init?(from network: DNetResEtherExecutorCoverBonus?) {
+        guard
+            let calculationType = network?.calculationType,
+            let cost = network?.cost,
+            let status = network?.status else {return nil}
+        
+        self.calculationType = calculationType
+        self.cost = cost
+        self.status = status
     }
 }
 
@@ -250,11 +304,17 @@ public struct EtherListExecutorBonus: Codable, Sendable {
         self.minKm = minKm
         self.status = status
     }
-    init(from network: DNetResEtherExecutorBonus) {
-        self.cost = network.cost
-        self.minCost = network.minCost
-        self.minKm = network.minKm
-        self.status = network.status
+    init?(from network: DNetResEtherExecutorBonus?) {
+        guard
+            let cost = network?.cost,
+            let minCost = network?.minCost,
+            let minKm = network?.minKm,
+            let status = network?.status else {return nil}
+        
+        self.cost = cost
+        self.minCost = minCost
+        self.minKm = minKm
+        self.status = status
     }
 }
 
@@ -269,10 +329,15 @@ public struct EtherListOrderService: Codable, Sendable {
         self.name = name
     }
     
-    init(from network: DNetResEtherOrderService) {
-        self.cost = network.cost
-        self.costType = network.costType
-        self.name = network.name
+    init?(from network: DNetResEtherOrderService?) {
+        guard
+            let cost = network?.cost,
+            let costType = network?.costType,
+            let name = network?.name else {return nil}
+        
+        self.cost = cost
+        self.costType = costType
+        self.name = name
     }
 }
 
@@ -287,10 +352,14 @@ public struct EtherListOrderRoute: Codable, Sendable {
         self.level2 = level2
     }
     
-    init(from network: DNetResEtherOrderRoute) {
-        self.coords = EtherListCoords(lat: network.coords.lat, lng: network.coords.lng)
-        self.lavel1 = network.lavel1
-        self.level2 = network.level2
+    init?(from network: DNetResEtherOrderRoute?) {
+        guard let coords = network?.coords,
+              let lavel1 = network?.lavel1,
+              let level2 = network?.level2 else {return nil}
+        
+        self.coords = EtherListCoords(lat: coords.lat ?? 0, lng: coords.lng ?? 0)
+        self.lavel1 = lavel1
+        self.level2 = level2
     }
 }
 
@@ -302,9 +371,13 @@ public struct EtherListCoords: Codable, Sendable {
         self.lat = lat
         self.lng = lng
     }
-    init(from network: DNetResEtherCoords) {
-        self.lat = network.lat
-        self.lng = network.lng
+    init?(from network: DNetResEtherCoords?) {
+        guard
+            let lat = network?.lat,
+            let lng = network?.lng else {return nil}
+        
+        self.lat = lat
+        self.lng = lng
         
     }
 }
@@ -316,7 +389,7 @@ public struct Pagination: Codable, Sendable {
     public let currentPage: Int
     public let totalPages: Int
     public let lastPage: Int
-
+    
     public init(total: Int, count: Int, perPage: String, currentPage: Int, totalPages: Int, lastPage: Int) {
         self.total = total
         self.count = count
@@ -325,15 +398,14 @@ public struct Pagination: Codable, Sendable {
         self.totalPages = totalPages
         self.lastPage = lastPage
     }
-
-    /// 🟢 ADD THIS:
-     init(from network: DNetResPagination) {
-         self.total = network.total ?? 0
-        self.count = network.count  ?? 0
-         self.perPage = "\(network.perPage ?? 0)"
-        self.currentPage = network.currentPage  ?? 0
-        self.totalPages = network.totalPages  ?? 0
-        self.lastPage = network.lastPage ?? 0
+    
+    init?(from network: DNetResPagination?) {
+        self.total = network?.total ?? 0
+        self.count = network?.count  ?? 0
+        self.perPage = "\(network?.perPage ?? 0)"
+        self.currentPage = network?.currentPage  ?? 0
+        self.totalPages = network?.totalPages  ?? 0
+        self.lastPage = network?.lastPage ?? 0
     }
 }
 

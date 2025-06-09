@@ -25,8 +25,14 @@ public final class OrderListUseCase: OrderListUseCaseProtocol {
         guard let result = try await gateway.getEtherList(type: type) else {
             throw NSError(domain: "No configuration found", code: -1)
         }
-        return OrderListResponse(from: result)
+
+        guard let orderList = OrderListResponse(from: result) else {
+            throw NSError(domain: "Failed to parse OrderListResponse", code: -2)
+        }
+
+        return orderList
     }
+
     
     
 }
