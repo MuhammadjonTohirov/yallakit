@@ -22,8 +22,8 @@ public struct OrderRoute: Codable, Sendable {
     init?(res: NetResOrderRoute?) {
         guard let res = res else { return nil }
         
-        self.coords = .init(lat: res.coords.lat, lng: res.coords.lng)
-        self.index = res.index
-        self.fullAddress = res.fullAddress
+        self.coords = .init(lat: res.coords?.lat ?? 0, lng: res.coords?.lng ?? 0)
+        self.index = res.index ?? 0
+        self.fullAddress = res.fullAddress ?? ""
     }
 }

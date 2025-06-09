@@ -162,13 +162,13 @@ public struct OrderTaxiDetails: Codable, Sendable {
             return nil
         }
         
-        self.tariff = res.tariff
+        self.tariff = res.tariff ?? ""
         self.startPrice = res.startPrice
         self.distance = res.distance
         self.clientTotalPrice = res.clientTotalPrice ?? 0
-        self.fixedPrice = res.fixedPrice
+        self.fixedPrice = res.fixedPrice ?? false
         self.totalPrice = res.totalPrice
-        self.routes = res.routes.compactMap(OrderRoute.init)
+        self.routes = res.routes?.compactMap(OrderRoute.init) ?? []
         self.bonusAmount = res.bonusAmount
         self.isUsingBonus = res.bonusUsed
         self.award = res.award.map { Award(amount: $0.amount, type: $0.type) }
