@@ -14,17 +14,23 @@ public protocol DriverBuyPlanUseCaseProtocol {
 public final class DriverBuyPlanUseCase: DriverBuyPlanUseCaseProtocol {
     
     private let gateway: DriverBuyPlanProtocol
+    
     init(gateway: DriverBuyPlanProtocol) {
         self.gateway = gateway
     }
     public init() {
         self.gateway = DriverBuyPlanGateway()
+        
     }
+    
     public func execute(planId: Int) async throws -> DriverBuyPlanResponse {
-        guard let result = try? await gateway.buyPlan(planId: planId) else {
+        guard let result = try? await gateway.buyPlan(planId: planId),
+              let response = DriverBuyPlanResponse(network: result) else {
             throw NSError(domain: "No configuration found", code: -1)
         }
-        
-        return DriverBuyPlanResponse(condition: result.condition, plan: result.plan)
+
+        return response
     }
+
 }
+

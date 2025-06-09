@@ -9,11 +9,11 @@ import Foundation
 import SwiftUI
 import NetworkLayer
  
-struct DNetResPlan: DNetResBody {
-    let result: [DNetResExecutorPlanResult]?
+struct DNetPlanListResponse: DNetResBody {
+    let result: [DNetPlanListRes]?
 }
 
-struct DNetResExecutorPlanResult: Codable {
+struct DNetPlanListRes: Codable {
     let addressId: Int
     let cost: Int
     let deactivation: Bool

@@ -10,12 +10,12 @@ import Core
 import NetworkLayer
 
 protocol DriverPlanListProtocol {
-    func getPlanLists() async throws -> [DNetResExecutorPlanResult]?
+    func getPlanLists() async throws -> [DNetPlanListRes]?
 }
 
 struct DriverPlanListGatewayGetway: DriverPlanListProtocol {
-    func getPlanLists() async throws -> [DNetResExecutorPlanResult]? {
-        let result: NetRes<[DNetResExecutorPlanResult]>? = try await Network.sendThrow(request: Request())
+    func getPlanLists() async throws -> [DNetPlanListRes]? {
+        let result: NetRes<[DNetPlanListRes]>? = try await Network.sendThrow(request: Request())
         return result?.result
         
         
@@ -24,7 +24,7 @@ struct DriverPlanListGatewayGetway: DriverPlanListProtocol {
                 URL.baseAPI
                     .appending(path: "executor")
                     .appending(path: "plans")
-            }
+            } 
             
             var body: Data? {
                 nil

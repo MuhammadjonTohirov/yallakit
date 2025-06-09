@@ -16,10 +16,13 @@ public struct DriverBuyPlanResponse: DNetResBody {
         self.plan = plan
     }
     
-    init?(network: DNetResPlan?) {
-        guard let network else { return nil }
-        self.condition = !(network.result?.isEmpty ?? true)
-        self.plan = network.result?.first.map { BuyPlanResult(network: $0) }
+    init?(network: DNetPlanRes?) {
+        guard let network else {
+            return nil
+        }
+        
+        self.condition = network.condition
+        self.plan = BuyPlanResult(network: network.plan)
     }
 }
 
@@ -49,7 +52,7 @@ public struct BuyPlanResult: Codable {
         self.orderPayPresent = orderPayPresent
     }
     
-    init(network: DNetResExecutorPlanResult) {
+    init(network: DNetBuyPlanResult) {
         self.addressId = network.addressId
         self.cost = network.cost
         self.deactivation = network.deactivation

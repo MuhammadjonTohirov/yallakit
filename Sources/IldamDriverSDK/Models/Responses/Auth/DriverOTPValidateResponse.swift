@@ -27,5 +27,6 @@ public struct DriverOTPValidateResponse {
         self.accessToken = network.accessToken ?? ""
         self.tokenType = network.tokenType ?? ""
         self.expiresIn = network.expiresIn ?? 0
+        
     }
 }

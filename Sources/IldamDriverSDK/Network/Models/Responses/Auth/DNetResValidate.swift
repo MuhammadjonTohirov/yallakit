@@ -176,8 +176,8 @@ struct ExecutorTransportColor: Codable {
 
 struct DNetResExecutorPlan: Codable {
     let id: Int?
-    let name: DNetExecutorPlanName?
-    let description: DNetExecutorPlanDescription?
+    let name: String?
+    let description: String?
     let cost: Int?
     let limitTime: Int?
     let planExpire: Int?
@@ -197,8 +197,8 @@ struct DNetResExecutorPlan: Codable {
     init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.id = try? container.decodeIfPresent(Int.self, forKey: .id)
-        self.name = try? container.decodeIfPresent(DNetExecutorPlanName.self, forKey: .name)
-        self.description = try? container.decodeIfPresent(DNetExecutorPlanDescription.self, forKey: .description)
+        self.name = try? container.decodeIfPresent(String.self, forKey: .name)
+        self.description = try? container.decodeIfPresent(String.self, forKey: .description)
         self.cost = try? container.decodeIfPresent(Int.self, forKey: .cost)
         self.limitTime = try? container.decodeIfPresent(Int.self, forKey: .limitTime)
         self.planExpire = try? container.decodeIfPresent(Int.self, forKey: .planExpire)
@@ -207,14 +207,4 @@ struct DNetResExecutorPlan: Codable {
         self.orderPayPresent = try? container.decodeIfPresent(Int.self, forKey: .orderPayPresent)
     }
 }
-
-struct DNetExecutorPlanName: Codable {
-    let uz: String?
-    let ru: String?
-}
-
-struct DNetExecutorPlanDescription: Codable {
-    let uz: String?
-    let ru: String?
-}
-
+ 
