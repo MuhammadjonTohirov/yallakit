@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct DriverPlanListResponse {
+public struct DriverPlanListResponse: Sendable {
     public let addressId: Int
     public let cost: Int
     public let deactivation: Bool

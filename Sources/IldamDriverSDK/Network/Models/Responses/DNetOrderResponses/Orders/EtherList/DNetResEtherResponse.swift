@@ -11,7 +11,7 @@ import NetworkLayer
 
 struct DNetResEtherResponse: NetResBody {
     let list: [DNetResEtherList]
-    let pagination: DNetResPagination
+    let pagination: DNetResPagination?
 
     enum CodingKeys: String, CodingKey {
         case list

@@ -9,23 +9,24 @@ import Foundation
 import NetworkLayer
 import Core
 
-public struct OrderListResponse: DNetResBody {
+public struct OrderListResponse: Codable, Sendable {
     public var list: [EtherList]?
-    public let pagination: Pagination
+    public var pagination: Pagination?
     
-    public init(list: [EtherList]? = nil, pagination: Pagination) {
+    public init(list: [EtherList]? = nil, pagination: Pagination?) {
         self.list = list
         self.pagination = pagination
     }
    
     init(from network: DNetResEtherResponse) {
         self.list = network.list.map { EtherList(from: $0) }
-        self.pagination = Pagination(from: network.pagination)
+        if let pagination = network.pagination {
+            self.pagination = Pagination(from: pagination)
+        }
     }
-
 }
 
-public struct EtherList: Codable {
+public struct EtherList: Codable, Sendable {
     public let addressId: Int
     public let brand: EtherListBrand
     public let counterparty: Bool?
@@ -143,7 +144,7 @@ public struct EtherList: Codable {
         }
 }
 
-public struct EtherListBrand: Codable {
+public struct EtherListBrand: Codable, Sendable {
     public let addressName: String
     public let name: String
     public let serviceName: String
@@ -160,7 +161,7 @@ public struct EtherListBrand: Codable {
     }
 }
 
-public struct EtherListDetail: Codable {
+public struct EtherListDetail: Codable, Sendable {
     public let approxTotalPrice: Double?
     public let cost: Double?
     public let modifPrice: Double?
@@ -187,7 +188,7 @@ public struct EtherListDetail: Codable {
         self.tariffName = network.tariffName
     }
 }
-public struct EtherListDirectionToClient: Codable {
+public struct EtherListDirectionToClient: Codable, Sendable {
     public let distance: Double
     public let duration: Double
     public let mapType: String
@@ -203,10 +204,10 @@ public struct EtherListDirectionToClient: Codable {
         self.mapType = network.mapType
     }
 }
-public struct EtherListExecutorCompensation: Codable {
-    let minCost: Double
-    let minKm: Double
-    let cost: Double
+public struct EtherListExecutorCompensation: Codable, Sendable {
+    public let minCost: Double
+    public let minKm: Double
+    public let cost: Double
     
     public init(minCost: Double, minKm: Double, cost: Double) {
         self.minCost = minCost
@@ -220,7 +221,7 @@ public struct EtherListExecutorCompensation: Codable {
         self.cost = network.cost
     }
 }
-public struct EtherListExecutorCoverBonus: Codable {
+public struct EtherListExecutorCoverBonus: Codable, Sendable {
     public let calculationType: String
     public let cost: Int
     public let status: Bool
@@ -237,7 +238,7 @@ public struct EtherListExecutorCoverBonus: Codable {
     }
 }
 
-public struct EtherListExecutorBonus: Codable {
+public struct EtherListExecutorBonus: Codable, Sendable {
     public let cost: Int
     public let minCost: Int
     public let minKm: Int
@@ -257,7 +258,7 @@ public struct EtherListExecutorBonus: Codable {
     }
 }
 
-public struct EtherListOrderService: Codable {
+public struct EtherListOrderService: Codable, Sendable {
     public let cost: Int
     public let costType: String
     public let name: String
@@ -275,7 +276,7 @@ public struct EtherListOrderService: Codable {
     }
 }
 
-public struct EtherListOrderRoute: Codable {
+public struct EtherListOrderRoute: Codable, Sendable {
     public let coords: EtherListCoords
     public let lavel1: String
     public let level2: String
@@ -293,7 +294,7 @@ public struct EtherListOrderRoute: Codable {
     }
 }
 
-public struct EtherListCoords: Codable {
+public struct EtherListCoords: Codable, Sendable {
     public let lat: Double
     public let lng: Double
     
@@ -308,7 +309,7 @@ public struct EtherListCoords: Codable {
     }
 }
 
-public struct Pagination: Codable {
+public struct Pagination: Codable, Sendable {
     public let total: Int
     public let count: Int
     public let perPage: String
