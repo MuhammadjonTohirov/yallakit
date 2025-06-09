@@ -26,11 +26,11 @@ struct SendCoords: Encodable {
     let heading: Int
     let lat: Double
     let lng: Double
-    let speed: Int
-    let orderStatus: String
+    let speed: Double
+    let orderStatus: String?
     let orderId: Int?
-    let online: Bool
-    let statusTime: String
+    let online: Bool?
+    let statusTime: String?
     
     enum CodingKeys: String, CodingKey {
         case heading
@@ -83,9 +83,9 @@ struct OrderCheck: Encodable {
 }
 
 struct DNetLocationZone: Encodable {
-let distance: Double
-let duration: String
-let waitPrice: Double
-let waitTime: String
-
+    let distance: Double
+    let duration: String
+    let waitPrice: Double
+    let waitTime: String
+    
 }
