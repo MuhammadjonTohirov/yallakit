@@ -11,10 +11,11 @@ import XCTest
 
 final class DriverConfigurationGatewayTest: XCTestCase {
     func test_fetchCarList() async {
- 
+        
         let gateway = DriverConfigurationGateway()
         let result = try? await gateway.fetchConfig()
-        
+        print("result: ",result?.autoWaitingCalc)
+
         XCTAssertNotNil(result)
         
     }
