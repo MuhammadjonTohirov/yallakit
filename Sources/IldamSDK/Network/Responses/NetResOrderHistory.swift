@@ -113,9 +113,9 @@ struct NetResOrderRoute: Codable {
         let lat, lng: Double
     }
     
-    let index: Int
-    let fullAddress: String
-    let coords: Coords
+    let index: Int?
+    let fullAddress: String?
+    let coords: Coords?
     
     enum CodingKeys: String, CodingKey {
         case index
