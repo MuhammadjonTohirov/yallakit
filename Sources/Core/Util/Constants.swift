@@ -10,6 +10,7 @@ import Foundation
 public struct Constants: Sendable {
     public var baseGoApi: String = "https://api2.ildam.uz"
     public var basePhpApi: String = "https://api.ildam.uz"
+    public var websocketServer: String = "wss://api2.ildam.uz/ws/executor"
     
     public var goBaseEndpoint: String = "/client"
     public var phpBaseEndpoint: String = "/cli"
@@ -19,6 +20,13 @@ public struct Constants: Sendable {
     public var secretKey: String = "2f52434c-3068-460d-8dbc-5c80599f2db4"
     
     public init() {}
+    
+    @discardableResult
+    public func setwebSocketServer(_ websocketServer: String) -> Self {
+        var result = self
+        result.websocketServer = websocketServer
+        return result
+    }
     
     @discardableResult
     public func setSecretKey(_ secretKey: String) -> Self {
