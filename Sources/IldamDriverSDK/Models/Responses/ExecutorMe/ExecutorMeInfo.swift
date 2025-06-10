@@ -9,34 +9,34 @@ import Foundation
 
 public struct ExecutorMeInfo: DNetResBody {
     
-    public let id: Int?
-    public let phone: String?
-    public let photo: String?
-    public let givenNames: String?
-    public let surName: String?
-    public let fatherName: String?
-    public let birthday: String?
-    public let rating: Int?
-    public let online: Bool?
-    public let status: String?
-    public let level: Int?
-    public let register: String?
-    public let balance: Double?
-    public let block: Bool?
-    public let blockNote: String?
-    public let blockExpiry: String?
-    public let condition: Bool?
-    public let createdAt: String?
-    public let addressId: Int?
-    public let activeness: Int?
-    public let priareted: Int?
-    public let appVer: String?
-    public let appVersions: String?
-    public let brand: ExecutorBrand?
-    public let fotocontrol: ExecutorFotoControl?
-    public let transport: ExecutorTransport?
-    public let executorServices: [ExecutorService]?
-    public let plan: ExecutorPlan?
+    public var id: Int?
+    public var phone: String?
+    public var photo: String?
+    public var givenNames: String?
+    public var surName: String?
+    public var fatherName: String?
+    public var birthday: String?
+    public var rating: Int?
+    public var online: Bool?
+    public var status: String?
+    public var level: Int?
+    public var register: String?
+    public var balance: Double?
+    public var block: Bool?
+    public var blockNote: String?
+    public var blockExpiry: String?
+    public var condition: Bool?
+    public var createdAt: String?
+    public var addressId: Int?
+    public var activeness: Int?
+    public var priareted: Int?
+    public var appVer: String?
+    public var appVersions: String?
+    public var brand: ExecutorBrand?
+    public var fotocontrol: ExecutorFotoControl?
+    public var transport: ExecutorTransport?
+    public var executorServices: [ExecutorService]?
+    public var plan: ExecutorPlan?
     
     public init(
         id: Int,
@@ -131,9 +131,9 @@ public struct ExecutorMeInfo: DNetResBody {
 }
 
 public struct ExecutorBrand: Codable, Sendable {
-    public let id: Int
-    public let name: String
-    public let slug: String
+    public var id: Int
+    public var name: String
+    public var slug: String
     
     public init(id: Int, name: String, slug: String) {
         self.id = id
@@ -149,8 +149,8 @@ public struct ExecutorBrand: Codable, Sendable {
 }
 
 public struct ExecutorFotoControl: Codable, Sendable {
-    public let fotocontrolStatus: Bool?
-    public let moderatorStatus: String?
+    public var fotocontrolStatus: Bool?
+    public var moderatorStatus: String?
     
     public init(fotocontrolStatus: Bool, moderatorStatus: String?) {
         self.fotocontrolStatus = fotocontrolStatus
@@ -164,11 +164,11 @@ public struct ExecutorFotoControl: Codable, Sendable {
 }
 
 public struct ExecutorTransport: Codable, Sendable {
-    public let callsign: String
-    public let color: ExecutorCarColor
-    public let mark: ExecutorCarMark
-    public let model: ExecutorCarModel
-    public let stateNumber: String
+    public var callsign: String
+    public var color: ExecutorCarColor
+    public var mark: ExecutorCarMark
+    public var model: ExecutorCarModel
+    public var stateNumber: String
     
     public init(callsign: String, color: ExecutorCarColor, mark: ExecutorCarMark, model: ExecutorCarModel, stateNumber: String) {
         self.callsign = callsign
@@ -188,9 +188,9 @@ public struct ExecutorTransport: Codable, Sendable {
 }
 
 public struct ExecutorCarColor: Codable, Sendable {
-    public let color: String
-    public let id: Int
-    public let name: String
+    public var color: String
+    public var id: Int
+    public var name: String
     
     public init(color: String, id: Int, name: String) {
         self.color = color
@@ -206,8 +206,8 @@ public struct ExecutorCarColor: Codable, Sendable {
 }
 
 public struct ExecutorCarMark: Codable, Sendable {
-    public let id: Int
-    public let name: String
+    public var id: Int
+    public var name: String
     
     public init(id: Int, name: String) {
         self.id = id
@@ -221,8 +221,8 @@ public struct ExecutorCarMark: Codable, Sendable {
 }
 
 public struct ExecutorCarModel: Codable, Sendable {
-    public let id: Int
-    public let name: String
+    public var id: Int
+    public var name: String
     
     public init(id: Int, name: String) {
         self.id = id
@@ -236,8 +236,8 @@ public struct ExecutorCarModel: Codable, Sendable {
 }
 
 public struct ExecutorService: Codable, Sendable {
-    public let id: Int
-    public let name: String
+    public var id: Int
+    public var name: String
     
     public init(id: Int, name: String) {
         self.id = id
@@ -251,15 +251,15 @@ public struct ExecutorService: Codable, Sendable {
 }
 
 public struct ExecutorPlan: Codable, Sendable {
-    public let id: Int
-    public let name: String
-    public let description: String
-    public let cost: Int
-    public let limitTime: Int
-    public let planExpire: Int
-    public let deactivation: Bool
-    public let orderPayCost: Int
-    public let orderPayPresent: Int
+    public var id: Int
+    public var name: String
+    public var description: String
+    public var cost: Int
+    public var limitTime: Int
+    public var planExpire: Int
+    public var deactivation: Bool
+    public var orderPayCost: Int
+    public var orderPayPresent: Int
     
     public init(
         id: Int,
