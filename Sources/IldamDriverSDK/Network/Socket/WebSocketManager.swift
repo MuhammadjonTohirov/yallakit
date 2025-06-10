@@ -12,7 +12,17 @@ import Starscream
 public protocol WebSocketDelegateHandler: AnyObject {
     func didReceive<T: NetResBody>(channel: WebSocketOrderChannels, message: SocketRes<T>)
     func didDisconnect(error: Error?)
+    func didPeerClosed()
+    func socketReconnectSuggested()
     func didConnect()
+}
+
+public extension WebSocketDelegateHandler {
+    func didReceive<T: NetResBody>(channel: WebSocketOrderChannels, message: SocketRes<T>) {}
+    func didDisconnect(error: Error?) {}
+    func didPeerClosed() {}
+    func didConnect() {}
+    func socketReconnectSuggested() {}
 }
 
 public final class WebSocketManager: WebSocketDelegate, @unchecked Sendable {
@@ -47,8 +57,12 @@ public final class WebSocketManager: WebSocketDelegate, @unchecked Sendable {
         socket.connect()
     }
 
-    public func disconnect() {
-        socket?.disconnect()
+    public func disconnect(force: Bool = false) {
+        if force {
+            socket?.forceDisconnect()
+        } else {
+            socket?.disconnect()
+        }
     }
 
     public func send<T: Encodable>(_ data: T) {
@@ -66,32 +80,36 @@ public final class WebSocketManager: WebSocketDelegate, @unchecked Sendable {
         switch event {
         case .connected(_):
             isConnected = true
+            Logging.l(tag: "[WebSocket]", "Connected success")
             delegate?.didConnect()
-
         case .disconnected(let reason, let code):
             isConnected = false
-            Logging.l("[WebSocket] Disconnected: \(reason) (code: \(code))")
+            Logging.l(tag: "[WebSocket]", "Disconnected: \(reason) (code: \(code))")
             delegate?.didDisconnect(error: WSError(type: .serverError, message: reason, code: code))
 
         case .text(let text):
             handleIncoming(text: text)
         case .binary(let data):
-            Logging.l("[WebSocket] Received binary data of size: \(data.count)")
+            Logging.l(tag: "[WebSocket]", "Received binary data of size: \(data.count)")
 
         case .error(let error):
             isConnected = false
-            Logging.l("[WebSocket] Error: \(String(describing: error))")
+            Logging.l(tag: "[WebSocket]", "Error: \(String(describing: error))")
             delegate?.didDisconnect(error: error)
 
         case .cancelled:
             isConnected = false
-            Logging.l("[WebSocket] Connection cancelled")
+            Logging.l(tag: "[WebSocket]", "Connection cancelled")
             delegate?.didDisconnect(error: nil)
 
-        case .pong(_), .ping(_), .reconnectSuggested(_), .peerClosed:
-            break
+        case .pong(_), .ping(_):
+            Logging.l(tag: "[WebSocket]", "Event: \(event)")
+        case .peerClosed:
+            self.delegate?.didPeerClosed()
+        case .reconnectSuggested(_):
+            self.delegate?.socketReconnectSuggested()
         case .viabilityChanged(let changed):
-            Logging.l(tag: "IldamDriverSDK", "[WebSocket] Viability changed: \(changed)")
+            Logging.l(tag: "[WebSocket]", "Viability changed: \(changed)")
         }
     }
     
