@@ -8,7 +8,7 @@
 import Foundation
 
 public protocol DriverSendCoordUseCaseProtocol {
-    func sendLocationWithoutOrder(lat: Double, lng: Double, heading: Double, speed: Double) async throws -> Bool
+    func sendLocationWithoutOrder(lat: Double, lng: Double, heading: Double, speed: Double, online: Bool?) async throws -> Bool
     func sendLocationWithOrder(body: SendCoordsBody) async throws -> Bool
 }
 
@@ -23,8 +23,8 @@ public final class DriverSendCoordUseCase: DriverSendCoordUseCaseProtocol {
         self.gateway = DriverSendCoordGateway()
     }
 
-    public func sendLocationWithoutOrder(lat: Double, lng: Double, heading: Double, speed: Double) async throws -> Bool {
-        try await gateway.sendCoordsWithoutOrder(lat: lat, lng: lng, heading: Double(heading), speed: speed)
+    public func sendLocationWithoutOrder(lat: Double, lng: Double, heading: Double, speed: Double, online: Bool?) async throws -> Bool {
+        try await gateway.sendCoordsWithoutOrder(lat: lat, lng: lng, heading: Double(heading), speed: speed, online: online)
     }
 
     public func sendLocationWithOrder(body: SendCoordsBody) async throws -> Bool {
