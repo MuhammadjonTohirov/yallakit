@@ -7,22 +7,22 @@
 
 import SwiftUI
 
-public struct SendCoordsBody: Encodable {
-    let coords: SendCoords
-    let orderCheck: OrderCheck
+public struct SendCoordsBody: Encodable, Sendable {
+    let coords: SendCoords?
+    let orderCheck: OrderCheck?
     
     enum CodingKeys: String, CodingKey {
         case coords
         case orderCheck = "order_ckeck"
     }
     
-    init(coords: SendCoords, orderCheck: OrderCheck) {
+    init(coords: SendCoords?, orderCheck: OrderCheck?) {
         self.coords = coords
         self.orderCheck = orderCheck
     }
 }
 
-struct SendCoords: Encodable {
+struct SendCoords: Encodable, Sendable {
     let heading: Int
     let lat: Double
     let lng: Double
@@ -44,7 +44,7 @@ struct SendCoords: Encodable {
     }
 }
 
-struct OrderCheck: Encodable {
+struct OrderCheck: Encodable, Sendable {
     let coverPrice: Int
     let accountCalculationStatus: Bool
     let distance: Double
