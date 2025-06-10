@@ -8,6 +8,7 @@
 import Foundation
 import NetworkLayer
 import Starscream
+import Core
 
 public protocol WebSocketDelegateHandler: AnyObject {
     func didReceive<T: NetResBody>(channel: WebSocketOrderChannels, message: SocketRes<T>)
@@ -45,7 +46,7 @@ public final class WebSocketManager: WebSocketDelegate, @unchecked Sendable {
 
     public func configure(token: String) {
         self.token = token
-        var request = URLRequest(url: URL(string: "wss://api2.ildam.uz/ws/executor?token=\(token)")!)
+        var request = URLRequest(url: URL(string: ConstantsProvider.shared.constants.websocketServer + "?token=\(token)")!)
         request.timeoutInterval = 5
         socket = WebSocket(request: request)
         socket?.delegate = self
