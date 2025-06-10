@@ -11,13 +11,13 @@ import NetworkLayer
 import Core
 
 protocol DriverSendCoordProtocol {
-    func sendCoordsWithoutOrder(lat: Double, lng: Double, heading: Double, speed: Double) async throws -> Bool
+    func sendCoordsWithoutOrder(lat: Double, lng: Double, heading: Double, speed: Double, online: Bool?) async throws -> Bool
     func sendCoordsWithOrder(body: SendCoordsBody) async throws -> Bool
 }
 
 struct DriverSendCoordGateway: DriverSendCoordProtocol {
     
-    func sendCoordsWithoutOrder(lat: Double, lng: Double, heading: Double, speed: Double) async throws -> Bool {
+    func sendCoordsWithoutOrder(lat: Double, lng: Double, heading: Double, speed: Double, online: Bool? = nil) async throws -> Bool {
         let coords = SendCoords(
             heading: Int(heading),
             lat: lat,
@@ -25,7 +25,7 @@ struct DriverSendCoordGateway: DriverSendCoordProtocol {
             speed: (speed),
             orderStatus: "",
             orderId: nil,
-            online: true,
+            online: online,
             statusTime: ""
         )
         
