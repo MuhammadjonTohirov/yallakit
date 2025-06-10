@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct SendConditionResponse: DNetResBody {
+public struct SendConditionResponse: DNetResBody, Sendable {
     public let cost: Int
     public let deactivation: Bool
     public let description: String

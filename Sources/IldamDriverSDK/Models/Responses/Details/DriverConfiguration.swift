@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct DriverConfiguration: Codable {
+public struct DriverConfiguration: Codable, Sendable {
     public let autoWaitingCalc: Bool
     public let blackList: String
     public let countEfirOnExecutor: Int
@@ -77,7 +77,7 @@ public struct DriverConfiguration: Codable {
         self.waitingTime = network.waitingTime
     }
 }
-public struct PaymentSetting: Codable {
+public struct PaymentSetting: Codable, Sendable {
     public let holdBalance: Int
     public let isWorking: Bool
     public let maxFill: Int
@@ -112,7 +112,7 @@ public struct PaymentSetting: Codable {
 }
 
 
-public struct EnergyConfiguration: Codable {
+public struct EnergyConfiguration: Codable, Sendable {
     public let long: EnergyType
     public let middle: EnergyType
     public let noStandart: EnergyType
@@ -138,7 +138,7 @@ public struct EnergyConfiguration: Codable {
     }
 }
 
-public struct EnergyType: Codable {
+public struct EnergyType: Codable, Sendable {
     public let cancel: Int
     public let km: Int
     public let minus: Int

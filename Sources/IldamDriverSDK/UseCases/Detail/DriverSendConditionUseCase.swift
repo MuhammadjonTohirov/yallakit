@@ -8,7 +8,7 @@
 import Foundation
 
 public protocol DriverSendConditionUseCaseProtocol {
-    func send_Condition() async throws -> SendConditionResponse
+    func sendCondition() async throws -> SendConditionResponse
 }
 
 public final class DriverSendConditionUseCase: DriverSendConditionUseCaseProtocol {
@@ -22,7 +22,7 @@ public final class DriverSendConditionUseCase: DriverSendConditionUseCaseProtoco
     public init() {
         self.gateway = DriverSendConditionGateway()
     }
-    public func send_Condition() async throws -> SendConditionResponse {
+    public func sendCondition() async throws -> SendConditionResponse {
         guard let result = try? await gateway.sendCondtion() else {
             throw NSError(domain: "No sendCondition found", code: -1)
         }
