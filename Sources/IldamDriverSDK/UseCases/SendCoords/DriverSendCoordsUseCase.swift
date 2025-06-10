@@ -8,26 +8,34 @@
 import Foundation
 
 public protocol DriverSendCoordUseCaseProtocol {
-    func sendLocationWithoutOrder(lat: Double, lng: Double, heading: Double, speed: Double, online: Bool?) async throws -> Bool
-    func sendLocationWithOrder(body: SendCoordsBody) async throws -> Bool
+    func sendCoords(lat: Double, lng: Double, heading: Double, speed: Double, online: Bool) async throws -> Bool
+    func sendCoords(body: SendCoordsBody) async throws -> Bool
 }
 
 public final class DriverSendCoordUseCase: DriverSendCoordUseCaseProtocol {
     
-    private let gateway: DriverSendCoordProtocol
+    private let gateway: any DriverSendCoordProtocol
     
-    init(gateway: DriverSendCoordProtocol) {
+    init(gateway: any DriverSendCoordProtocol) {
         self.gateway = gateway
     }
+    
     public init() {
         self.gateway = DriverSendCoordGateway()
     }
 
-    public func sendLocationWithoutOrder(lat: Double, lng: Double, heading: Double, speed: Double, online: Bool?) async throws -> Bool {
-        try await gateway.sendCoordsWithoutOrder(lat: lat, lng: lng, heading: Double(heading), speed: speed, online: online)
+    public func sendCoords(lat: Double, lng: Double, heading: Double, speed: Double, online: Bool = false) async throws -> Bool {
+        try await gateway.sendCoords(
+            lat: lat, lng: lng,
+            heading: heading,
+            speed: speed,
+            online: online
+        )
     }
 
-    public func sendLocationWithOrder(body: SendCoordsBody) async throws -> Bool {
-        try await gateway.sendCoordsWithOrder(body: body)
+    public func sendCoords(body: SendCoordsBody) async throws -> Bool {
+        try await gateway.sendCoords(
+            request: body
+        )
     }
 }

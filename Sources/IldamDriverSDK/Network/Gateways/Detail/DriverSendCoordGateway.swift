@@ -11,13 +11,13 @@ import NetworkLayer
 import Core
 
 protocol DriverSendCoordProtocol {
-    func sendCoordsWithoutOrder(lat: Double, lng: Double, heading: Double, speed: Double, online: Bool?) async throws -> Bool
-    func sendCoordsWithOrder(body: SendCoordsBody) async throws -> Bool
+    func sendCoords(lat: Double, lng: Double, heading: Double, speed: Double, online: Bool?) async throws -> Bool
+    func sendCoords(request _req: SendCoordsBody) async throws -> Bool
 }
 
 struct DriverSendCoordGateway: DriverSendCoordProtocol {
     
-    func sendCoordsWithoutOrder(lat: Double, lng: Double, heading: Double, speed: Double, online: Bool? = nil) async throws -> Bool {
+    func sendCoords(lat: Double, lng: Double, heading: Double, speed: Double, online: Bool? = nil) async throws -> Bool {
         let coords = SendCoords(
             heading: Int(heading),
             lat: lat,
@@ -29,42 +29,32 @@ struct DriverSendCoordGateway: DriverSendCoordProtocol {
             statusTime: ""
         )
         
-        let request = Request(coords: coords)
+        let request = Request(req: .init(coords: coords, orderCheck: nil))
         let response: NetRes<Bool>? = try await Network.sendThrow(request: request)
         return response?.success == true
     }
-
-    func sendCoordsWithOrder(body: SendCoordsBody) async throws -> Bool {
-        let request = FullRequest(coordsBody: body)
+    
+    func sendCoords(request _req: SendCoordsBody) async throws -> Bool {
+        let request = Request(req: _req)
         let response: NetRes<Bool>? = try await Network.sendThrow(request: request)
         return response?.success == true
     }
-
+    
     private struct Request: URLRequestProtocol {
-        let coords: SendCoords
+        let req: SendCoordsBody
 
         var url: URL {
             URL.baseAPI.appendingPathComponent("executor/send-coords")
         }
 
         var body: Data? {
-            try? JSONEncoder().encode(coords)
+            try? JSONEncoder().encode(req)
         }
 
         var method: HTTPMethod { .post }
-    }
-
-    private struct FullRequest: URLRequestProtocol {
-        let coordsBody: SendCoordsBody
-
-        var url: URL {
-            URL.baseAPI.appendingPathComponent("executor/send-coords")
+        
+        enum CodingKeys: CodingKey {
+            case coords
         }
-
-        var body: Data? {
-            try? JSONEncoder().encode(coordsBody)
-        }
-
-        var method: HTTPMethod { .post }
     }
 }
