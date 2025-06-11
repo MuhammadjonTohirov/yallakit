@@ -176,8 +176,10 @@ extension WebSocketManager {
                 try decodeAndDelegate(jsonData, type: DNetDefaultTariffResult.self, for: channel)
             case .curbCreate:
                 try decodeAndDelegate(jsonData, type: DNetCrubOrderResponse.self, for: channel)
-            case .getCondition, .condition, .panelCondition:
+            case .getCondition, .condition:
                 try decodeAndDelegate(jsonData, type: DNetGetConditionResponse.self, for: channel)
+            case .panelCondition:
+                try decodeAndDelegate(jsonData, type: DNetExecutorMeResponse.self, for: channel)
             case .orderSkip:
                 Logging.l("[WebSocket] ℹ️ Ignoring channel: \(channel.rawValue)")
             }
@@ -357,8 +359,8 @@ extension WebSocketManager {
                 })
             }
         case .panelCondition:
-            if let response = result.result as? DNetGetConditionResponse {
-                let _response: DriverGetConditionResponse = .init(from: response)
+            if let response = result.result as? DNetExecutorMeResponse {
+                let _response: ExecutorMeInfo = .init(from: response)
                 listenerObjects.forEach({
                     $0.onReceivePanelCondition(_response)
                 })
