@@ -12,6 +12,7 @@ import Core
 
 public protocol WebSocketDelegateHandler: AnyObject {
     func didReceive<T: NetResBody>(channel: WebSocketOrderChannels, message: SocketRes<T>)
+    func didReceive(text: String)
     func didDisconnect(error: Error?)
     func didPeerClosed()
     func socketReconnectSuggested()
@@ -28,8 +29,8 @@ public extension WebSocketDelegateHandler {
 
 public final class WebSocketManager: WebSocketDelegate, @unchecked Sendable {
     @MainActor public static let shared = WebSocketManager()
-    private var socket: WebSocket?
-    private var isConnected: Bool = false
+    public private(set) var socket: WebSocket?
+    public private(set) var isConnected: Bool = false
     private var token: String?
     private let decoder = JSONDecoder()
     private let encoder = JSONEncoder()
@@ -40,6 +41,11 @@ public final class WebSocketManager: WebSocketDelegate, @unchecked Sendable {
     private var listenerObjects: [any WebSocketChannelHandler] {
         listeners.allObjects.compactMap({$0 as? WebSocketChannelHandler})
     }
+    
+    private var connectionCheckCallbacks: [String: (Bool) -> Void] = [:]
+    private let connectionCheckQueue = DispatchQueue(label: "WebSocketManager.connectionCheck", attributes: .concurrent)
+    private var connectionCheckTimeouts: [String: DispatchWorkItem] = [:]
+    
     private let listenersQueue = DispatchQueue(label: "WebSocketChannelHandler.listeners", attributes: .concurrent)
 
     private init() {}
@@ -87,25 +93,27 @@ public final class WebSocketManager: WebSocketDelegate, @unchecked Sendable {
             isConnected = false
             Logging.l(tag: "[WebSocket]", "Disconnected: \(reason) (code: \(code))")
             delegate?.didDisconnect(error: WSError(type: .serverError, message: reason, code: code))
-
+            
         case .text(let text):
             handleIncoming(text: text)
+            delegate?.didReceive(text: text)
+            handleConnectionSuccess()
         case .binary(let data):
             Logging.l(tag: "[WebSocket]", "Received binary data of size: \(data.count)")
-
+            handleConnectionSuccess()
         case .error(let error):
             isConnected = false
             Logging.l(tag: "[WebSocket]", "Error: \(String(describing: error))")
             delegate?.didDisconnect(error: error)
-
         case .cancelled:
             isConnected = false
             Logging.l(tag: "[WebSocket]", "Connection cancelled")
             delegate?.didDisconnect(error: nil)
-
         case .pong(_), .ping(_):
             Logging.l(tag: "[WebSocket]", "Event: \(event)")
+            handleConnectionSuccess()
         case .peerClosed:
+            isConnected = false
             self.delegate?.didPeerClosed()
         case .reconnectSuggested(_):
             self.delegate?.socketReconnectSuggested()
@@ -381,5 +389,70 @@ extension WebSocketManager {
     
     private struct SocketBase: Decodable {
         let channel: String
+    }
+}
+
+extension WebSocketManager {
+    public func hasConnection(timeout: TimeInterval = 5.0, completion: @escaping @Sendable (Bool) -> Void) {
+        // If not connected at all, return false immediately
+        guard isConnected else {
+            completion(false)
+            return
+        }
+        
+        let checkId = UUID().uuidString
+        
+        connectionCheckQueue.async(flags: .barrier) {
+            self.connectionCheckCallbacks[checkId] = completion
+        }
+        
+        // Create timeout work item
+        let timeoutItem = DispatchWorkItem { @Sendable [weak self] in
+            self?.connectionCheckQueue.async(flags: .barrier) { @Sendable [weak self, checkId] in
+                guard let self else { return }
+                if let callback = self.connectionCheckCallbacks.removeValue(forKey: checkId) {
+                    DispatchQueue.main.async {
+                        callback(false)
+                    }
+                }
+                self.connectionCheckTimeouts.removeValue(forKey: checkId)
+            }
+        }
+        
+        connectionCheckQueue.sync(flags: .barrier) { [weak self] in
+            guard let self else { return }
+            
+            self.connectionCheckTimeouts[checkId] = timeoutItem
+        }
+        
+        // Schedule timeout
+        DispatchQueue.main.asyncAfter(deadline: .now() + timeout, execute: timeoutItem)
+        
+        // Send any message to check connection - server will respond if active
+        let pingMessage = ["ping": checkId]
+        send(pingMessage)
+    }
+    
+    private func handleConnectionSuccess() {
+        // Capture callbacks and timeouts, then clear collections
+        var callbacksToExecute: [(Bool) -> Void] = []
+        var timeoutsToCancel: [DispatchWorkItem] = []
+        
+        connectionCheckQueue.sync(flags: .barrier) {
+            callbacksToExecute = Array(self.connectionCheckCallbacks.values)
+            timeoutsToCancel = Array(self.connectionCheckTimeouts.values)
+            
+            self.connectionCheckCallbacks.removeAll()
+            self.connectionCheckTimeouts.removeAll()
+        }
+        
+        // Cancel timeouts and execute callbacks outside the barrier
+        timeoutsToCancel.forEach { $0.cancel() }
+        
+        DispatchQueue.main.async {
+            callbacksToExecute.forEach { callback in
+                callback(true)
+            }
+        }
     }
 }
