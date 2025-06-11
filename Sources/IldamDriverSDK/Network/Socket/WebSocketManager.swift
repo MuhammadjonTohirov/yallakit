@@ -146,7 +146,7 @@ extension WebSocketManager {
             switch channel {
             case .ordersMe: // deprecated
                 try decodeAndDelegate(jsonData, type: DNetActiveOrderListResponse.self, for: channel)
-            case .me, .info, .balanceIncome, .balanceExpense, .balance, .fotocontrol:
+            case .me, .info, .balanceIncome, .balanceExpense, .balance, .fotocontrol, .transport:
                 try decodeAndDelegate(jsonData, type: DNetExecutorMeResponse.self, for: channel)
             case .ordersEther: // deprecated
                 try decodeAndDelegate(jsonData, type: DNetResEtherResponse.self, for: channel)
@@ -194,7 +194,7 @@ extension WebSocketManager {
         delegate?.didReceive(channel: channel, message: result)
         
         switch channel {
-        case .me:
+        case .me, .transport:
             if let response = result.result as? DNetExecutorMeResponse {
                 listenerObjects.forEach({$0.onReceiveMe(.init(from: response))})
             }
