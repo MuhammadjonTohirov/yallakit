@@ -62,9 +62,9 @@ public class WindowAlertManager: ObservableObject, @unchecked Sendable {
         var alertButtons: [AlertButton] = [
             PrimaryAlertButton(
                 title: primaryButtonTitle,
-                action: {
+                action: { [weak self] in
                     primaryAction()
-                    self.dismiss()
+                    self?.dismiss()
                 }
             )
         ]
@@ -74,19 +74,19 @@ public class WindowAlertManager: ObservableObject, @unchecked Sendable {
             alertButtons.append(
                 CancelAlertButton(
                     title: secondaryButtonTitle,
-                    action: {
+                    action: { [weak self] in
                         secondaryAction()
-                        self.dismiss()
+                        self?.dismiss()
                     }
                 )
             )
         }
-        self.onDismiss = onDismiss
-        self.showAlert(title: title, message: message, buttons: alertButtons)
+        
+        self.showAlert(title: title, message: message, buttons: alertButtons, onDismiss: onDismiss)
     }
     
     @MainActor
-    private func presentAlertWindow(onDismiss: @escaping () -> Void = {}) {
+    private func presentAlertWindow() {
         guard isPresented else { return }
         
         // Create alert host view
