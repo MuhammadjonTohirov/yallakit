@@ -36,13 +36,15 @@ public class WindowAlertManager: ObservableObject, @unchecked Sendable {
         message: String,
         buttons: [AlertButton],
         customContent: AnyView? = nil,
-        onDismiss: () -> Void = {}
+        onDismiss: @escaping () -> Void = {}
     ) {
         self.title = title
         self.message = message
         self.buttons = buttons
         self.customContent = customContent
         self.isPresented = true
+        self.onDismiss = onDismiss
+
         Task { @MainActor in
             self.presentAlertWindow()
         }

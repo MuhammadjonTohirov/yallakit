@@ -47,12 +47,14 @@ public struct AlertUtils {
     public static func showAlert(
         title: String,
         message: String,
-        buttons: [AlertButton]
+        buttons: [AlertButton],
+        onDismiss: @escaping () -> Void
     ) {
         WindowAlertManager.shared.showAlert(
             title: title,
             message: message,
-            buttons: buttons
+            buttons: buttons,
+            onDismiss: onDismiss
         )
     }
     
@@ -61,13 +63,15 @@ public struct AlertUtils {
         title: String,
         message: String,
         buttons: [AlertButton],
-        customContent: AnyView
+        customContent: AnyView,
+        onDismiss: @escaping () -> Void
     ) {
         WindowAlertManager.shared.showAlert(
             title: title,
             message: message,
             buttons: buttons,
-            customContent: customContent
+            customContent: customContent,
+            onDismiss: onDismiss
         )
     }
     
