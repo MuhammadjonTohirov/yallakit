@@ -13,7 +13,9 @@ public enum WebSocketOrderChannels: String {
     case ordersMe                             = "orders-me" // DNetActiveOrderListResponse
     case me                                   = "me" // DNetExecutorMeResponse
     case info                                 = "info" // DNetExecutorMeResponse
-    
+    case panelCondition                       = "panel_condition" // DNetExecutorMeResponse
+    case transport                            = "transport" // DNetExecutorMeResponse
+
     // deprecated
     case ordersEther                          = "orders-ether" // DNetResEtherResponse
     case orderSendToEther                     = "order-send-to-ether" // DNetOrderSentToEtherResult
@@ -60,5 +62,4 @@ public enum WebSocketOrderChannels: String {
     // deprecated
     case getCondition                         = "get-condition" // DNetGetConditionResponse
     case condition                            = "condition" // DNetGetConditionResponse
-    case panelCondition                       = "panel_condition" // DNetGetConditionResponse
 }
