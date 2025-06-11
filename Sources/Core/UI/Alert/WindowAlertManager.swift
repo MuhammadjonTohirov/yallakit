@@ -50,6 +50,7 @@ public class WindowAlertManager: ObservableObject, @unchecked Sendable {
         }
     }
     
+    @MainActor
     public func showAlert(
         title: String,
         message: String,
@@ -64,7 +65,7 @@ public class WindowAlertManager: ObservableObject, @unchecked Sendable {
                 title: primaryButtonTitle,
                 action: { [weak self] in
                     primaryAction()
-                    self?.dismiss()
+                    self?.dismiss(onDismiss: onDismiss)
                 }
             )
         ]
@@ -76,7 +77,7 @@ public class WindowAlertManager: ObservableObject, @unchecked Sendable {
                     title: secondaryButtonTitle,
                     action: { [weak self] in
                         secondaryAction()
-                        self?.dismiss()
+                        self?.dismiss(onDismiss: onDismiss)
                     }
                 )
             )
@@ -178,6 +179,7 @@ struct AlertHostView: View {
 }
 
 // Helper function to show the global alert from anywhere
+@MainActor
 public func showWindowAlert(
     title: String,
     message: String,
