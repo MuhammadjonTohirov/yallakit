@@ -9,10 +9,12 @@
 import Foundation
 
 public enum WebSocketOrderChannels: String {
+    // deprecated
     case ordersMe                             = "orders-me" // DNetActiveOrderListResponse
     case me                                   = "me" // DNetExecutorMeResponse
     case info                                 = "info" // DNetExecutorMeResponse
     
+    // deprecated
     case ordersEther                          = "orders-ether" // DNetResEtherResponse
     case orderSendToEther                     = "order-send-to-ether" // DNetOrderSentToEtherResult
     
@@ -28,9 +30,12 @@ public enum WebSocketOrderChannels: String {
     case orderUpdateFromEther                 = "order-update-from-ether" // DNetOrderSentToEtherResult
     
     case statusUpdateFromPanel                = "status-update-from-panel" //DNetOrderStatusUpdateFromPanelResult ✅
+    
+    // deprecated
     case orderStatusUpdate                    = "order/status/update" // DNetOrderStatusUpdateFromPanelResult ✅
- 
     case orderShow                            = "order-show" // DNetOrderShowResponse
+    
+    // deprecated
     case orderSkip                            = "order-skip"// TODO: [Info] useless
     case orderAppointFromOffer                = "order-appoint-from-offer" // DNetOrderAppointResult
     case orderAppoint                         = "order-appoint" // DNetOrderAppointResult
@@ -51,6 +56,8 @@ public enum WebSocketOrderChannels: String {
     case balance                              = "balance" // DNetExecutorMeResponse
     
     case fotocontrol                          = "fotocontrol" // DNetExecutorMeResponse
+    
+    // deprecated
     case getCondition                         = "get-condition" // DNetGetConditionResponse
     case condition                            = "condition" // DNetGetConditionResponse
     case panelCondition                       = "panel_condition" // DNetGetConditionResponse

@@ -144,11 +144,11 @@ extension WebSocketManager {
             }
 
             switch channel {
-            case .ordersMe:
+            case .ordersMe: // deprecated
                 try decodeAndDelegate(jsonData, type: DNetActiveOrderListResponse.self, for: channel)
             case .me, .info, .balanceIncome, .balanceExpense, .balance, .fotocontrol:
                 try decodeAndDelegate(jsonData, type: DNetExecutorMeResponse.self, for: channel)
-            case .ordersEther:
+            case .ordersEther: // deprecated
                 try decodeAndDelegate(jsonData, type: DNetResEtherResponse.self, for: channel)
             case .orderSendToEther:
                 try decodeAndDelegate(jsonData, type: DNetOrderSentToEtherResult.self, for: channel)
@@ -160,7 +160,7 @@ extension WebSocketManager {
                 try decodeAndDelegate(jsonData, type: DNetOrderRemoveFromAppointedExecutor.self, for: channel)
             case .orderUpdate:
                 try decodeAndDelegate(jsonData, type: DNetOrderUpdateResult.self, for: channel)
-            case .orderShow:
+            case .orderShow: // deprecated
                 try decodeAndDelegate(jsonData, type: DNetOrderShowResponse.self, for: channel)
             case .orderAppointFromOffer, .orderAppoint:
                 try decodeAndDelegate(jsonData, type: DNetOrderAppointResult.self, for: channel)

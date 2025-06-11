@@ -10,7 +10,7 @@ import SwiftUI
 struct DNetGetConditionResponse: DNetResBody {
     let activeTransport: Bool
     let condition: Bool
-    let plan: DNetGetConditionPlan
+    let plan: DNetGetConditionPlan?
     
     enum CodingKeys: String, CodingKey {
         case activeTransport = "active_transport"
@@ -20,16 +20,16 @@ struct DNetGetConditionResponse: DNetResBody {
 }
 
 struct DNetGetConditionPlan: Codable {
-    let cost: Int
-    let deactivation: Bool
-    let description: String
-    let id: Int
-    let limitTime: Int
-    let limitUnit: String
-    let name: String
-    let orderPayCost: Int
-    let orderPayPresent: Int
-    let planExpire: Int
+    let cost: Int?
+    let deactivation: Bool?
+    let description: String?
+    let id: Int?
+    let limitTime: Int?
+    let limitUnit: String?
+    let name: String?
+    let orderPayCost: Int?
+    let orderPayPresent: Int?
+    let planExpire: Int?
     
     enum CodingKeys: String, CodingKey {
         case cost, deactivation, description, id
