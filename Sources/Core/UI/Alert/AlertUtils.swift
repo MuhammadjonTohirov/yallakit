@@ -58,7 +58,7 @@ public struct AlertUtils {
         )
     }
     
-    // Show an alert with custom buttons and custom content
+    @MainActor
     public static func showAlert(
         title: String,
         message: String,
@@ -75,8 +75,9 @@ public struct AlertUtils {
         )
     }
     
-    public static func dismiss() {
-        WindowAlertManager.shared.dismiss()
+    @MainActor
+    public static func dismiss(_ onDismiss: (() -> Void)? = nil) {
+        WindowAlertManager.shared.dismiss(onDismiss: onDismiss)
     }
 }
 

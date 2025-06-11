@@ -110,21 +110,20 @@ public class WindowAlertManager: ObservableObject, @unchecked Sendable {
         self.alertWindow = alertWindow
     }
     
-    public func dismiss() {
-        Task { @MainActor in
-            self.isPresented = false
-            self.dismissAlertWindow()
-        }
+    @MainActor
+    public func dismiss(onDismiss: (() -> Void)? = nil) {
+        self.isPresented = false
+        self.dismissAlertWindow(onDismiss)
     }
     
     @MainActor
-    private func dismissAlertWindow() {
+    private func dismissAlertWindow(_ _onDismiss: (() -> Void)? = nil) {
         // Dismiss with a short delay to allow animations to complete
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
             self.alertWindow?.isHidden = true
             self.alertWindow = nil
             self.hostingController = nil
-            self.onDismiss()
+            (_onDismiss ?? self.onDismiss)()
         }
     }
 }
