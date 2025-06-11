@@ -54,7 +54,7 @@ public protocol WebSocketChannelHandler: AnyObject, Sendable {
     
     func onReceiveGetCondition(_ response: DriverGetConditionResponse)
     func onReceiveCondition(_ response:DriverGetConditionResponse)
-    func onReceivePanelCondition(_ response:DriverGetConditionResponse)
+    func onReceivePanelCondition(_ response:ExecutorMeInfo)
 }
 
 public extension WebSocketChannelHandler {
@@ -104,5 +104,5 @@ public extension WebSocketChannelHandler {
     
     func onReceiveGetCondition(_ response: DriverGetConditionResponse) {}
     func onReceiveCondition(_ response:DriverGetConditionResponse) {}
-    func onReceivePanelCondition(_ response:DriverGetConditionResponse) {}
+    func onReceivePanelCondition(_ response:ExecutorMeInfo) {}
 }
