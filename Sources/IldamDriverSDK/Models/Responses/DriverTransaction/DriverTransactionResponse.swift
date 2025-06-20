@@ -82,7 +82,7 @@ public struct DriverTransactionItem {
 public struct TransactionPaginationModel {
     public let total: Int
     public let count: Int
-    public let perPage: String
+    public let perPage: Int
     public let currentPage: Int
     public let totalPages: Int
     public let lastPage: Int
@@ -90,7 +90,7 @@ public struct TransactionPaginationModel {
     public init(
         total: Int,
         count: Int,
-        perPage: String,
+        perPage: Int,
         currentPage: Int,
         totalPages: Int,
         lastPage: Int
@@ -106,7 +106,7 @@ public struct TransactionPaginationModel {
     init(from network: DNetTransactionPagination) {
         self.total = network.total ?? 0
         self.count = network.count ?? 0
-        self.perPage = network.perPage ?? ""
+        self.perPage = network.perPage ?? 0
         self.currentPage = network.currentPage ?? 0
         self.totalPages = network.totalPages ?? 0
         self.lastPage = network.lastPage ?? 0

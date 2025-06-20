@@ -44,7 +44,7 @@ struct DNetDriverTransactionItem: Codable {
 struct DNetTransactionPagination: Codable {
     let total: Int?
     let count: Int?
-    let perPage: String?
+    let perPage: Int?
     let currentPage: Int?
     let totalPages: Int?
     let lastPage: Int?
