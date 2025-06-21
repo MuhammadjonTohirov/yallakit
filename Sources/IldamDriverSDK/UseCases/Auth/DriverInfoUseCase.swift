@@ -17,6 +17,10 @@ public final class DriverInfoUseCase: DriverInfoUseCaseProtocol {
     init(gateway: AuthMeExecutorProtocol = AuthMeExecutorGateway()) {
         self.gateway = gateway
     }
+    
+    public init() {
+        self.gateway = AuthMeExecutorGateway()
+    }
 
     public func execute() async throws -> ExecutorLoginResponse? {
         guard let result = try await gateway.getAuthMe() else {

@@ -8,9 +8,9 @@
 import Foundation
 
 public struct DriverTransactionModel {
-    public let balance: Double
-    public let transactions: [DriverTransactionItem]
-    public let pagination: TransactionPaginationModel
+    public let balance: Double?
+    public let transactions: [DriverTransactionItem?]
+    public let pagination: TransactionPaginationModel?
 
     public init(balance: Double, transactions: [DriverTransactionItem], pagination: TransactionPaginationModel) {
         self.balance = balance
@@ -26,31 +26,19 @@ public struct DriverTransactionModel {
 }
 
 public struct DriverTransactionItem {
-    public let id: Int
-    public let number: String
+    public let id: Int?
+    public let number: String?
     public let address: String?
-    public let operationType: String
-    public let dateTime: String
-    public let operationId: Int
-    public let operationName: String
-    public let amount: String
-    public let note: String
-    public let payTable: String
-    public let payTableId: Int
+    public let operationType: String?
+    public let dateTime: String?
+    public let operationId: Int?
+    public let operationName: String?
+    public let amount: String?
+    public let note: String?
+    public let payTable: String?
+    public let payTableId: Int?
 
-    public init(
-        id: Int,
-        number: String,
-        address: String?,
-        operationType: String,
-        dateTime: String,
-        operationId: Int,
-        operationName: String,
-        amount: String,
-        note: String,
-        payTable: String,
-        payTableId: Int
-    ) {
+    public init(id: Int?, number: String?, address: String?, operationType: String?, dateTime: String?, operationId: Int?, operationName: String?, amount: String?, note: String?, payTable: String?, payTableId: Int?) {
         self.id = id
         self.number = number
         self.address = address
@@ -63,7 +51,7 @@ public struct DriverTransactionItem {
         self.payTable = payTable
         self.payTableId = payTableId
     }
-
+   
     init(from network: DNetDriverTransactionItem) {
         self.id = network.id ?? 0
         self.number = network.number  ?? ""
@@ -80,21 +68,14 @@ public struct DriverTransactionItem {
 }
 
 public struct TransactionPaginationModel {
-    public let total: Int
-    public let count: Int
-    public let perPage: Int
-    public let currentPage: Int
-    public let totalPages: Int
-    public let lastPage: Int
+    public let total: Int?
+    public let count: Int?
+    public let perPage: Int?
+    public let currentPage: Int?
+    public let totalPages: Int?
+    public let lastPage: Int?
 
-    public init(
-        total: Int,
-        count: Int,
-        perPage: Int,
-        currentPage: Int,
-        totalPages: Int,
-        lastPage: Int
-    ) {
+    public init(total: Int?, count: Int?, perPage: Int?, currentPage: Int?, totalPages: Int?, lastPage: Int?) {
         self.total = total
         self.count = count
         self.perPage = perPage
