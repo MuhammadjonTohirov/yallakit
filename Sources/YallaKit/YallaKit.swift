@@ -4,7 +4,6 @@
 @_exported import Core
 @_exported import NetworkLayer
 @_exported import IldamSDK
-@_exported import IldamDriverSDK
 
 public struct IldamKit {
     public static let version = "1.0.0"
