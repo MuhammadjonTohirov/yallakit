@@ -10,7 +10,6 @@ import Foundation
 import Combine
 import SwiftUI
 import UIKit
-import Core
 
 // Global alert manager that uses a UIWindow to display alerts on top of everything
 public class WindowAlertManager: ObservableObject, @unchecked Sendable {
@@ -22,6 +21,7 @@ public class WindowAlertManager: ObservableObject, @unchecked Sendable {
     @Published public var message: String = ""
     @Published public var buttons: [AlertButton] = []
     @Published public var customContent: AnyView? = nil
+    public var onDismiss: () -> Void = {}
     
     // UIWindow for displaying the alert on top of everything
     private var alertWindow: UIWindow?
@@ -35,32 +35,37 @@ public class WindowAlertManager: ObservableObject, @unchecked Sendable {
         title: String,
         message: String,
         buttons: [AlertButton],
-        customContent: AnyView? = nil
+        customContent: AnyView? = nil,
+        onDismiss: @escaping () -> Void = {}
     ) {
         self.title = title
         self.message = message
         self.buttons = buttons
         self.customContent = customContent
         self.isPresented = true
+        self.onDismiss = onDismiss
+
         Task { @MainActor in
             self.presentAlertWindow()
         }
     }
     
+    @MainActor
     public func showAlert(
         title: String,
         message: String,
         primaryButtonTitle: String,
         primaryAction: @escaping () -> Void,
         secondaryButtonTitle: String? = nil,
-        secondaryAction: (() -> Void)? = nil
+        secondaryAction: (() -> Void)? = nil,
+        onDismiss: @escaping () -> Void = {}
     ) {
         var alertButtons: [AlertButton] = [
             PrimaryAlertButton(
                 title: primaryButtonTitle,
-                action: {
+                action: { [weak self] in
                     primaryAction()
-                    self.dismiss()
+                    self?.dismiss(onDismiss: onDismiss)
                 }
             )
         ]
@@ -70,15 +75,15 @@ public class WindowAlertManager: ObservableObject, @unchecked Sendable {
             alertButtons.append(
                 CancelAlertButton(
                     title: secondaryButtonTitle,
-                    action: {
+                    action: { [weak self] in
                         secondaryAction()
-                        self.dismiss()
+                        self?.dismiss(onDismiss: onDismiss)
                     }
                 )
             )
         }
         
-        self.showAlert(title: title, message: message, buttons: alertButtons)
+        self.showAlert(title: title, message: message, buttons: alertButtons, onDismiss: onDismiss)
     }
     
     @MainActor
@@ -106,20 +111,20 @@ public class WindowAlertManager: ObservableObject, @unchecked Sendable {
         self.alertWindow = alertWindow
     }
     
-    public func dismiss() {
-        Task { @MainActor in
-            self.isPresented = false
-            self.dismissAlertWindow()
-        }
+    @MainActor
+    public func dismiss(onDismiss: (() -> Void)? = nil) {
+        self.isPresented = false
+        self.dismissAlertWindow(onDismiss)
     }
     
     @MainActor
-    private func dismissAlertWindow() {
+    private func dismissAlertWindow(_ _onDismiss: (() -> Void)? = nil) {
         // Dismiss with a short delay to allow animations to complete
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
             self.alertWindow?.isHidden = true
             self.alertWindow = nil
             self.hostingController = nil
+            (_onDismiss ?? self.onDismiss)()
         }
     }
 }
@@ -127,6 +132,7 @@ public class WindowAlertManager: ObservableObject, @unchecked Sendable {
 // View that hosts the alert UI
 struct AlertHostView: View {
     @ObservedObject var alertManager: WindowAlertManager
+    var onDismiss: () -> Void = { }
     
     var body: some View {
         ZStack {
@@ -166,18 +172,22 @@ struct AlertHostView: View {
                 }
                 .transition(.scale.combined(with: .opacity))
             }
+        }.onAppear {
+            alertManager.onDismiss = onDismiss
         }
     }
 }
 
 // Helper function to show the global alert from anywhere
+@MainActor
 public func showWindowAlert(
     title: String,
     message: String,
     primaryButtonTitle: String,
     primaryAction: @escaping () -> Void,
     secondaryButtonTitle: String? = nil,
-    secondaryAction: (() -> Void)? = nil
+    secondaryAction: (() -> Void)? = nil,
+    onDismiss: @escaping (() -> Void) = {}
 ) {
     WindowAlertManager.shared.showAlert(
         title: title,
@@ -185,6 +195,7 @@ public func showWindowAlert(
         primaryButtonTitle: primaryButtonTitle,
         primaryAction: primaryAction,
         secondaryButtonTitle: secondaryButtonTitle,
-        secondaryAction: secondaryAction
+        secondaryAction: secondaryAction,
+        onDismiss: onDismiss
     )
 }

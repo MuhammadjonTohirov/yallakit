@@ -83,13 +83,13 @@ struct NetResOrderDetails: NetResBody {
 }
 
 struct NetResOrderTaxiDetails: Codable {
-    let tariff: String
-    let startPrice: Float
+    let tariff: String?
+    let startPrice: Float?
     let distance: Float?
     let clientTotalPrice: Float?
     let totalPrice: Float?
-    let fixedPrice: Bool
-    let routes: [NetResOrderRoute]
+    let fixedPrice: Bool?
+    let routes: [NetResOrderRoute]?
     let services: [NetResOrderService]?
     let bonusUsed: Bool?
     var bonusAmount: Double?
