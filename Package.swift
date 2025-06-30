@@ -12,8 +12,7 @@ let package = Package(
         .library(name: "YallaKit", targets: ["YallaKit"]),
         .library(name: "Core", targets: ["Core"]),
         .library(name: "NetworkLayer", targets: ["NetworkLayer"]),
-        .library(name: "IldamSDK", targets: ["IldamSDK"]),
-        .library(name: "IldamDriverSDK", targets: ["IldamDriverSDK"])
+        .library(name: "IldamSDK", targets: ["IldamSDK"])
     ],
     dependencies: [
         .package(url: "https://github.com/daltoniam/Starscream", exact: "4.0.8")
@@ -24,8 +23,7 @@ let package = Package(
             dependencies: [
                 "Core",
                 "NetworkLayer",
-                "IldamSDK",
-                "IldamDriverSDK"
+                "IldamSDK"
             ]
         ),
         .target(
@@ -40,23 +38,5 @@ let package = Package(
             name: "IldamSDK",
             dependencies: ["Core", "NetworkLayer"]
         ),
-        .target(
-            name: "IldamDriverSDK",
-            dependencies: [
-                "Core",
-                "NetworkLayer",
-                .product(name: "Starscream", package: "Starscream")
-            ]
-        ),
-        .testTarget(
-            name: "IldamSDKTests",
-            dependencies: [
-                "IldamSDK",
-                "NetworkLayer",
-                "Core",
-                "IldamDriverSDK"
-            ]
-        ),
-        
     ]
 )
