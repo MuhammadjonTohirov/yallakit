@@ -1,17 +1,21 @@
+//
+//  DragState.swift
+//  TestApp
+//
+//  Created by Muhammadjon Tohirov on 08/07/25.
+//
+
+
 import Foundation
 import SwiftUI
-
-public enum DragState {
-    case started
-    case ended
-    case interrupted
-    case normal
-}
 
 public struct DraggableBottomSheet<FirstView: View, SecondView: View>: View {
     // Content views
     private let firstView: FirstView
     private let secondView: SecondView
+    
+    @StateObject
+    var viewModel = DraggableBottomSheetViewModel()
     
     // Configuration
     private let minHeight: CGFloat
@@ -19,18 +23,8 @@ public struct DraggableBottomSheet<FirstView: View, SecondView: View>: View {
     @Environment(\.scenePhase) private var scenePhase
 
     // State
-    @State private var offset: CGFloat = 0 {
-        didSet {
-            progress = (1 - (offset / maxDragDistance).clamped(to: 0...1))
-        }
-    }
-    
-    @State private var lastOffset: CGFloat = 0
-    @State private var scrollOffset: CGPoint = .zero
-    @State private var scrollAtTop: Bool = true
+
     @GestureState private var isDragging = false
-    @State private var isScrollEnabled: Bool = true
-    @State private var dragState: DragState = .normal
     
     // Screen dimensions
     @MainActor
@@ -56,7 +50,7 @@ public struct DraggableBottomSheet<FirstView: View, SecondView: View>: View {
     
     // Current drag progress (0 = collapsed, 1 = expanded)
     private var dragProgress: CGFloat {
-        1 - (offset / maxDragDistance).clamped(to: 0...1)
+        1 - (viewModel.offset / maxDragDistance).clamped(to: 0...1)
     }
     
     @Binding var progress: CGFloat
@@ -66,7 +60,10 @@ public struct DraggableBottomSheet<FirstView: View, SecondView: View>: View {
     private var shadowOpacity: Double {
         (1 - dragProgress) * 0.2
     }
-     
+
+    private var _offset: CGFloat = 0
+    private var _lastOffset: CGFloat = 0
+    
     public init(
         minHeight: CGFloat,
         maxTopSpace: CGFloat = 0,
@@ -80,11 +77,13 @@ public struct DraggableBottomSheet<FirstView: View, SecondView: View>: View {
         self.firstView = firstView()
         self.secondView = secondView()
         
+
         self._progress = progress
         self._isExpanded = isExpanded
+
         let currentOffset: CGFloat = maxDragDistance * (1 - self.progress)
-        self._offset = State(wrappedValue: currentOffset)
-        self._lastOffset = State(initialValue: maxDragDistance)
+        self._offset = currentOffset
+        self._lastOffset = maxDragDistance
     }
     
     public var body: some View {
@@ -118,96 +117,67 @@ public struct DraggableBottomSheet<FirstView: View, SecondView: View>: View {
                             radius: 10
                         )
                 )
-                .offset(y: offset)
-                .gesture(dragGesture)
+                .offset(y: viewModel.offset)
+                .gesture(dragGesture, isEnabled: !isExpanded)
             }
             .ignoresSafeArea(edges: .bottom)
         }
-        .onChange(val: scenePhase, action: { old, new in
-            
-        })
         .background(
-            Color.background
+            Color.white
                 .opacity(dragProgress)
         )
         .onChange(of: isExpanded) { newValue in
             toggleSheet(expanded: newValue)
         }
         .onChange(of: isDragging) { newValue in
-            if !newValue && dragState == .started {
-                self.dragState = .interrupted
+            if !newValue && viewModel.dragState == .started {
+                self.viewModel.dragState = .interrupted
             }
         }
-        .onChange(of: dragState) { newValue in
-            let diff = maxDragDistance - offset
-            
-            withTransaction(.init(animation: nil)) {
-                if diff >= 60 {
-                    if newValue == .interrupted {
-                        isExpanded.toggle()
-                        dragState = .normal
-                    }
-                } else {
-                    isExpanded = false
-                    offset = maxDragDistance
-                    dragState = .normal
+        .onAppear {
+            viewModel.lastOffset = _lastOffset
+            viewModel.offset = _offset
+            viewModel.maxDragDistance = maxDragDistance
+            viewModel.progress = progress
+
+            viewModel.$offset.removeDuplicates().sink { newValue in
+                if newValue == viewModel.maxDragDistance {
+                    self.isExpanded = false
+                }
+                
+                if newValue == 0 {
+                    self.isExpanded = true
                 }
             }
+            .store(in: &viewModel.cancellables)
+            
+            viewModel.$progress.removeDuplicates().sink { prog in
+                self.progress = prog
+            }.store(in: &viewModel.cancellables)
         }
     }
     
     private var secondViewBody: some View {
-        ScrollViewReader(content: { scrollProxy in
-            ScrollView {
-                secondView
-                    .id("secondView")
-                    .transaction { transition in
-                        transition.animation = nil
-                    }
-                    .background(content: {
-                        secondViewBackgroundReader(scrollProxy)
-                    })
-            }
-        })
-        .coordinateSpace(name: "scroll")
-        .scrollBounceBehavior(.basedOnSize, axes: .vertical)
-        .opacity(dragProgress)
-        .disabled(dragProgress != 1)
-    }
-    
-    private func secondViewBackgroundReader(_ scrollProxy: ScrollViewProxy) -> some View {
-        GeometryReader { proxy in
-            let minY = proxy.frame(in: .named("scroll")).minY
-            Color.clear
-                .preference(
-                    key: ScrollPreferenceKey.self,
-                    value: minY
-                )
-                .onPreferenceChange(ScrollPreferenceKey.self) { value in
-                    if value > 0 && scrollAtTop {
-                        offset = 0.01
-                        scrollProxy
-                            .scrollTo("secondView", anchor: .top)
-
-                        if offset != 0 {
-                            DispatchQueue
-                                .main
-                                .asyncAfter(
-                                    deadline: .now() + 0.2
-                                ) {
-                                    offset = 0
-                                }
-                        }
-                    }
+        ScrollView {
+            secondView
+                .id("secondView")
+                .transaction { transition in
+                    transition.animation = nil
+                }
+                .introspectScrollView { scrollView in
+                    viewModel.setScrollView(scrollView)
                 }
         }
+        .coordinateSpace(name: "scroll")
+        .scrollIndicators(.hidden, axes: .vertical)
+        .opacity(dragProgress)
     }
     
     // Toggle method to show/hide the sheet
     private func toggleSheet(expanded: Bool) {
         withAnimation(.spring(response: 0.2, dampingFraction: 0.9)) {
-            offset = expanded ? 0 : maxDragDistance
-            lastOffset = offset
+            viewModel.offset = expanded ? 0 : viewModel.maxDragDistance
+            viewModel.lastOffset = viewModel.offset
         }
     }
     private var minimumDragDistance: CGFloat {
@@ -227,22 +197,23 @@ public struct DraggableBottomSheet<FirstView: View, SecondView: View>: View {
             .onChanged { value in
                 guard scenePhase == .active else { return }
                 let dragAmount = value.translation.height
-                dragState = .started
+                viewModel.dragState = .started
+                viewModel.setScrollViewOffset(.zero)
                 // Allow dragging UP from any state
                 // Allow dragging DOWN only if ScrollView is at the top or sheet is not fully expanded
-                let canDragDown = scrollAtTop || offset > 0
+                let canDragDown = viewModel.scrollAtTop || viewModel.offset > 0
                 
                 withTransaction(.init(animation: nil)) {
                     if dragAmount < 0 || canDragDown {
-                        let newOffset = lastOffset + dragAmount
+                        let newOffset = viewModel.lastOffset + dragAmount
                         
                         // Constrain to allowed range with resistance at ends
                         if newOffset < 0 {
-                            offset = 0  // Resistance when pulling beyond top
-                        } else if newOffset > maxDragDistance {
-                            offset = maxDragDistance + (newOffset - maxDragDistance) * 0.0001  // Resistance when pulling beyond bottom
+                            viewModel.offset = 0  // Resistance when pulling beyond top
+                        } else if newOffset > viewModel.maxDragDistance {
+                            viewModel.offset = viewModel.maxDragDistance + (newOffset - viewModel.maxDragDistance) * 0.0001  // Resistance when pulling beyond bottom
                         } else {
-                            offset = newOffset
+                            viewModel.offset = newOffset
                         }
                     }
                 }
@@ -253,50 +224,29 @@ public struct DraggableBottomSheet<FirstView: View, SecondView: View>: View {
     }
     
     private func onEndDragging(value: DragGesture.Value) {
-        dragState = .ended
+        viewModel.dragState = .ended
         // Determine if we should snap to top or bottom based on drag velocity
         let dragAmount = value.translation.height
         let velocity = value.predictedEndTranslation.height - dragAmount
         
         withAnimation(.interactiveSpring(duration: 0.3)) {
-            if dragAmount + velocity < -10 || offset < maxDragDistance * 0.1 {
+            if dragAmount + velocity < -10 || viewModel.offset < viewModel.maxDragDistance * 0.1 {
                 expandSeet()
             } else {
                 dismissSheet()
             }
-            lastOffset = offset
+            viewModel.lastOffset = viewModel.offset
         }
     }
     
     private func dismissSheet() {
-        offset = maxDragDistance
+        viewModel.offset = maxDragDistance
         isExpanded = false
     }
     
     private func expandSeet() {
-        offset = 0
+        viewModel.offset = 0
         isExpanded = true
-    }
-}
-
-extension Comparable {
-    func clamped(to range: ClosedRange<Self>) -> Self {
-        min(max(self, range.lowerBound), range.upperBound)
-    }
-}
-
-extension View {
-    
-    func onChange<T>(val value: T, action: @escaping (_ old: T, _ new: T) -> Void) -> some View where T: Equatable {
-        if #available(iOS 17.0, *) {
-            return self.onChange(of: value) { oldValue, newValue in
-                action(oldValue, newValue)
-            }
-        } else {
-            return self.onChange(of: value, perform: { newValue in
-                action(newValue, newValue)
-            })
-        }
     }
 }
 
