@@ -123,7 +123,7 @@ public struct DraggableBottomSheet<FirstView: View, SecondView: View>: View {
             .ignoresSafeArea(edges: .bottom)
         }
         .background(
-            Color.white
+            Color.background
                 .opacity(dragProgress)
         )
         .onChange(of: isExpanded) { newValue in
