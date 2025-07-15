@@ -125,6 +125,10 @@ public struct BottomAlertView<Content: View>: View {
 
             Text(message)
                 .font(.system(size: 14))
+                .lineLimit(100)
+                .frame(
+                    width: UIApplication.shared.screenFrame.width - 40
+                )
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(isHorizontal ? .leading : .center)
                 .padding(.horizontal, 20)
@@ -205,7 +209,7 @@ struct BottomSheetExample: View {
             .bottomSheet(isPresented: $showBottomSheet) {
                 BottomAlertView<EmptyView>(
                     title: "Отменить заказ?",
-                    message: "Ищем машину для вас, но если отмените сейчас, поиск новой займет больше времени.",
+                    message: "Ищем машину для вас, но если отмените сейчас, поиск новой займет больше времени. Ищем машину для вас, но если отмените сейчас, поиск новой займет больше времени. Ищем машину для вас, но если отмените сейчас, поиск новой займет больше времени.",
                     primaryButtonTitle: "Отменить заказ",
                     primaryAction: {
                         // Handle cancel action
