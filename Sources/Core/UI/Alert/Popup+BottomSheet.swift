@@ -8,46 +8,6 @@
 import Foundation
 import SwiftUI
 
-public struct BottomSheetAlert<SheetContent: View>: ViewModifier {
-    @Binding var isPresented: Bool
-    let sheetContent: SheetContent
-    
-    public init(isPresented: Binding<Bool>, @ViewBuilder content: () -> SheetContent) {
-        self._isPresented = isPresented
-        self.sheetContent = content()
-    }
-    
-    public func body(content: Content) -> some View {
-        ZStack {
-            content
-                .disabled(isPresented)
-            
-            if isPresented {
-                Color.black
-                    .opacity(0.12)
-                    .ignoresSafeArea()
-                    .transition(.opacity)
-                    .onTapGesture {
-                        isPresented = false
-                    }
-                
-                VStack {
-                    Spacer()
-                    self.sheetContent
-                        .background(
-                            Color.background
-                                .cornerRadius(30, corners: [.topLeft, .topRight])
-                                .ignoresSafeArea()
-                        )
-                }
-                .transition(.move(edge: .bottom))
-                .zIndex(1)
-            }
-        }
-        .animation(.easeInOut(duration: 0.3), value: isPresented)
-    }
-}
-
 // BottomSheet content view with support for multiple buttons
 public struct BottomAlertView<Content: View>: View {
     let title: String
@@ -125,14 +85,12 @@ public struct BottomAlertView<Content: View>: View {
 
             Text(message)
                 .font(.system(size: 14))
-                .lineLimit(100)
-                .frame(
-                    width: UIApplication.shared.screenFrame.width - 40
-                )
                 .foregroundColor(.secondary)
-                .multilineTextAlignment(isHorizontal ? .leading : .center)
+                .multilineTextAlignment(
+                    isHorizontal ? .leading : .center
+                )
                 .padding(.horizontal, 20)
-            
+                
             if let customContent = customContent {
                 customContent
                     .padding(.horizontal, 20)
@@ -140,7 +98,6 @@ public struct BottomAlertView<Content: View>: View {
             
             actionsView
         }
-        .padding(.bottom, 20) // For devices with home indicator
     }
     
     @ViewBuilder
@@ -190,7 +147,12 @@ extension View {
         isPresented: Binding<Bool>,
         @ViewBuilder content: @escaping () -> Content
     ) -> some View {
-        self.modifier(BottomSheetAlert(isPresented: isPresented, content: content))
+        self.modifier(
+            CustomBottomAlertModifier(
+                isPresented: isPresented,
+                sheetView: content
+            )
+        )
     }
 }
 
@@ -220,7 +182,7 @@ struct BottomSheetExample: View {
                         // Handle continue action
                         showBottomSheet = false
                     },
-                    isHorizontal: false
+                    isHorizontal: true
                 )
             }
         }
@@ -230,4 +192,26 @@ struct BottomSheetExample: View {
 // SwiftUI preview for testing
 #Preview {
     BottomSheetExample()
+}
+
+private struct CustomBottomAlertModifier<Container: View>: ViewModifier {
+    var isPresented: Binding<Bool>
+    var sheetView: () -> Container
+    @State private var rect: CGRect = .zero
+    @State private var sheetHeight: CGFloat = 0
+    
+    func body(content: Content) -> some View {
+        content.sheet(isPresented: isPresented) {
+            ScrollView(content: {
+                sheetView()
+                .readRect(rect: $rect)
+            })
+            .presentationDetents([.height(sheetHeight)])
+            .presentationCornerRadius(25)
+        }
+        .onChange(of: rect.height) { newValue in
+            debugPrint("New height is \(newValue)")
+            sheetHeight = newValue
+        }
+    }
 }
