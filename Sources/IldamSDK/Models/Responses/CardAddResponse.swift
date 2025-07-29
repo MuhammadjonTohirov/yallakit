@@ -8,10 +8,10 @@
 import Foundation
 
 public struct CardAddResponse {
-    public let expiry: String
-    public let key: String
-    public let cardNumber: String
-    public let phone: String
+    public let expiry: String?
+    public let key: String?
+    public let cardNumber: String?
+    public let phone: String?
     
     init(networkResponse: NetResAddCard) {
         self.expiry = networkResponse.expiry

@@ -8,10 +8,10 @@
 import Foundation
 
 struct NetResAddCard: NetResBody {
-    let expiry: String
-    let key: String
-    let cardNumber: String
-    let phone: String
+    let expiry: String?
+    let key: String?
+    let cardNumber: String?
+    let phone: String?
     
     enum CodingKeys: String, CodingKey {
         case expiry
