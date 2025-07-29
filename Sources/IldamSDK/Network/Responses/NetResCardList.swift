@@ -18,7 +18,7 @@ struct NetResCardItem: NetResBody {
         case cardId = "card_id"
         case isDefault = "default"
         case expiry
-        case maskedPan = "cart_number"
+        case maskedPan = "masked_pan"
         case createdAt = "created_at"
     }
 }
