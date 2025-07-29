@@ -49,7 +49,7 @@ public final class SyncCardsUseCaseImpl: @unchecked Sendable, SyncCardsUseCase {
     public static let shared = SyncCardsUseCaseImpl()
     
     public var defaultCard: CardItem? {
-        cards.first(where: {$0.isDefault})
+        cards.first(where: {$0.isDefault ?? false})
     }
     
     public var paymentTypeString: String {
@@ -79,7 +79,7 @@ public final class SyncCardsUseCaseImpl: @unchecked Sendable, SyncCardsUseCase {
 
 extension CardItem {
     public var type: CardType {
-        .init(cardId: self.cardId)
+        .init(cardId: self.cardId ?? "cash")
     }
     
     public var miniPan: String {

@@ -36,7 +36,8 @@ extension CardItem {
             cardId: res.cardId,
             isDefault: res.isDefault,
             expiry: res.expiry,
-            maskedPan: res.maskedPan
+            maskedPan: res.maskedPan ?? "",
+            createdAt: res.createdAt
         )
     }
 }
