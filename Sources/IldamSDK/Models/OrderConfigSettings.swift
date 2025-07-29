@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct OrderConfigSettings: Codable {
+public struct OrderConfigSettings: Codable, Sendable {
     public let efirTime: Int?
     public let expireTime: Int?
     public let findRadius: Float?
@@ -54,8 +54,13 @@ extension OrderConfigSettings {
 }
 
 public extension OrderConfigSettings {
-    struct CancelReason: Codable {
-        let id: Int
-        let name: String
+    struct CancelReason: Codable, Sendable {
+        public let id: Int
+        public let name: String
+        
+        public init(id: Int, name: String) {
+            self.id = id
+            self.name = name
+        }
     }
 }
