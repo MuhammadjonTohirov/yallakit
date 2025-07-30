@@ -23,7 +23,7 @@ extension FastOrderGatewayImpl {
     struct Request: URLRequestProtocol {
         var orderId: Int
         var url: URL {
-            URL.baseAPICli.appending(path: "order/faster/\(orderId)")
+            URL.goIldamAPI.appending(path: "order/faster/\(orderId)")
         }
         var body: Data? = nil
         var method: NetworkLayer.HTTPMethod = .get
