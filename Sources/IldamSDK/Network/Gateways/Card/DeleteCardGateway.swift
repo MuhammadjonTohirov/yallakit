@@ -27,7 +27,7 @@ extension DeleteCardGateway {
         var cardId: String
         
         var url: URL {
-            URL.goIldamAPI.appendingPath("card", "delete", cardId)
+            URL.goIldamAPI.appendingPath("card", "deleted", cardId)
         }
         
         var body: Data?
