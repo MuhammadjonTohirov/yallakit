@@ -26,6 +26,6 @@ extension FastOrderGatewayImpl {
             URL.goIldamAPI.appending(path: "order/faster/\(orderId)")
         }
         var body: Data? = nil
-        var method: NetworkLayer.HTTPMethod = .get
+        var method: NetworkLayer.HTTPMethod = .put
     }
 }
