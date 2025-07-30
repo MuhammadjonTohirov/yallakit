@@ -14,7 +14,7 @@ protocol DeleteCardGatewayProtocol {
 
 struct DeleteCardGateway: DeleteCardGatewayProtocol {
     func delete(id: String) async throws -> Bool? {
-        let result: NetRes<String>? = try await Network.sendThrow(
+        let result: NetRes<DeleteCardGateway.Result>? = try await Network.sendThrow(
             request: Request(cardId: id)
         )
         
@@ -33,5 +33,9 @@ extension DeleteCardGateway {
         var body: Data?
         
         var method: NetworkLayer.HTTPMethod = .put
+    }
+    
+    struct Result: NetResBody {
+        
     }
 }
