@@ -46,9 +46,9 @@ struct NetResTaxiTariff: Codable {
 
 struct NetResTaxiTariffAward: Codable {
     let cashOrPercentage: String
-    let minKm: Int
-    let minPrice: Int
-    let value: Int
+    let minKm: Float
+    let minPrice: Float
+    let value: Float
     
     enum CodingKeys: String, CodingKey {
         case cashOrPercentage = "cash_or_percentage"

@@ -54,11 +54,11 @@ public struct TaxiTariff: Sendable {
 
 public struct TaxiTariffAward: Sendable {
     public let cashOrPercentage: String
-    public let minKm: Int
-    public let minPrice: Int
-    public let value: Int
+    public let minKm: Float
+    public let minPrice: Float
+    public let value: Float
     
-    public init(cashOrPercentage: String, minKm: Int, minPrice: Int, value: Int) {
+    public init(cashOrPercentage: String, minKm: Float, minPrice: Float, value: Float) {
         self.cashOrPercentage = cashOrPercentage
         self.minKm = minKm
         self.minPrice = minPrice
