@@ -37,7 +37,7 @@ public enum NetworkError: Error {
     case unauthorized
     case timeout
     
-    var localizedDescription: String {
+    public var localizedDescription: String {
         switch self {
         case .custom(let message, _):
             return message
@@ -50,9 +50,9 @@ public enum NetworkError: Error {
         }
     }
     
-    var code: Int {
+    public var code: Int {
         switch self {
-        case .custom(let message, let code):
+        case .custom(_, let code):
             return code
         case .unauthorized:
             return 401

@@ -91,7 +91,12 @@ public struct Network {
             return res
         } catch let error {
             debugPrint(error)
-            throw NetworkError.custom(message: error.serverMessage, code: -1)
+            switch error as? NetworkError {
+            case .custom(let message, let code):
+                throw NetworkError.custom(message: message, code: code)
+            default:
+                throw NetworkError.custom(message: error.serverMessage, code: -1)
+            }
         }
     }
     
