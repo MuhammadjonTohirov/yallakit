@@ -118,7 +118,33 @@ public struct DraggableBottomSheet<FirstView: View, SecondView: View>: View {
                         )
                 )
                 .offset(y: viewModel.offset)
-                .gesture(dragGesture, isEnabled: !isExpanded)
+                .dragGestureInterruptable(isEnabled: !isExpanded) { state, value in
+                    switch state {
+                    case .dragging:
+                        let dragAmount = value.translation.height
+                        let canDragDown = viewModel.scrollAtTop || viewModel.offset > 0
+                        
+                        withTransaction(.init(animation: nil)) {
+                            if dragAmount < 0 || canDragDown {
+                                let newOffset = viewModel.lastOffset + dragAmount
+                                
+                                // Constrain to allowed range with resistance at ends
+                                if newOffset < 0 {
+                                    viewModel.offset = 0  // Resistance when pulling beyond top
+                                } else if newOffset > viewModel.maxDragDistance {
+                                    viewModel.offset = viewModel.maxDragDistance + (newOffset - viewModel.maxDragDistance) * 0.0001  // Resistance when pulling beyond bottom
+                                } else {
+                                    viewModel.offset = newOffset
+                                }
+                            }
+                        }
+                    case .ended:
+                        onEndDragging(value: value)
+                    case .interrupted:
+                        dismissSheet()
+                    default: break
+                    }
+                }
             }
             .ignoresSafeArea(edges: .bottom)
         }
@@ -128,6 +154,12 @@ public struct DraggableBottomSheet<FirstView: View, SecondView: View>: View {
         )
         .onChange(of: isExpanded) { newValue in
             toggleSheet(expanded: newValue)
+        }
+        .onChange(of: viewModel.dragState) { newValue in
+            if newValue == .interrupted {
+                self.dismissSheet()
+                self.viewModel.dragState = .normal
+            }
         }
         .onChange(of: isDragging) { newValue in
             if !newValue && viewModel.dragState == .started {
@@ -196,11 +228,10 @@ public struct DraggableBottomSheet<FirstView: View, SecondView: View>: View {
             }
             .onChanged { value in
                 guard scenePhase == .active else { return }
-                let dragAmount = value.translation.height
                 viewModel.dragState = .started
                 viewModel.setScrollViewOffset(.zero)
-                // Allow dragging UP from any state
-                // Allow dragging DOWN only if ScrollView is at the top or sheet is not fully expanded
+
+                let dragAmount = value.translation.height
                 let canDragDown = viewModel.scrollAtTop || viewModel.offset > 0
                 
                 withTransaction(.init(animation: nil)) {
