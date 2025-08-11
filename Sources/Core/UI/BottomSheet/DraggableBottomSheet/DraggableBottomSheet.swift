@@ -132,7 +132,7 @@ public struct DraggableBottomSheet<FirstView: View, SecondView: View>: View {
                                 if newOffset < 0 {
                                     viewModel.offset = 0  // Resistance when pulling beyond top
                                 } else if newOffset > viewModel.maxDragDistance {
-                                    viewModel.offset = viewModel.maxDragDistance + (newOffset - viewModel.maxDragDistance) * 0.0001  // Resistance when pulling beyond bottom
+                                    viewModel.offset = viewModel.maxDragDistance + (newOffset - viewModel.maxDragDistance) * 0.0001
                                 } else {
                                     viewModel.offset = newOffset
                                 }
@@ -210,6 +210,7 @@ public struct DraggableBottomSheet<FirstView: View, SecondView: View>: View {
         withAnimation(.spring(response: 0.2, dampingFraction: 0.9)) {
             viewModel.offset = expanded ? 0 : viewModel.maxDragDistance
             viewModel.lastOffset = viewModel.offset
+            isExpanded = expanded
         }
     }
     private var minimumDragDistance: CGFloat {
@@ -223,28 +224,13 @@ public struct DraggableBottomSheet<FirstView: View, SecondView: View>: View {
     private func onEndDragging(value: DragGesture.Value) {
         viewModel.dragState = .ended
         viewModel.lastOffset = viewModel.offset
-
-        let dragAmount = value.translation.height
-        
         withAnimation(.interactiveSpring(duration: 0.3)) {
-            if !isExpanded {
-                if abs(dragAmount) > 50 {
-                    expandSeet()
-                } else {
-                    dismissSheet()
-                }
-                
-                return
-            }
+            let diff = self.viewModel.maxDragDistance - self.viewModel.offset
             
-            if isExpanded {
-                if abs(dragAmount) > 50 {
-                    dismissSheet()
-                } else {
-                    expandSeet()
-                }
-                
-                return
+            if diff > 50 {
+                expandSeet()
+            } else {
+                dismissSheet()
             }
         }
     }
