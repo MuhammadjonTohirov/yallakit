@@ -141,7 +141,7 @@ public struct DraggableBottomSheet<FirstView: View, SecondView: View>: View {
                     case .ended:
                         onEndDragging(value: value)
                     case .interrupted:
-                        dismissSheet()
+                        onEndDragging(value: value)
                     default: break
                     }
                 }
@@ -220,53 +220,32 @@ public struct DraggableBottomSheet<FirstView: View, SecondView: View>: View {
         return 0
     }
     
-    // Drag gesture to handle sheet movement
-    private var dragGesture: some Gesture {
-        DragGesture(minimumDistance: minimumDragDistance)
-            .updating($isDragging) { _, state, _ in
-                state = true
-            }
-            .onChanged { value in
-                guard scenePhase == .active else { return }
-                viewModel.dragState = .started
-                viewModel.setScrollViewOffset(.zero)
-
-                let dragAmount = value.translation.height
-                let canDragDown = viewModel.scrollAtTop || viewModel.offset > 0
-                
-                withTransaction(.init(animation: nil)) {
-                    if dragAmount < 0 || canDragDown {
-                        let newOffset = viewModel.lastOffset + dragAmount
-                        
-                        // Constrain to allowed range with resistance at ends
-                        if newOffset < 0 {
-                            viewModel.offset = 0  // Resistance when pulling beyond top
-                        } else if newOffset > viewModel.maxDragDistance {
-                            viewModel.offset = viewModel.maxDragDistance + (newOffset - viewModel.maxDragDistance) * 0.0001  // Resistance when pulling beyond bottom
-                        } else {
-                            viewModel.offset = newOffset
-                        }
-                    }
-                }
-            }
-            .onEnded { value in
-                onEndDragging(value: value)
-            }
-    }
-    
     private func onEndDragging(value: DragGesture.Value) {
         viewModel.dragState = .ended
-        // Determine if we should snap to top or bottom based on drag velocity
+        viewModel.lastOffset = viewModel.offset
+
         let dragAmount = value.translation.height
-        let velocity = value.predictedEndTranslation.height - dragAmount
         
         withAnimation(.interactiveSpring(duration: 0.3)) {
-            if dragAmount + velocity < -10 || viewModel.offset < viewModel.maxDragDistance * 0.1 {
-                expandSeet()
-            } else {
-                dismissSheet()
+            if !isExpanded {
+                if abs(dragAmount) > 50 {
+                    expandSeet()
+                } else {
+                    dismissSheet()
+                }
+                
+                return
             }
-            viewModel.lastOffset = viewModel.offset
+            
+            if isExpanded {
+                if abs(dragAmount) > 50 {
+                    dismissSheet()
+                } else {
+                    expandSeet()
+                }
+                
+                return
+            }
         }
     }
     
