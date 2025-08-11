@@ -88,7 +88,6 @@ struct NetResClient: Codable {
         case balance
         case busyBalance = "busy_balance"
         case blockNote = "block_note"
-        case rating
         case blockDate = "block_date"
         case blockSource = "block_source"
         case image
