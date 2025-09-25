@@ -20,4 +20,15 @@ public extension View {
     }
 }
 
-
+public func withAnimation<Result>(
+    animation: Animation? = .default,
+    body: () throws -> Result,
+    completion: @escaping (() -> Void) = {}
+) rethrows -> Result {
+    if #available(iOS 17.0, *) {
+        return try withAnimation(animation, body, completion: completion)
+    } else {
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: completion)
+        return try withAnimation(animation, body)
+    }
+}
