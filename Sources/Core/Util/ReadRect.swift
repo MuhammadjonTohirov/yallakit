@@ -8,8 +8,6 @@
 import Foundation
 import SwiftUI
 
-//SizePreferenceKey
-
 public struct SizePreferenceKey: @preconcurrency PreferenceKey {
     public typealias Value = CGRect
     
@@ -32,4 +30,3 @@ public extension View {
         self.modifier(ReadRectModifier(onRectChange: onRectChange))
     }
 }
-

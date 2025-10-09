@@ -28,6 +28,9 @@ public final class GetAddressUseCase: GetAddressUseCaseProtocol {
             return nil
         }
         
-        return AddressResponse(response: result)
+        var response = AddressResponse(response: result)
+        response?.lat = lat
+        response?.lng = lng
+        return response
     }
 }
