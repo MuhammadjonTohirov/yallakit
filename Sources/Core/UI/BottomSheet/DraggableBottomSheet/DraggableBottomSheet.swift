@@ -68,14 +68,15 @@ public struct DraggableBottomSheet<FirstView: View, SecondView: View>: View {
     
     private var backgroundColor: Color
     private var shadowColor: Color = .black
-    private var shadowRadius: CGFloat = 12
-    
+    private var cornerRadius: CGFloat = 20
+
     public init(
         minHeight: CGFloat,
         maxTopSpace: CGFloat = 0,
         progress: Binding<CGFloat>,
         backgroundColor: Color = Color.init(uiColor: .systemBackground),
         shadowOpacity: CGFloat = 0.2,
+        cornerRadius: CGFloat = 20,
         isExpanded: Binding<Bool> = .constant(false),
         @ViewBuilder firstView: () -> FirstView,
         @ViewBuilder secondView: () -> SecondView
@@ -86,6 +87,7 @@ public struct DraggableBottomSheet<FirstView: View, SecondView: View>: View {
         self.secondView = secondView()
         self.backgroundColor = backgroundColor
         self._shadowOpacity = shadowOpacity
+        self.cornerRadius = cornerRadius
         self._progress = progress
         self._isExpanded = isExpanded
 
@@ -116,8 +118,10 @@ public struct DraggableBottomSheet<FirstView: View, SecondView: View>: View {
                 }
                 .frame(width: geometry.size.width)
                 .background(
-                    RoundedRectangle(cornerRadius: 20, style: .continuous)
-                        .fill(backgroundColor)
+                    Rectangle()
+                        .fill(Color.init(uiColor: .systemBackground))
+                        .cornerRadius(cornerRadius, corners: [.topLeft, .topRight])
+                        
                         .shadow(
                             color: Color.black.opacity(shadowOpacity),
                             radius: 10
@@ -155,8 +159,7 @@ public struct DraggableBottomSheet<FirstView: View, SecondView: View>: View {
             .ignoresSafeArea(edges: .bottom)
         }
         .background(
-            Color.background
-                .opacity(dragProgress)
+            backgroundColor.opacity(dragProgress)
         )
         .onChange(of: isExpanded) { newValue in
             toggleSheet(expanded: newValue)
