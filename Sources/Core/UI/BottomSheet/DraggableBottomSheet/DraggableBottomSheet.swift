@@ -58,16 +58,24 @@ public struct DraggableBottomSheet<FirstView: View, SecondView: View>: View {
 
     // Shadow opacity based on drag position
     private var shadowOpacity: Double {
-        (1 - dragProgress) * 0.2
+        (1 - dragProgress) * _shadowOpacity
     }
+    
+    private var _shadowOpacity: CGFloat = 0.2
 
     private var _offset: CGFloat = 0
     private var _lastOffset: CGFloat = 0
+    
+    private var backgroundColor: Color
+    private var shadowColor: Color = .black
+    private var shadowRadius: CGFloat = 12
     
     public init(
         minHeight: CGFloat,
         maxTopSpace: CGFloat = 0,
         progress: Binding<CGFloat>,
+        backgroundColor: Color = Color.init(uiColor: .systemBackground),
+        shadowOpacity: CGFloat = 0.2,
         isExpanded: Binding<Bool> = .constant(false),
         @ViewBuilder firstView: () -> FirstView,
         @ViewBuilder secondView: () -> SecondView
@@ -76,8 +84,8 @@ public struct DraggableBottomSheet<FirstView: View, SecondView: View>: View {
         self.maxTopSpace = maxTopSpace
         self.firstView = firstView()
         self.secondView = secondView()
-        
-
+        self.backgroundColor = backgroundColor
+        self._shadowOpacity = shadowOpacity
         self._progress = progress
         self._isExpanded = isExpanded
 
@@ -109,9 +117,7 @@ public struct DraggableBottomSheet<FirstView: View, SecondView: View>: View {
                 .frame(width: geometry.size.width)
                 .background(
                     RoundedRectangle(cornerRadius: 20, style: .continuous)
-                        .fill(
-                            Color(UIColor.systemBackground)
-                        )
+                        .fill(backgroundColor)
                         .shadow(
                             color: Color.black.opacity(shadowOpacity),
                             radius: 10
