@@ -11,6 +11,7 @@ import Combine
 
 final class DraggableBottomSheetViewModel: NSObject, ObservableObject {
     
+    @MainActor
     @Published var lastOffset: CGFloat = 0
     @Published var scrollOffset: CGPoint = .zero
     @Published var scrollAtTop: Bool = true
@@ -18,8 +19,11 @@ final class DraggableBottomSheetViewModel: NSObject, ObservableObject {
     @Published var dragState: DragState = .normal
     @Published var progress: CGFloat = 0
     
+    private var decelerating: Bool?
+    private var isDisimssing: Bool?
+    private var scrollView: UIScrollView?
+
     var cancellables: Set<AnyCancellable> = []
-    
     var maxDragDistance: CGFloat = 0
     
     @Published var offset: CGFloat = 0 {
@@ -27,8 +31,6 @@ final class DraggableBottomSheetViewModel: NSObject, ObservableObject {
             progress = (1 - (offset / maxDragDistance).clamped(to: 0...1))
         }
     }
-    
-    private var scrollView: UIScrollView?
     
     func onAppear() {
         subscribeToDragState()
@@ -49,26 +51,6 @@ final class DraggableBottomSheetViewModel: NSObject, ObservableObject {
         
     }
     
-//        .onChange(of: viewModel.dragState) { newValue in
-//            let diff = maxDragDistance - viewModel.offset
-//
-//            withTransaction(.init(animation: nil)) {
-//                if diff >= 60 {
-//                    if newValue == .interrupted {
-//                        isExpanded.toggle()
-//                        viewModel.dragState = .normal
-//                    }
-//                } else {
-//                    isExpanded = false
-//                    viewModel.offset = maxDragDistance
-//                    viewModel.dragState = .normal
-//                }
-//            }
-//        }
-    
-    private var decelerating: Bool?
-    private var isDisimssing: Bool?
-    
     func expand() {
         withAnimation(.spring(duration: 0.25)) {
             self.offset = 0
@@ -84,38 +66,41 @@ final class DraggableBottomSheetViewModel: NSObject, ObservableObject {
 
 extension DraggableBottomSheetViewModel: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        
-        if decelerating == true && scrollView.contentOffset.y < 0 {
-            self.stopScrolling()
-        }
-        
-        func setOffset(_ offset: CGFloat) {
-            self.offset = offset.limitBottom(0).limitTop(maxDragDistance)
-        }
-        
-        let offsetY = scrollView.contentOffset.y
-        
-        if offsetY < 0 {
-            self.isDisimssing = true
-            setOffset(offset + abs(offsetY))
-            scrollView.contentOffset.y = 0
-        }
-        
-        if offsetY >= 0 {
-            if isDisimssing == true {
-
-                if self.offset - abs(offsetY) < 0 {
-                    self.isDisimssing = nil
+        withTransaction(.init(animation: nil)) {
+            if decelerating == true && scrollView.contentOffset.y < 0 {
+                self.stopScrolling()
+            }
+            
+            func setOffset(_ offset: CGFloat) {
+                withAnimation {
+                    self.offset = offset.limitBottom(0).limitTop(maxDragDistance)
                 }
-
-                setOffset(offset - abs(offsetY))
-                                
+            }
+            
+            let offsetY = scrollView.contentOffset.y
+            
+            if offsetY < 0 {
+                self.isDisimssing = true
+                setOffset(offset + abs(offsetY))
                 scrollView.contentOffset.y = 0
             }
+            
+            if offsetY >= 0 {
+                if isDisimssing == true {
 
+                    if self.offset - abs(offsetY) < 0 {
+                        self.isDisimssing = nil
+                    }
+
+                    setOffset(offset - abs(offsetY))
+                                    
+                    scrollView.contentOffset.y = 0
+                }
+
+            }
+            
+            lastOffset = offset
         }
-        
-        lastOffset = offset
     }
     
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
