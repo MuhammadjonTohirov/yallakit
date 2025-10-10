@@ -246,11 +246,13 @@ public struct DraggableBottomSheet<FirstView: View, SecondView: View>: View {
     
     private func dismissSheet() {
         viewModel.offset = maxDragDistance
+        viewModel.lastOffset = viewModel.offset
         isExpanded = false
     }
     
     private func expandSeet() {
         viewModel.offset = 0
+        viewModel.lastOffset = viewModel.offset
         isExpanded = true
     }
 }
