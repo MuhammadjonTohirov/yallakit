@@ -10,7 +10,10 @@ let package = Package(
         .library(name: "YallaKit", targets: ["YallaKit"]),
         .library(name: "Core", targets: ["Core"]),
         .library(name: "NetworkLayer", targets: ["NetworkLayer"]),
-        .library(name: "IldamSDK", targets: ["IldamSDK"])
+        .library(name: "IldamSDK", targets: ["IldamSDK"]),
+    ],
+    dependencies: [
+        .package(url: "https://github.com/MuhammadjonTohirov/SlidingBottomSheet", branch: "main")
     ],
     targets: [
         .target(
@@ -18,7 +21,8 @@ let package = Package(
             dependencies: [
                 "Core",
                 "NetworkLayer",
-                "IldamSDK"
+                "IldamSDK",
+                .product(name: "SlidingBottomSheet", package: "SlidingBottomSheet")
             ]
         ),
         .target(

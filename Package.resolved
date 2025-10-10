@@ -1,0 +1,15 @@
+{
+  "originHash" : "aeea5dcc7ec66be9cff15bbd0ecd88f67544ecf978fee6a34a2e8457a2af966c",
+  "pins" : [
+    {
+      "identity" : "slidingbottomsheet",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/MuhammadjonTohirov/SlidingBottomSheet",
+      "state" : {
+        "branch" : "main",
+        "revision" : "44ca05aa014bef98a9116d8a2e3d6fd180c3c72f"
+      }
+    }
+  ],
+  "version" : 3
+}
