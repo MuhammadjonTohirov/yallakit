@@ -28,7 +28,7 @@ public extension Date {
         let formatter = DateFormatter()
         formatter.dateFormat = format
         formatter.timeZone = timezone
-        formatter.locale = Locale(identifier: UserSettings.shared.language?.code ?? "ru")
+        formatter.locale = Locale(identifier: UserSettings.shared.language ?? "ru")
         return formatter.string(from: self)
     }
     

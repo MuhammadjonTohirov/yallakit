@@ -33,7 +33,7 @@ public extension URL {
     }
     
     static var langHeader: (key: String, value: String) {
-        ("lang", (UserSettings.shared.language ?? .russian).smallCode)
+        ("lang", (UserSettings.shared.language ?? Language.russian.smallCode))
     }
     
     // not in use for now

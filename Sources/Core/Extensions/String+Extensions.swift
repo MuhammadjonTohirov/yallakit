@@ -80,8 +80,8 @@ public extension String {
     }
     
     
-    func localize(language: Language) -> String {
-        let path = Bundle.main.path(forResource: language.code, ofType: "lproj")
+    func localize(language: String) -> String {
+        let path = Bundle.main.path(forResource: language, ofType: "lproj")
         guard path != nil else {
             return self
         }
@@ -90,7 +90,7 @@ public extension String {
     }
     
     var localize: String {
-        return localize(language: UserSettings.shared.language ?? .russian)
+        return localize(language: (UserSettings.shared.language ?? Language.russian.code))
     }
     
     func placeholder(_ text: String) -> String {
@@ -101,7 +101,6 @@ public extension String {
         String.init(format: self.localize, arguments: arguments)
     }
     
-//    attributed string localize
     func localize(attributes: [NSAttributedString.Key: Any]) -> AttributedString {
         return AttributedString(NSAttributedString(string: self, attributes: attributes))
     }
