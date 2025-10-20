@@ -88,11 +88,11 @@ public struct TaxiTariffCategory: Sendable {
 // MARK: - Service
 public struct TaxiTariffService: Identifiable, Sendable {
     public var id: Int
-    public let cost: Int
-    public let name, costType: String
+    public let cost: Float?
+    public let name, costType: String?
     public var isSelected: Bool = false
     
-    public init(id: Int, cost: Int, name: String, costType: String, isSelected: Bool) {
+    public init(id: Int, cost: Float?, name: String?, costType: String?, isSelected: Bool) {
         self.id = id
         self.cost = cost
         self.name = name
