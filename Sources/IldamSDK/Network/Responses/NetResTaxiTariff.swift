@@ -67,7 +67,7 @@ struct NetResTaxiTariffCategory: Codable {
 struct NetResTaxiTariffService: Codable, Identifiable {
     var id: Int
     let cost: Float?
-    let name, costType: String
+    let name, costType: String?
 
     enum CodingKeys: String, CodingKey {
         case cost, name
