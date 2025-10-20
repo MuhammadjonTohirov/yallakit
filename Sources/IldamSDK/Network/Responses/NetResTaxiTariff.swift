@@ -66,7 +66,7 @@ struct NetResTaxiTariffCategory: Codable {
 // MARK: - Service
 struct NetResTaxiTariffService: Codable, Identifiable {
     var id: Int
-    let cost: Int
+    let cost: Float?
     let name, costType: String
 
     enum CodingKeys: String, CodingKey {

@@ -9,8 +9,8 @@ import Foundation
 import UIKit
 
 public struct AppMetrics {
-    public static let designHeight: CGFloat = 780
-    public static let designWidth: CGFloat = 360
+    @MainActor public static var designHeight: CGFloat = 780
+    @MainActor public static var designWidth: CGFloat = 360
     
     @MainActor
     public static func width(_ width: CGFloat) -> CGFloat {
