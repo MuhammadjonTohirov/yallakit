@@ -14,6 +14,7 @@ struct NetResNotifications: NetResBody {
 struct NetResNotification: NetResBody {
     let id: Int?
     let title: String?
+    let type: String?
     let content: String?
     let createdAt: Int?
     let readed: Bool?
@@ -22,6 +23,7 @@ struct NetResNotification: NetResBody {
     enum CodingKeys: String, CodingKey {
         case id
         case title
+        case type
         case content
         case createdAt = "created_at"
         case readed

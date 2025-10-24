@@ -18,14 +18,16 @@ public struct NotificationsResponse: Sendable {
 public struct NotificationItem: Sendable {
     public let id: Int?
     public let title: String?
+    public let type: String?
     public let content: String?
     public let createdAt: Int?
     public let readed: Bool?
     public let image: String?
     
-    public init(id: Int, title: String, content: String, createdAt: Int, readed: Bool, image: String?) {
+    public init(id: Int, title: String, type: String, content: String, createdAt: Int, readed: Bool, image: String?) {
         self.id = id
         self.title = title
+        self.type = type
         self.content = content
         self.createdAt = createdAt
         self.readed = readed
@@ -38,6 +40,7 @@ extension NotificationItem {
         guard let res else { return nil }
         id = res.id
         title = res.title
+        type = res.type
         content = res.content
         createdAt = res.createdAt
         readed = res.readed
