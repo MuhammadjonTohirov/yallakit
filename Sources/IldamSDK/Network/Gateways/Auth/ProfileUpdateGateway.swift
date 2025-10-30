@@ -9,13 +9,13 @@
 import Foundation
 import NetworkLayer
 
-protocol UpdateProfileGatewayProtocol {
-    func updateProfile(req: NetReqUpdateProfile) async -> Bool
+protocol UpdateProfileGatewayProtocol: Sendable {
+    func updateProfile(req: NetReqUpdateProfile) async throws -> Bool
 }
 
 struct UpdateProfileGateway: UpdateProfileGatewayProtocol {
-    func updateProfile(req: NetReqUpdateProfile) async -> Bool {
-        let res: NetRes<Bool>? = await Network.send(request: AuthNetworkRoute.updateProfile(
+    func updateProfile(req: NetReqUpdateProfile) async throws -> Bool {
+        let res: NetRes<Bool>? = try await Network.sendThrow(request: AuthNetworkRoute.updateProfile(
             givenNames: req.givenNames,
             surName: req.surName,
             birthday: req.birthday,

@@ -8,11 +8,11 @@
 // UpdateProfileUseCase.swift
 import Foundation
 
-public protocol UpdateProfileUseCaseProtocol {
-    func execute(request: ProfileUpdateRequest) async -> Bool
+public protocol UpdateProfileUseCaseProtocol: Sendable {
+    func execute(request: ProfileUpdateRequest) async throws -> Bool
 }
 
-public final class UpdateProfileUseCase: UpdateProfileUseCaseProtocol {
+public struct UpdateProfileUseCase: UpdateProfileUseCaseProtocol {
     private let gateway: UpdateProfileGatewayProtocol
     
     init(gateway: UpdateProfileGatewayProtocol = UpdateProfileGateway()) {
@@ -23,7 +23,7 @@ public final class UpdateProfileUseCase: UpdateProfileUseCaseProtocol {
         self.gateway = UpdateProfileGateway()
     }
     
-    public func execute(request: ProfileUpdateRequest) async -> Bool {
-        return await gateway.updateProfile(req: request.toNetworkRequest())
+    public func execute(request: ProfileUpdateRequest) async throws -> Bool {
+        try await gateway.updateProfile(req: request.toNetworkRequest())
     }
 }

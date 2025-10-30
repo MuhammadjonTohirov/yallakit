@@ -10,11 +10,11 @@ import Foundation
 import NetworkLayer
 
 protocol RegisterGatewayProtocol: Sendable {
-    func register(req: NetReqRegisterProfile) async -> NetRes<NetResRegisterProfile>?
+    func register(req: NetReqRegisterProfile) async throws -> NetRes<NetResRegisterProfile>?
 }
 
 struct RegisterGateway: RegisterGatewayProtocol {
-    func register(req: NetReqRegisterProfile) async -> NetRes<NetResRegisterProfile>? {
-        return await Network.send(request: AuthNetworkRoute.register(req: req))
+    func register(req: NetReqRegisterProfile) async throws -> NetRes<NetResRegisterProfile>? {
+        return try await Network.sendThrow(request: AuthNetworkRoute.register(req: req))
     }
 }

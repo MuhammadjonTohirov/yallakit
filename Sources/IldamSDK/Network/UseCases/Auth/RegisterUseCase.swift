@@ -10,7 +10,7 @@ import Foundation
 import Core
 
 public protocol RegisterUseCaseProtocol: Sendable {
-    func execute(request: RegistrationRequest) async -> Bool
+    func execute(request: RegistrationRequest) async throws -> Bool
 }
 
 public struct RegisterUseCase: RegisterUseCaseProtocol {
@@ -24,8 +24,8 @@ public struct RegisterUseCase: RegisterUseCaseProtocol {
         self.gateway = RegisterGateway()
     }
     
-    public func execute(request: RegistrationRequest) async -> Bool {
-        let res = await gateway.register(req: request.toNetworkRequest())
+    public func execute(request: RegistrationRequest) async throws -> Bool {
+        let res = try await gateway.register(req: request.toNetworkRequest())
         let code = res?.code ?? 0
         
         if let registerResult = res?.result {
