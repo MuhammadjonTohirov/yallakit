@@ -8,7 +8,7 @@
 import Foundation
 import CoreLocation
 
-public struct GRoutePoint: Codable, Identifiable, Hashable {
+public struct GRoutePoint: Codable, Identifiable, Hashable, Sendable {
     /// the same order
     public var id: Int
     public var order: Int
