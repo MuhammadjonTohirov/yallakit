@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum Gender: String, Codable {
+public enum Gender: String, Codable, Sendable {
     case male = "MALE"
     case female = "FEMALE"
     case none = "NOT_SELECTED"

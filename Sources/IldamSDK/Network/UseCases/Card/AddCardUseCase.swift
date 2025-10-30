@@ -12,7 +12,7 @@ public protocol AddCardUseCaseProtocol {
     func execute(request: CardAddRequest) async throws -> CardAddResponse?
 }
 
-public final class AddCardUseCase: AddCardUseCaseProtocol {
+public struct AddCardUseCase: AddCardUseCaseProtocol {
     private let gateway: AddCardGatewayProtocol
     
     init(gateway: AddCardGatewayProtocol = AddCardGateway()) {

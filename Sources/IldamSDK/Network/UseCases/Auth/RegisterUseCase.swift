@@ -9,11 +9,11 @@
 import Foundation
 import Core
 
-public protocol RegisterUseCaseProtocol {
+public protocol RegisterUseCaseProtocol: Sendable {
     func execute(request: RegistrationRequest) async -> Bool
 }
 
-public final class RegisterUseCase: RegisterUseCaseProtocol {
+public struct RegisterUseCase: RegisterUseCaseProtocol {
     private let gateway: RegisterGatewayProtocol
     
     init(gateway: RegisterGatewayProtocol = RegisterGateway()) {

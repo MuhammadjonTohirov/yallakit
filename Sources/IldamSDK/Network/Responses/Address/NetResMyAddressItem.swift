@@ -8,7 +8,7 @@
 import Foundation
 import Core
 
-struct NetResMyAddressItem: NetResBody {
+struct NetResMyAddressItem: NetResBody, Sendable {
     let id: Int
     let name: String
     let address: String

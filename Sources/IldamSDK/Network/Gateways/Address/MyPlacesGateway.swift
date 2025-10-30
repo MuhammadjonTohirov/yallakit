@@ -10,7 +10,7 @@
 import Foundation
 import NetworkLayer
 
-protocol MyPlacesGatewayProtocol {
+protocol MyPlacesGatewayProtocol: Sendable {
     func loadMyPlaces() async -> [NetResMyAddressItem]
 }
 

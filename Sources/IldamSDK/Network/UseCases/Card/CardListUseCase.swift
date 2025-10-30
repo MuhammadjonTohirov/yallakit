@@ -13,7 +13,7 @@ public protocol GetCardListUseCaseProtocol {
     func execute() async throws -> [CardItem]
 }
 
-public final class GetCardListUseCase: GetCardListUseCaseProtocol {
+public struct GetCardListUseCase: GetCardListUseCaseProtocol {
     private let gateway: CardListGatewayProtocol
     
     init(gateway: CardListGatewayProtocol = CardListGateway()) {

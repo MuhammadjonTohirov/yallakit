@@ -8,11 +8,11 @@
 // LogoutUseCase.swift
 import Foundation
 
-public protocol LogoutUseCaseProtocol {
+public protocol LogoutUseCaseProtocol: Sendable {
     func execute() async -> Bool
 }
 
-public final class LogoutUseCase: LogoutUseCaseProtocol {
+public struct LogoutUseCase: LogoutUseCaseProtocol {
     private let gateway: LogoutGatewayProtocol
     
     init(gateway: LogoutGatewayProtocol = LogoutGateway()) {

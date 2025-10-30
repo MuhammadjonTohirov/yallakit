@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct NetResCardItem: NetResBody {
+struct NetResCardItem: NetResBody, Sendable {
     let cardId: String?
     let isDefault: Bool?
     let expiry: String?

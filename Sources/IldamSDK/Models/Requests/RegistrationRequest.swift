@@ -8,7 +8,7 @@
 import Foundation
 import Core
 
-public struct RegistrationRequest {
+public struct RegistrationRequest: Sendable {
     public let phone: String
     public let givenNames: String
     public let surname: String

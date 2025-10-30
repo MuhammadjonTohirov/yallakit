@@ -9,7 +9,7 @@
 import Foundation
 import NetworkLayer
 
-protocol RegisterGatewayProtocol {
+protocol RegisterGatewayProtocol: Sendable {
     func register(req: NetReqRegisterProfile) async -> NetRes<NetResRegisterProfile>?
 }
 

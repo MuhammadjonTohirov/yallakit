@@ -8,7 +8,7 @@
 // Models/CardAddRequest.swift
 import Foundation
 
-public struct CardAddRequest {
+public struct CardAddRequest: Sendable {
     public let cardNumber: String
     public let expiry: String
     

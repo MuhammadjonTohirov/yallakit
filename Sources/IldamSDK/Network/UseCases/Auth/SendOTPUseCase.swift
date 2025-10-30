@@ -12,7 +12,7 @@ public protocol SendOTPUseCaseProtocol {
     func execute(username: String) async throws -> OTPResponse?
 }
 
-public final class SendOTPUseCase: SendOTPUseCaseProtocol {
+public struct SendOTPUseCase: SendOTPUseCaseProtocol, Sendable {
     private let gateway: SendOTPGatewayProtocol
     
     init(gateway: SendOTPGatewayProtocol = SendOTPGateway()) {

@@ -9,7 +9,7 @@ import Foundation
 import NetworkLayer
 import Core
 
-protocol SendOTPGatewayProtocol {
+protocol SendOTPGatewayProtocol: Sendable {
     func sendOTP(username: String) async throws -> NetResSendOTP?
 }
 

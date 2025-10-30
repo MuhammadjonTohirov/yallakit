@@ -9,7 +9,7 @@
 import Foundation
 import NetworkLayer
 
-protocol LogoutGatewayProtocol {
+protocol LogoutGatewayProtocol: Sendable {
     func logout() async -> Bool
 }
 

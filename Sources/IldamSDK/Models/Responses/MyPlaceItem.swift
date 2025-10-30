@@ -9,7 +9,7 @@
 import Foundation
 import Core
 
-public struct MyPlaceItem {
+public struct MyPlaceItem: Sendable, Identifiable, Equatable, Hashable {
     public let id: Int
     public let name: String
     public let address: String

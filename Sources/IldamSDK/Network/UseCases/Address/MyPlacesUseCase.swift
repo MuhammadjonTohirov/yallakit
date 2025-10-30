@@ -8,11 +8,11 @@
 // UseCases/LoadMyPlacesUseCase.swift
 import Foundation
 
-public protocol LoadMyPlacesUseCaseProtocol {
+public protocol LoadMyPlacesUseCaseProtocol: Sendable {
     func execute() async -> [MyPlaceItem]
 }
 
-public final class LoadMyPlacesUseCase: LoadMyPlacesUseCaseProtocol {
+public struct LoadMyPlacesUseCase: LoadMyPlacesUseCaseProtocol {
     private let gateway: MyPlacesGatewayProtocol
     
     init(gateway: MyPlacesGatewayProtocol = MyPlacesGateway()) {

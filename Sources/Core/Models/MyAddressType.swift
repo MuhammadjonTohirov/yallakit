@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum MyAddressType: String, Codable {
+public enum MyAddressType: String, Codable, Sendable {
     case other
     case home
     case work

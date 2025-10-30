@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct UserInfo: Codable {
+public struct UserInfo: Codable, Sendable {
     public var id: Int
     public var phone: String
     public var givenNames: String?

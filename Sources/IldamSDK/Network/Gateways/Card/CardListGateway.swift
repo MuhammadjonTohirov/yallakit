@@ -9,7 +9,7 @@
 import Foundation
 import NetworkLayer
 
-protocol CardListGatewayProtocol {
+protocol CardListGatewayProtocol: Sendable {
     func getCardList() async throws -> [NetResCardItem]?
 }
 
