@@ -60,16 +60,16 @@ public final class AuthService: AuthServiceProtocol, @unchecked Sendable {
         return await getMeInfoUseCase.execute()
     }
     
-    public func updateProfile(request: ProfileUpdateRequest) async -> Bool {
-        return await updateProfileUseCase.execute(request: request)
+    public func updateProfile(request: ProfileUpdateRequest) async throws -> Bool {
+        try await updateProfileUseCase.execute(request: request)
     }
     
     public func logout() async -> Bool {
         return await logoutUseCase.execute()
     }
     
-    public func register(request: RegistrationRequest) async -> Bool? {
-        return await registerUseCase.execute(request: request)
+    public func register(request: RegistrationRequest) async throws -> Bool? {
+        try await registerUseCase.execute(request: request)
     }
     
     public func changeAvatar(profileAvatar: Data) async -> (success: Bool, result: AvatarResponse?) {
