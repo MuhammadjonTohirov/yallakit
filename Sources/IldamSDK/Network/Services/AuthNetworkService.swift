@@ -13,9 +13,9 @@ public protocol AuthServiceProtocol: Sendable {
     func sendOTP(username: String) async throws -> OTPResponse?
     func validate(username: String, code: String) async -> ValidationResponse?
     func getUserInfo() async -> UserInfoResponse?
-    func updateProfile(request: ProfileUpdateRequest) async -> Bool
+    func updateProfile(request: ProfileUpdateRequest) async throws -> Bool
     func logout() async -> Bool
-    func register(request: RegistrationRequest) async -> Bool?
+    func register(request: RegistrationRequest) async throws -> Bool?
     func changeAvatar(profileAvatar: Data) async -> (success: Bool, result: AvatarResponse?)
 }
 
