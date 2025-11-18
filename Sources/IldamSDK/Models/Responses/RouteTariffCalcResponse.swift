@@ -11,10 +11,12 @@ import Core
 public struct RouteTariffCalcResponse {
     public var map: RouteData?
     public let tariffs: [TaxiTariff]
+    public let working: TaxiWorkingItem?
     
-    public init(map: RouteData?, tariffs: [TaxiTariff]) {
+    public init(map: RouteData?, tariffs: [TaxiTariff], working: TaxiWorkingItem?) {
         self.tariffs = tariffs
         self.map = map
+        self.working = working
     }
 }
 
