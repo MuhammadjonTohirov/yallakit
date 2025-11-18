@@ -11,9 +11,31 @@ import Core
 // MARK: - TaxiTariffs
 public struct TaxiTariffList {
     public let tariffs: [TaxiTariff]
+    public let working: TaxiWorkingItem?
     
-    public init(tariffs: [TaxiTariff]) {
+    public init(tariffs: [TaxiTariff], working: TaxiWorkingItem?) {
         self.tariffs = tariffs
+        self.working = working
+    }
+}
+
+public struct TaxiWorkingItem: Sendable {
+    public var brandId: Int?
+    public var isWorking: Bool
+    public var text: String?
+    
+    public init(brandId: Int, isWorking: Bool, text: String) {
+        self.brandId = brandId
+        self.isWorking = isWorking
+        self.text = text
+    }
+    
+    init?(_ res: NetResTaxiWorking?) {
+        guard let res else { return nil }
+        
+        self.brandId = res.brandId
+        self.isWorking = res.isWorking ?? false
+        self.text = res.text
     }
 }
 
