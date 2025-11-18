@@ -12,10 +12,7 @@ import Core
 protocol RouteTariffCalcGatewayProtocol {
     func calculateRouteAndTariffs(
         req: NetReqTaxiTariff
-    ) async throws -> (
-        map: NetResRouteCoords?,
-        tariffs: [NetResTaxiTariff]?
-    )
+    ) async throws -> NetResTaxiTariffCalculationWithRoute?
 }
 
 final class RouteTariffCalcGateway: RouteTariffCalcGatewayProtocol {
@@ -23,15 +20,15 @@ final class RouteTariffCalcGateway: RouteTariffCalcGatewayProtocol {
     
     func calculateRouteAndTariffs(
         req: NetReqTaxiTariff
-    ) async throws -> (map: NetResRouteCoords?, tariffs: [NetResTaxiTariff]?) {
+    ) async throws -> NetResTaxiTariffCalculationWithRoute? {
         await session.tasks.0.forEach({$0.cancel()})
-        let result: NetRes<NetResRoute>? = try await Network.sendThrow(
+        let result: NetRes<NetResTaxiTariffCalculationWithRoute>? = try await Network.sendThrow(
             urlSession: session,
             request: MainNetworkRoute.getRouteCoordinates(
                 req: req
             )
         )
         
-        return (map: result?.result?.map, tariffs: result?.result?.tariff)
+        return result?.result
     }
 }

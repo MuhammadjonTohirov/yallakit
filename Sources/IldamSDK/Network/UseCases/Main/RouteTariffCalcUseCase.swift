@@ -37,16 +37,35 @@ public final class RouteTariffCalcUseCase: RouteTariffCalcUseCaseProtocol {
             address: request.addressId
         )
         
-        let result = try await gateway.calculateRouteAndTariffs(
-            req: networkRequest
-        )
+        var lastError: Error?
+        let maxRetries = 3
+        let retryDelay: UInt64 = 1_000_000_000 // 1 second in nanoseconds
         
-        let tariffItems = (result.tariffs ?? []).compactMap(TaxiTariff.init)
+        for attempt in 1...maxRetries {
+            do {
+                let result = try await gateway.calculateRouteAndTariffs(
+                    req: networkRequest
+                )
+                
+                let tariffItems = (result?.tariff ?? []).compactMap(TaxiTariff.init)
+                
+                return RouteTariffCalcResponse(
+                    map: .init(res: result?.map),
+                    tariffs: tariffItems,
+                    working: .init(result?.working)
+                )
+            } catch {
+                lastError = error
+                
+                // If this is not the last attempt, wait before retrying
+                if attempt < maxRetries {
+                    try await Task.sleep(nanoseconds: retryDelay)
+                }
+            }
+        }
         
-        return RouteTariffCalcResponse(
-            map: .init(res: result.map),
-            tariffs: tariffItems
-        )
+        // If all retries failed, throw the last error
+        throw lastError ?? NSError(domain: "RouteTariffCalcUseCase", code: -1, userInfo: [NSLocalizedDescriptionKey: "Unknown error occurred after \(maxRetries) attempts"])
     }
 }
 

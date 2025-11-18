@@ -127,6 +127,7 @@ extension TaxiTariffList {
     init?(res: NetResTaxiTariffList?) {
         guard let res = res else { return nil }
         self.tariffs = res.tariffs.compactMap(TaxiTariff.init)
+        self.working = .init(res.working)
     }
 }
 
