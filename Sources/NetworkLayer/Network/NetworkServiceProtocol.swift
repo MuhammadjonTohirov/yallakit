@@ -44,7 +44,7 @@ public enum NetworkError: Error {
         case .unauthorized:
             return "Unauthorized"
         case .timeout:
-            return "Timeout"
+            return "Timeout."
         case .emptyResponse:
             return "Empty response"
         }
