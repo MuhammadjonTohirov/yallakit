@@ -27,7 +27,10 @@ public extension Error {
     }
     
     var serverMessage: String {
-        (self as? NetworkError)?.localizedDescription ?? self.message
+        if let net = self as? NetworkError {
+            return Network.errorLocalizer?(net) ?? net.localizedDescription
+        }
+        return self.message
     }
 }
 
