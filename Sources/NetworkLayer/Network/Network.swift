@@ -30,6 +30,14 @@ public struct Network {
 
     nonisolated(unsafe) public static var delegate: NetworkDelegate?
     
+    // MARK: - Error Localization Hook
+    public typealias NetworkErrorLocalizer = (NetworkError) -> String
+    nonisolated(unsafe) public static var errorLocalizer: NetworkErrorLocalizer?
+    
+    public static func setErrorLocalizer(_ localize: @escaping NetworkErrorLocalizer) {
+        self.errorLocalizer = localize
+    }
+    
     public static func send<T: NetResBody>(urlSession: URLSession = URLSession.shared, request: URLRequestProtocol) async -> NetRes<T>? {
         do {
             return try await sendThrow(request: request)
