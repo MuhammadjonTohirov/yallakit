@@ -15,6 +15,7 @@ struct Logging {
     }
 }
 
+
 import Foundation
 
 public protocol NetworkDelegate {
