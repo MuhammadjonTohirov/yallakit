@@ -8,12 +8,12 @@
 import Foundation
 import CoreLocation
 
-public enum RouteLineType {
+public enum RouteLineType: Sendable {
     case carLine
     case walkLine
 }
 
-public struct RouteData {
+public struct RouteData: Sendable {
     public var routings: [RouteDataCoordinate]
     public var distance, duration: Double
     
@@ -24,7 +24,7 @@ public struct RouteData {
     }
 }
 
-public struct RouteDataCoordinate {
+public struct RouteDataCoordinate: Sendable {
     public var lat: Double
     public var lng: Double
     public var lineType: RouteLineType = .carLine
