@@ -31,7 +31,7 @@ public struct GetCardListUseCase: GetCardListUseCaseProtocol {
 }
 
 extension CardItem {
-    convenience init(res: NetResCardItem) {
+    init(res: NetResCardItem) {
         self.init(
             cardId: res.cardId,
             isDefault: res.isDefault,
