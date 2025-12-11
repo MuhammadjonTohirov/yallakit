@@ -8,7 +8,7 @@
 import Foundation
 import Core
 
-public struct RouteTariffCalcResponse {
+public struct RouteTariffCalcResponse: Sendable {
     public var map: RouteData?
     public let tariffs: [TaxiTariff]
     public let working: TaxiWorkingItem?
