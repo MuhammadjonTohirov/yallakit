@@ -141,6 +141,8 @@ public struct OrderTaxiDetails: Codable, Sendable {
     public let routes: [OrderRoute]
     public var services: [OrderServiceItem]?
     public var award: Award?
+    public var waitingTime: Float?
+    public var waitingCost: Float?
 
     init?(res: NetResOrderDetails?) {
         guard let res = res else { return nil }
@@ -155,6 +157,12 @@ public struct OrderTaxiDetails: Codable, Sendable {
         self.bonusAmount = res.taxi?.bonusAmount
         self.isUsingBonus = res.taxi?.bonusAmount != nil
         self.award = res.taxi?.award.map { Award(amount: $0.amount, type: $0.type) }
+        self.waitingCost = res.taxi?.waitingCost
+        if let waitingTime = res.taxi?.waitingTime, waitingTime > 0 {
+            self.waitingTime = waitingTime
+        } else {
+            self.waitingTime = nil
+        }
     }
     
     init?(taxiRes res: NetResOrderTaxiDetails?) {
