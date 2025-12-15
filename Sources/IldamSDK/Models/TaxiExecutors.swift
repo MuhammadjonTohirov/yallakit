@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct TaxiExecutor {
+public struct TaxiExecutor: Sendable {
     public let id: Int
     public let heading: Float
     public let lat, lng: Float
@@ -22,7 +22,7 @@ public struct TaxiExecutor {
     }
 }
 
-public struct TaxiExecutors {
+public struct TaxiExecutors: Sendable {
     public let timeout: Int
     public let executors: [TaxiExecutor]
     
