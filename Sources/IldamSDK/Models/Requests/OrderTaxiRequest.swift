@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct OrderTaxiRequest: Codable {
+public struct OrderTaxiRequest: Codable, Sendable {
     public var addresses: [TaxiOrderAddressItem]
     public var comment: String
     public var dontCallMe: Bool
@@ -62,7 +62,7 @@ public struct TaxiOrderItem: Codable {
     }
 }
 
-public struct TaxiOrderAddressItem: Codable {
+public struct TaxiOrderAddressItem: Codable, Sendable {
     public let id: Int?
     public let lat: Double
     public let lng: Double
