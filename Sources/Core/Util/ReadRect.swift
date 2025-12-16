@@ -18,8 +18,4 @@ public extension View {
     func readRect(onRectChange: @escaping (CGRect) -> Void) -> some View {
         self.modifier(ReadRectModifier(onRectChange: onRectChange))
     }
-    
-    func readSize(size: Biding<CGSize>) -> some View {
-        
-    }
 }
