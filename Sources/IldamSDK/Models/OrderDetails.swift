@@ -144,6 +144,22 @@ public struct OrderTaxiDetails: Codable, Sendable {
     public var waitingTime: Float?
     public var waitingCost: Float?
 
+    public init(tariff: String, startPrice: Float?, distance: Float?, clientTotalPrice: Float, totalPrice: Float?, fixedPrice: Bool, isUsingBonus: Bool? = nil, bonusAmount: Double? = nil, routes: [OrderRoute], services: [OrderServiceItem]? = nil, award: Award? = nil, waitingTime: Float? = nil, waitingCost: Float? = nil) {
+        self.tariff = tariff
+        self.startPrice = startPrice
+        self.distance = distance
+        self.clientTotalPrice = clientTotalPrice
+        self.totalPrice = totalPrice
+        self.fixedPrice = fixedPrice
+        self.isUsingBonus = isUsingBonus
+        self.bonusAmount = bonusAmount
+        self.routes = routes
+        self.services = services
+        self.award = award
+        self.waitingTime = waitingTime
+        self.waitingCost = waitingCost
+    }
+    
     init?(res: NetResOrderDetails?) {
         guard let res = res else { return nil }
         self.tariff = res.taxi?.tariff ?? ""
@@ -181,6 +197,7 @@ public struct OrderTaxiDetails: Codable, Sendable {
         self.isUsingBonus = res.bonusUsed
         self.award = res.award.map { Award(amount: $0.amount, type: $0.type) }
     }
+    
     
     public struct Award: Codable, Sendable {
         public var amount: Int
