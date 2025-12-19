@@ -196,6 +196,8 @@ public struct OrderTaxiDetails: Codable, Sendable {
         self.bonusAmount = res.bonusAmount
         self.isUsingBonus = res.bonusUsed
         self.award = res.award.map { Award(amount: $0.amount, type: $0.type) }
+        self.waitingTime = res.waitingTime
+        self.waitingCost = res.waitingCost
     }
     
     
@@ -230,6 +232,17 @@ public struct TaxiOrderExecutor: Codable, Sendable {
         self.photo = res.photo ?? ""
         self.coords = TaxiOrderExecutorCoords(res: res)
         self.driver = TaxiOrderExecutorDriver(res: res)
+    }
+    
+    public init(id: Int, phone: String, givenNames: String, surName: String, fatherName: String?, photo: String, coords: TaxiOrderExecutorCoords?, driver: TaxiOrderExecutorDriver?) {
+        self.id = id
+        self.phone = phone
+        self.givenNames = givenNames
+        self.surName = surName
+        self.fatherName = fatherName
+        self.photo = photo
+        self.coords = coords
+        self.driver = driver
     }
 }
 
