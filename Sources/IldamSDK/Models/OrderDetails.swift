@@ -62,16 +62,16 @@ public enum OrderStatus: String, CaseIterable, Codable, Sendable {
 }
 
 public struct OrderDetails: Codable, Sendable {
-    public let id: Int
-    public let dateTime: Double?
-    public let service: String
+    public var id: Int
+    public var dateTime: Double?
+    public var service: String
     public var status: OrderStatus?
-    public let executor: TaxiOrderExecutor?
-    public let taxi: OrderTaxiDetails?
-    public let comment: String?
-    public let statusTime: [StatusTime]?
-    public let paymentType: String
-    public let track: [OrderTaxiTrack]?
+    public var executor: TaxiOrderExecutor?
+    public var taxi: OrderTaxiDetails?
+    public var comment: String?
+    public var statusTime: [StatusTime]?
+    public var paymentType: String
+    public var track: [OrderTaxiTrack]?
     
     init?(res: NetResOrderDetails?) {
         guard let res = res else { return nil }
@@ -114,8 +114,8 @@ public struct OrderDetails: Codable, Sendable {
     }
     
     public struct StatusTime: Codable, Sendable {
-        public let status: OrderStatus
-        public let time: Double
+        public var status: OrderStatus
+        public var time: Double
         
         init(status: OrderStatus, time: Double) {
             self.status = status
@@ -130,15 +130,15 @@ public struct OrderDetails: Codable, Sendable {
 }
 
 public struct OrderTaxiDetails: Codable, Sendable {
-    public let tariff: String
-    public let startPrice: Float?
-    public let distance: Float?
-    public let clientTotalPrice: Float
-    public let totalPrice: Float?
-    public let fixedPrice: Bool
+    public var tariff: String
+    public var startPrice: Float?
+    public var distance: Float?
+    public var clientTotalPrice: Float
+    public var totalPrice: Float?
+    public var fixedPrice: Bool
     public var isUsingBonus: Bool?
     public var bonusAmount: Double?
-    public let routes: [OrderRoute]
+    public var routes: [OrderRoute]
     public var services: [OrderServiceItem]?
     public var award: Award?
     public var waitingTime: Float?
