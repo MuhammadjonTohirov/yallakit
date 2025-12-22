@@ -23,11 +23,13 @@ public struct TaxiWorkingItem: Sendable {
     public var brandId: Int?
     public var isWorking: Bool
     public var text: String?
+    public var addressId: Int?
     
-    public init(brandId: Int, isWorking: Bool, text: String) {
+    public init(brandId: Int, isWorking: Bool, text: String, addressId: Int?) {
         self.brandId = brandId
         self.isWorking = isWorking
         self.text = text
+        self.addressId = addressId
     }
     
     init?(_ res: NetResTaxiWorking?) {
@@ -36,6 +38,7 @@ public struct TaxiWorkingItem: Sendable {
         self.brandId = res.brandId
         self.isWorking = res.isWorking ?? false
         self.text = res.text
+        self.addressId = res.addressId
     }
 }
 
