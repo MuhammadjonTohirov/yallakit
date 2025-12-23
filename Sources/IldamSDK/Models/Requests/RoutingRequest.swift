@@ -86,7 +86,7 @@ extension RoutingRequest {
 
 extension RoutingRequest: URLRequestProtocol {
     public var url: URL {
-        return URL.baseAPICli.appendingPath("routing")
+        return URL.baseAPI.appendingPath("client", "routing")
     }
     
     public var body: Data? {
