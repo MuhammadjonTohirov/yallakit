@@ -8,7 +8,7 @@
 import Foundation
 import NetworkLayer
 
-public struct RoutingRequest: Codable {
+public struct RoutingRequest: Codable, Sendable {
     public let points: [RoutingPoint]
     
     public init(points: [RoutingPoint]) {
@@ -19,8 +19,7 @@ public struct RoutingRequest: Codable {
         case points
     }
     
-    
-    public struct RoutingPoint: Codable {
+    public struct RoutingPoint: Codable, Sendable {
         public let type: PointType
         public let lng: Double
         public let lat: Double
@@ -32,12 +31,11 @@ public struct RoutingRequest: Codable {
         }
     }
 
-    public enum PointType: String, Codable {
+    public enum PointType: String, Codable, Sendable {
         case start
         case point
         case stop
     }
-
 }
 // MARK: - Convenience Initializers
 

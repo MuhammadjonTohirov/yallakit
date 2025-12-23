@@ -9,15 +9,13 @@ import Foundation
 import NetworkLayer
 import Core
 
-protocol RoutingGatewayProtocol {
+protocol RoutingGatewayProtocol: Sendable {
     func execute(
         req: [(lat: Double, lng: Double)]
     ) async throws -> RoutingResponse?
 }
 
-final class RoutingGateway: RoutingGatewayProtocol {
-    private lazy var session: URLSession = URLSession(configuration: .default)
-    
+struct RoutingGateway: RoutingGatewayProtocol {
     func execute(req: [(lat: Double, lng: Double)]) async throws -> RoutingResponse? {
         let reqCount = req.count
         let points: [RoutingRequest.RoutingPoint] = req.enumerated().map { (index, item) in

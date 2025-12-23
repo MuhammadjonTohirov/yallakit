@@ -7,13 +7,13 @@
 
 import Foundation
 
-public protocol RoutingUseCaseProtocol {
+public protocol RoutingUseCaseProtocol: Sendable {
     func execute(
         req: [(lat: Double, lng: Double)]
     ) async throws -> RoutingResponse?
 }
 
-public final class RoutingUseCase: RoutingUseCaseProtocol {
+public struct RoutingUseCase: RoutingUseCaseProtocol {
     public init() {
         
     }

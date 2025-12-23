@@ -8,7 +8,7 @@
 import Foundation
 import Core
 
-public struct RoutingResponse: NetResBody {
+public struct RoutingResponse: NetResBody, Sendable {
     public let distance: Double
     public let duration: Double
     public let routing: [Coord]
