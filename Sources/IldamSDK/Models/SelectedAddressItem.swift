@@ -23,6 +23,7 @@ public struct SecondaryAddressItem {
     public let uniqueId: Int?
     public let addressId: Int?
     public let name: String?
+    public let addressName: String?
     public let type: String?
     public let lat: Double
     public let lng: Double
@@ -30,10 +31,11 @@ public struct SecondaryAddressItem {
     public let duration: Double
     public let parent: SecondaryAddressParentItem?
     
-    public init(uniqueId: Int?, addressId: Int?, name: String?, type: String?, lat: Double, lng: Double, distance: Double, duration: Double, parent: SecondaryAddressParentItem?) {
+    public init(uniqueId: Int?, addressId: Int?, name: String?, addressName: String ,type: String?, lat: Double, lng: Double, distance: Double, duration: Double, parent: SecondaryAddressParentItem?) {
         self.uniqueId = uniqueId
         self.addressId = addressId
         self.name = name
+        self.addressName = addressName
         self.type = type
         self.lat = lat
         self.lng = lng
@@ -66,6 +68,7 @@ extension SecondaryAddressItem {
         self.uniqueId = response.uniqueId
         self.addressId = response.addressId
         self.name = response.name
+        self.addressName = response.addressName
         self.type = response.type
         self.lat = response.lat
         self.lng = response.lng
