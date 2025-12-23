@@ -9,23 +9,23 @@ import Foundation
 import NetworkLayer
 
 public protocol FetchSecondaryAddressesUseCase {
-    func fetch(lat: Double, lng: Double) async throws -> [SecondaryAddressItem]
+    func fetch(lat: Double, lng: Double) async throws -> SecondaryAddressResult
 }
 
 public struct FetchSecondaryAddressUseCaseImpl: FetchSecondaryAddressesUseCase {
     public init() {
         
     }
-    
-    public func fetch(lat: Double, lng: Double) async throws -> [SecondaryAddressItem] {
-        let result: NetRes<[NetResSecondaryAddressItem]>? = try await Network.sendThrow(
+    //NetResSecondaryAddressResult
+    public func fetch(lat: Double, lng: Double) async throws -> SecondaryAddressResult {
+        let result: NetRes<NetResSecondaryAddressResult>? = try await Network.sendThrow(
             request: Request(
                 lat: lat,
                 lng: lng
             )
         )
-        
-        return result?.result?.compactMap {SecondaryAddressItem.init(res: $0)} ?? []
+
+        return SecondaryAddressResult(res: result?.result) ?? SecondaryAddressResult(items: [])
     }
 }
 

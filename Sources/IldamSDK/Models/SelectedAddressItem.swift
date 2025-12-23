@@ -7,6 +7,13 @@
 
 import Foundation
 
+public struct SecondaryAddressResult {
+    public let items: [SecondaryAddressItem]
+    
+    public init(items: [SecondaryAddressItem]) {
+        self.items = items
+    }
+}
 
 public struct SecondaryAddressParentItem {
     public let id: Int?
@@ -74,7 +81,7 @@ extension SecondaryAddressItem {
         self.lng = response.lng
         self.distance = response.distance ?? 0
         self.duration = response.duration ?? 0
-        self.parent = SecondaryAddressParentItem(id: response.parent?.id ?? 0, name: response.parent?.name ?? "")
+        self.parent = SecondaryAddressParentItem(res: response.parent) ?? SecondaryAddressParentItem(id: nil, name: nil)
     }
 }
 
@@ -86,3 +93,12 @@ extension SecondaryAddressParentItem {
         self.name = response.name
     }
 }
+
+extension SecondaryAddressResult {
+    init?(res response: NetResSecondaryAddressResult?) {
+        guard let response = response else { return nil }
+        
+        self.items = response.items.compactMap { SecondaryAddressItem(res: $0) }
+    }
+}
+
