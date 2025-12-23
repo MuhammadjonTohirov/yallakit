@@ -40,7 +40,7 @@ extension FetchSecondaryAddressUseCaseImpl {
         }
         
         var url: URL {
-            URL.goIldamAPI.appending(path: "/order/secondary-addresses")
+            URL.goIldamV2API.appending(path: "/order/secondary-addresses")
         }
         
         var body: Data? {
