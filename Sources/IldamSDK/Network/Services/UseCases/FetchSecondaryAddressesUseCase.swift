@@ -9,7 +9,7 @@ import Foundation
 import NetworkLayer
 
 public protocol FetchSecondaryAddressesUseCase {
-    func fetch(lat: Double, lng: Double) async throws -> SecondaryAddressResult
+    func fetch(lat: Double, lng: Double) async throws -> [SecondaryAddressItem]
 }
 
 public struct FetchSecondaryAddressUseCaseImpl: FetchSecondaryAddressesUseCase {
@@ -17,7 +17,7 @@ public struct FetchSecondaryAddressUseCaseImpl: FetchSecondaryAddressesUseCase {
         
     }
     //NetResSecondaryAddressResult
-    public func fetch(lat: Double, lng: Double) async throws -> SecondaryAddressResult {
+    public func fetch(lat: Double, lng: Double) async throws -> [SecondaryAddressItem] {
         let result: NetRes<NetResSecondaryAddressResult>? = try await Network.sendThrow(
             request: Request(
                 lat: lat,
@@ -25,7 +25,7 @@ public struct FetchSecondaryAddressUseCaseImpl: FetchSecondaryAddressesUseCase {
             )
         )
 
-        return SecondaryAddressResult(res: result?.result) ?? SecondaryAddressResult(items: [])
+        return result?.result?.items.compactMap { SecondaryAddressItem(res: $0) } ?? []
     }
 }
 
