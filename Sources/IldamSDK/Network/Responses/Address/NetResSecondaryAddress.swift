@@ -14,6 +14,7 @@ struct NetResAddressParent: Codable {
 struct NetResSecondaryAddressItem: Codable {
     let uniqueId: Int?
     let addressId: Int?
+    let addressName: String?
     let name: String?
     let type: String?
     let lat: Double
@@ -26,6 +27,7 @@ struct NetResSecondaryAddressItem: Codable {
         case uniqueId = "unique_id"
         case addressId = "address_id"
         case name
+        case addressName = "address_name" 
         case type
         case lat
         case lng
