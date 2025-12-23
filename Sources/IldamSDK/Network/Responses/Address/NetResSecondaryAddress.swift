@@ -7,6 +7,10 @@
 
 import Foundation
 
+struct NetResSecondaryAddressResult: NetResBody {
+    let items: [NetResSecondaryAddressItem]
+}
+
 struct NetResAddressParent: Codable {
     let id: Int?
     let name: String?
