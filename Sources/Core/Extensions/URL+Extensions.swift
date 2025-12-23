@@ -27,6 +27,10 @@ public extension URL {
     static var goIldamAPI: URL {
         .init(string: ConstantsProvider.shared.constants.baseGoApi + ConstantsProvider.shared.constants.goBaseEndpoint)!
     }
+     /// https://api2.ildam.uz/client/v2/
+    static var goIldamV2API: URL {
+        .init(string: ConstantsProvider.shared.constants.baseGoApi + ConstantsProvider.shared.constants.goBaseV2Endpoint)!
+    }
     
     static var keyHeader: (key: String, value: String) {
         ("secret-key", ConstantsProvider.shared.constants.secretKey)

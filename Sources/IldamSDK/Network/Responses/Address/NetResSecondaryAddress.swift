@@ -7,24 +7,30 @@
 
 import Foundation
 
+struct NetResAddressParent: Codable {
+    let id: Int?
+    let name: String?
+}
 struct NetResSecondaryAddressItem: Codable {
-    let addressId: Int?
-    let addressName: String?
     let uniqueId: Int?
-    let distance: Double
-    let lat: Double
-    let lng: Double
+    let addressId: Int?
     let name: String?
     let type: String?
+    let lat: Double
+    let lng: Double
+    let distance: Double?
+    let duration: Double?
+    let parent: NetResAddressParent?
     
     enum CodingKeys: String, CodingKey {
-        case addressId = "address_id"
         case uniqueId = "unique_id"
-        case addressName = "address_name"
-        case distance
-        case lat
-        case lng
+        case addressId = "address_id"
         case name
         case type
+        case lat
+        case lng
+        case distance
+        case duration
+        case parent
     }
 }
