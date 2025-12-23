@@ -98,7 +98,7 @@ extension RoutingRequest: URLRequestProtocol {
     }
     
     public func request() -> URLRequest {
-        var req = URLRequest(url: url)
+        var req = URLRequest.new(url: url)
         req.httpMethod = method.rawValue
         req.httpBody = body
         return req
