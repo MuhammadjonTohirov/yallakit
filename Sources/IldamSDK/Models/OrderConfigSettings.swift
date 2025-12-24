@@ -45,7 +45,7 @@ extension OrderConfigSettings {
         self.efirTime = res.efirTime
         self.expireTime = res.expireTime
         self.findRadius = res.findRadius
-        self.reasons = res.reasons.compactMap({.init(id: $0.id, name: $0.name)})
+        self.reasons = res.reasons.compactMap({.init(id: $0.id, name: $0.name, icon: $0.icon)})
         self.sendEfirRadius = res.sendEfirRadius
         self.supportNumber = res.supportNumber
         self.timeToEfir = res.timeToEfir
@@ -57,10 +57,12 @@ public extension OrderConfigSettings {
     struct CancelReason: Codable, Sendable {
         public let id: Int
         public let name: String
+        public let icon: String?
         
-        public init(id: Int, name: String) {
+        public init(id: Int, name: String, icon: String?) {
             self.id = id
             self.name = name
+            self.icon = icon
         }
     }
 }
