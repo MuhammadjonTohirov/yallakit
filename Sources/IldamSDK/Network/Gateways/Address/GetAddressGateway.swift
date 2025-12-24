@@ -1,5 +1,5 @@
 //
-//  GatAddressGateway.swift
+//  GetAddressGateway.swift
 //  IldamSDK
 //
 //  Created by Muhammadjon Tohirov on 25/03/25.
