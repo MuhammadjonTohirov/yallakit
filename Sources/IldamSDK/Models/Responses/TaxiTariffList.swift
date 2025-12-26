@@ -10,10 +10,10 @@ import Core
 
 // MARK: - TaxiTariffs
 public struct TaxiTariffList {
-    public let tariffs: [TaxiTariff]
+    public let tariffs: [TaxiTariff]?
     public let working: TaxiWorkingItem?
     
-    public init(tariffs: [TaxiTariff], working: TaxiWorkingItem?) {
+    public init(tariffs: [TaxiTariff]?, working: TaxiWorkingItem?) {
         self.tariffs = tariffs
         self.working = working
     }
@@ -129,7 +129,7 @@ public struct TaxiTariffService: Identifiable, Sendable {
 extension TaxiTariffList {
     init?(res: NetResTaxiTariffList?) {
         guard let res = res else { return nil }
-        self.tariffs = res.tariffs.compactMap(TaxiTariff.init)
+        self.tariffs = res.tariffs?.compactMap(TaxiTariff.init)
         self.working = .init(res.working)
     }
 }
