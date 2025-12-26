@@ -9,6 +9,6 @@ import Foundation
 
 struct NetResTaxiTariffCalculationWithRoute: NetResBody {
     var map: NetResRouteCoords?
-    var tariff: [NetResTaxiTariff]
+    var tariff: [NetResTaxiTariff]?
     var working: NetResTaxiWorking?
 }
