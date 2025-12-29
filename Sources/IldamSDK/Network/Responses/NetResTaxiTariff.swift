@@ -10,7 +10,7 @@ import Core
 
 // MARK: - TaxiTariffs
 struct NetResTaxiTariffList: NetResBody {
-    let tariffs: [NetResTaxiTariff]
+    let tariffs: [NetResTaxiTariff]?
     let working: NetResTaxiWorking?
     
     enum CodingKeys: String, CodingKey {
@@ -23,11 +23,13 @@ struct NetResTaxiWorking: Codable {
     let brandId: Int?
     let isWorking: Bool?
     let text: String?
+    let addressId: Int?
     
     enum CodingKeys: String, CodingKey {
         case brandId = "brand_id"
         case isWorking = "is_working"
         case text
+        case addressId = "address_id"
     }
 }
 

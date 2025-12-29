@@ -94,6 +94,8 @@ struct NetResOrderTaxiDetails: Codable {
     let bonusUsed: Bool?
     var bonusAmount: Double?
     var award: Award?
+    var waitingTime: Float?
+    var waitingCost: Float?
     
     enum CodingKeys: String, CodingKey {
         case tariff
@@ -107,6 +109,8 @@ struct NetResOrderTaxiDetails: Codable {
         case bonusAmount = "bonus_amount"
         case services
         case award
+        case waitingTime = "waiting_time"
+        case waitingCost = "waiting_cost"
     }
     
     struct Award: Codable {

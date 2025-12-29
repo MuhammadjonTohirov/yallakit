@@ -13,6 +13,7 @@ public struct Constants: Sendable {
     public var websocketServer: String = "wss://api2.ildam.uz/ws/executor"
     
     public var goBaseEndpoint: String = "/client"
+    public var goBaseV2Endpoint: String = "/client/v2"
     public var phpBaseEndpoint: String = "/cli"
     
     public var suiteName: String = "uz.xcoder.Ildam"

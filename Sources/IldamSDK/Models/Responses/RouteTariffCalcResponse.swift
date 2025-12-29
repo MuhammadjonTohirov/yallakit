@@ -8,12 +8,12 @@
 import Foundation
 import Core
 
-public struct RouteTariffCalcResponse {
+public struct RouteTariffCalcResponse: Sendable {
     public var map: RouteData?
-    public let tariffs: [TaxiTariff]
+    public let tariffs: [TaxiTariff]?
     public let working: TaxiWorkingItem?
     
-    public init(map: RouteData?, tariffs: [TaxiTariff], working: TaxiWorkingItem?) {
+    public init(map: RouteData?, tariffs: [TaxiTariff]?, working: TaxiWorkingItem?) {
         self.tariffs = tariffs
         self.map = map
         self.working = working

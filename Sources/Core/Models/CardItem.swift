@@ -7,7 +7,7 @@
 
 import Foundation
 
-public final class CardItem: NSObject {
+public struct CardItem: Sendable {
     public var cardId: String?
     public var isDefault: Bool?
     public var expiry: String?

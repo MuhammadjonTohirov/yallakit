@@ -16,16 +16,16 @@ public struct FetchSecondaryAddressUseCaseImpl: FetchSecondaryAddressesUseCase {
     public init() {
         
     }
-    
+    //NetResSecondaryAddressResult
     public func fetch(lat: Double, lng: Double) async throws -> [SecondaryAddressItem] {
-        let result: NetRes<[NetResSecondaryAddressItem]>? = try await Network.sendThrow(
+        let result: NetRes<NetResSecondaryAddressResult>? = try await Network.sendThrow(
             request: Request(
                 lat: lat,
                 lng: lng
             )
         )
-        
-        return result?.result?.compactMap {SecondaryAddressItem.init(res: $0)} ?? []
+
+        return result?.result?.items.compactMap { SecondaryAddressItem(res: $0) } ?? []
     }
 }
 
@@ -40,7 +40,7 @@ extension FetchSecondaryAddressUseCaseImpl {
         }
         
         var url: URL {
-            URL.goIldamAPI.appending(path: "/order/secondary-addresses")
+            URL.goIldamV2API.appending(path: "/order/secondary-addresses")
         }
         
         var body: Data? {

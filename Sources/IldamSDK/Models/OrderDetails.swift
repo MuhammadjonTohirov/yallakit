@@ -62,16 +62,16 @@ public enum OrderStatus: String, CaseIterable, Codable, Sendable {
 }
 
 public struct OrderDetails: Codable, Sendable {
-    public let id: Int
-    public let dateTime: Double?
-    public let service: String
+    public var id: Int
+    public var dateTime: Double?
+    public var service: String
     public var status: OrderStatus?
-    public let executor: TaxiOrderExecutor?
-    public let taxi: OrderTaxiDetails?
-    public let comment: String?
-    public let statusTime: [StatusTime]?
-    public let paymentType: String
-    public let track: [OrderTaxiTrack]?
+    public var executor: TaxiOrderExecutor?
+    public var taxi: OrderTaxiDetails?
+    public var comment: String?
+    public var statusTime: [StatusTime]?
+    public var paymentType: String
+    public var track: [OrderTaxiTrack]?
     
     init?(res: NetResOrderDetails?) {
         guard let res = res else { return nil }
@@ -114,8 +114,8 @@ public struct OrderDetails: Codable, Sendable {
     }
     
     public struct StatusTime: Codable, Sendable {
-        public let status: OrderStatus
-        public let time: Double
+        public var status: OrderStatus
+        public var time: Double
         
         init(status: OrderStatus, time: Double) {
             self.status = status
@@ -130,18 +130,36 @@ public struct OrderDetails: Codable, Sendable {
 }
 
 public struct OrderTaxiDetails: Codable, Sendable {
-    public let tariff: String
-    public let startPrice: Float?
-    public let distance: Float?
-    public let clientTotalPrice: Float
-    public let totalPrice: Float?
-    public let fixedPrice: Bool
+    public var tariff: String
+    public var startPrice: Float?
+    public var distance: Float?
+    public var clientTotalPrice: Float
+    public var totalPrice: Float?
+    public var fixedPrice: Bool
     public var isUsingBonus: Bool?
     public var bonusAmount: Double?
-    public let routes: [OrderRoute]
+    public var routes: [OrderRoute]
     public var services: [OrderServiceItem]?
     public var award: Award?
+    public var waitingTime: Float?
+    public var waitingCost: Float?
 
+    public init(tariff: String, startPrice: Float?, distance: Float?, clientTotalPrice: Float, totalPrice: Float?, fixedPrice: Bool, isUsingBonus: Bool? = nil, bonusAmount: Double? = nil, routes: [OrderRoute], services: [OrderServiceItem]? = nil, award: Award? = nil, waitingTime: Float? = nil, waitingCost: Float? = nil) {
+        self.tariff = tariff
+        self.startPrice = startPrice
+        self.distance = distance
+        self.clientTotalPrice = clientTotalPrice
+        self.totalPrice = totalPrice
+        self.fixedPrice = fixedPrice
+        self.isUsingBonus = isUsingBonus
+        self.bonusAmount = bonusAmount
+        self.routes = routes
+        self.services = services
+        self.award = award
+        self.waitingTime = waitingTime
+        self.waitingCost = waitingCost
+    }
+    
     init?(res: NetResOrderDetails?) {
         guard let res = res else { return nil }
         self.tariff = res.taxi?.tariff ?? ""
@@ -155,6 +173,12 @@ public struct OrderTaxiDetails: Codable, Sendable {
         self.bonusAmount = res.taxi?.bonusAmount
         self.isUsingBonus = res.taxi?.bonusAmount != nil
         self.award = res.taxi?.award.map { Award(amount: $0.amount, type: $0.type) }
+        self.waitingCost = res.taxi?.waitingCost
+        if let waitingTime = res.taxi?.waitingTime, waitingTime > 0 {
+            self.waitingTime = waitingTime
+        } else {
+            self.waitingTime = nil
+        }
     }
     
     init?(taxiRes res: NetResOrderTaxiDetails?) {
@@ -172,7 +196,10 @@ public struct OrderTaxiDetails: Codable, Sendable {
         self.bonusAmount = res.bonusAmount
         self.isUsingBonus = res.bonusUsed
         self.award = res.award.map { Award(amount: $0.amount, type: $0.type) }
+        self.waitingTime = res.waitingTime
+        self.waitingCost = res.waitingCost
     }
+    
     
     public struct Award: Codable, Sendable {
         public var amount: Int
@@ -205,6 +232,17 @@ public struct TaxiOrderExecutor: Codable, Sendable {
         self.photo = res.photo ?? ""
         self.coords = TaxiOrderExecutorCoords(res: res)
         self.driver = TaxiOrderExecutorDriver(res: res)
+    }
+    
+    public init(id: Int, phone: String, givenNames: String, surName: String, fatherName: String?, photo: String, coords: TaxiOrderExecutorCoords?, driver: TaxiOrderExecutorDriver?) {
+        self.id = id
+        self.phone = phone
+        self.givenNames = givenNames
+        self.surName = surName
+        self.fatherName = fatherName
+        self.photo = photo
+        self.coords = coords
+        self.driver = driver
     }
 }
 

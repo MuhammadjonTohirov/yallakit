@@ -61,17 +61,27 @@ public final class SyncCardsUseCaseImpl: @unchecked Sendable, SyncCardsUseCase {
     }
     
     public func setDefault(cardId: String) async {
+        var _cards = cards
+        
+        func set(cards: [CardItem]) {
+            self.cards = cards
+        }
+        
+        for i in 0..<_cards.count {
+            _cards[i].isDefault = false
+        }
+
         guard let index = cards.firstIndex(where: {$0.cardId == cardId}) else {
             _ = try? await SetDefaultCardUseCase().execute(cardId: "cash")
+                        
+            set(cards: _cards)
+            
             return
         }
         
-        cards[index].isDefault = true
-        cards.forEach {
-            if $0.cardId != cardId {
-                $0.isDefault = false
-            }
-        }
+        _cards[index].isDefault = true
+
+        set(cards: _cards)
         
         _ = try? await SetDefaultCardUseCase().execute(cardId: cardId)
     }
