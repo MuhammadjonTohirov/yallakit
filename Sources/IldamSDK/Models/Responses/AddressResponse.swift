@@ -15,7 +15,7 @@ public struct AddressResponse: Sendable {
     public var name: String
     public var distance: Double?
     public var parent: AddressParent?
-    public var level: String?
+    public var level: String?`
     
     public init(id: Int?, lat: Double, lng: Double, name: String, distance: Double? = nil, parent: AddressParent? = nil, level: String? = nil) {
         self.id = id
