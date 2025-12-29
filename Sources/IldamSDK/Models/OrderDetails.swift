@@ -117,7 +117,7 @@ public struct OrderDetails: Codable, Sendable {
         public var status: OrderStatus
         public var time: Double
         
-        init(status: OrderStatus, time: Double) {
+        public init(status: OrderStatus, time: Double) {
             self.status = status
             self.time = time
         }
