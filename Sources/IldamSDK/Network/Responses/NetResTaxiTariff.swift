@@ -10,7 +10,7 @@ import Core
 
 // MARK: - TaxiTariffs
 struct NetResTaxiTariffList: NetResBody {
-    let tariffs: [NetResTaxiTariff]
+    let tariffs: [NetResTaxiTariff]?
     let working: NetResTaxiWorking?
     
     enum CodingKeys: String, CodingKey {

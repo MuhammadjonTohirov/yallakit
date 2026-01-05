@@ -9,7 +9,7 @@ import Foundation
 
 struct NetResRoute: NetResBody {
     var map: NetResRouteCoords?
-    var tariff: [NetResTaxiTariff]
+    var tariff: [NetResTaxiTariff]?
 }
 
 struct NetResRouteCoords: Codable {
