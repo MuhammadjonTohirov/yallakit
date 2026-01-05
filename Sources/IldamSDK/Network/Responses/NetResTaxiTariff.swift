@@ -84,11 +84,13 @@ struct NetResTaxiTariffService: Codable, Identifiable {
     var id: Int
     let cost: Float?
     let name, costType: String?
-
+    let icon: String?
+    
     enum CodingKeys: String, CodingKey {
         case cost, name
         case id
         case costType = "cost_type"
+        case icon
     }
     
     var isSelected: Bool = false

@@ -115,14 +115,16 @@ public struct TaxiTariffService: Identifiable, Sendable {
     public var id: Int
     public let cost: Float?
     public let name, costType: String?
+    public var icon: String?
     public var isSelected: Bool = false
     
-    public init(id: Int, cost: Float?, name: String?, costType: String?, isSelected: Bool) {
+    public init(id: Int, cost: Float?, name: String?, costType: String?, icon: String?, isSelected: Bool) {
         self.id = id
         self.cost = cost
         self.name = name
         self.costType = costType
         self.isSelected = isSelected
+        self.icon = icon
     }
 }
 
@@ -171,6 +173,7 @@ extension TaxiTariffService {
         self.name = res.name
         self.costType = res.costType
         self.isSelected = false
+        self.icon = res.icon
     }
 }
 
