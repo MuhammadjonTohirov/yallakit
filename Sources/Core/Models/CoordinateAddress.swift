@@ -8,7 +8,7 @@
 import Foundation
 
 public struct CoordinateAddress {
-    public let id: Int?
+    public let id: Int64?
     public var lat: Double
     public var lng: Double
     public var name: String
@@ -16,7 +16,7 @@ public struct CoordinateAddress {
     public var parent: AddressParent?
     public var level: String?
     
-    public init(id: Int?, lat: Double, lng: Double, name: String, distance: Double? = nil, parent: AddressParent? = nil, level: String? = nil) {
+    public init(id: Int64?, lat: Double, lng: Double, name: String, distance: Double? = nil, parent: AddressParent? = nil, level: String? = nil) {
         self.id = id
         self.lat = lat
         self.lng = lng
@@ -27,11 +27,11 @@ public struct CoordinateAddress {
     }
     
     public struct AddressParent {
-        public var id: Int
+        public var id: Int64
         public var name: String?
         public var level: String?
         
-        public init(id: Int, name: String? = nil, lavel: String? = nil) {
+        public init(id: Int64, name: String? = nil, lavel: String? = nil) {
             self.id = id
             self.name = name
             self.level = lavel

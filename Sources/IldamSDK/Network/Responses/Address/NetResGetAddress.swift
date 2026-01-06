@@ -9,7 +9,7 @@ import Foundation
 import NetworkLayer
 
 struct NetResGetAddress: NetResBody {
-    let id: Int?
+    let id: Int64?
     var lat: Double
     var lng: Double
     var name: String
@@ -28,7 +28,7 @@ struct NetResGetAddress: NetResBody {
     }
     
     struct AddressParent: Codable {
-        var id: Int
+        var id: Int64
         var name: String?
         var level: String?
     }

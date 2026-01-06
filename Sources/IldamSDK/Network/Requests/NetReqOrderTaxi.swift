@@ -17,7 +17,7 @@ struct NetReqOrderTaxi: Codable {
     var tariffID: Int
     var tariffOptions: [Int]
     var toPhone: String
-    var addressId: Int?
+    var addressId: Int64?
     var bonusAmount: Int?
     var cardId: String?
     var useTheBonus: Bool?
@@ -72,7 +72,7 @@ struct NetReqOrderTaxi: Codable {
 }
 
 struct NetReqOrderTaxiAddress: Codable {
-    let addressId: Int?
+    let addressId: Int64?
     let lat: Double
     let lng: Double
     let name: String

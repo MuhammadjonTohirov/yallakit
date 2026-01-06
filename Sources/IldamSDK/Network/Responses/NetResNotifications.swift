@@ -12,7 +12,7 @@ struct NetResNotifications: NetResBody {
 }
 
 struct NetResNotification: NetResBody {
-    let id: Int?
+    let id: Int64?
     let title: String?
     let type: String?
     let content: String?

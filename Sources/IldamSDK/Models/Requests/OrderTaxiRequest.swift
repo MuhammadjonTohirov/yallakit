@@ -17,7 +17,7 @@ public struct OrderTaxiRequest: Codable, Sendable {
     public var tariffID: Int
     public var tariffOptions: [Int]
     public var toPhone: String
-    public var addressId: Int?
+    public var addressId: Int64?
     public var bonusAmount: Int?
     public var cardId: String?
     
@@ -36,7 +36,7 @@ public struct OrderTaxiRequest: Codable, Sendable {
         case cardId = "card_id"
     }
     
-    public init(addresses: [TaxiOrderAddressItem], comment: String, dontCallMe: Bool, fixedPrice: Bool, paymentType: String, service: String, tariffID: Int, tariffOptions: [Int], toPhone: String, addressId: Int? = nil, bonusAmount: Int? = nil, cardId: String? = nil) {
+    public init(addresses: [TaxiOrderAddressItem], comment: String, dontCallMe: Bool, fixedPrice: Bool, paymentType: String, service: String, tariffID: Int, tariffOptions: [Int], toPhone: String, addressId: Int64? = nil, bonusAmount: Int? = nil, cardId: String? = nil) {
         self.addresses = addresses
         self.comment = comment
         self.dontCallMe = dontCallMe
@@ -63,12 +63,12 @@ public struct TaxiOrderItem: Codable {
 }
 
 public struct TaxiOrderAddressItem: Codable, Sendable {
-    public let id: Int?
+    public let id: Int64?
     public let lat: Double
     public let lng: Double
     public let name: String
     
-    public init(id: Int?, lat: Double, lng: Double, name: String) {
+    public init(id: Int64?, lat: Double, lng: Double, name: String) {
         self.id = id
         self.lat = lat
         self.lng = lng

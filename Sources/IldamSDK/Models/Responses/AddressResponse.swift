@@ -9,7 +9,7 @@
 import Foundation
 
 public struct AddressResponse: Sendable {
-    public let id: Int?
+    public let id: Int64?
     public var lat: Double
     public var lng: Double
     public var name: String
@@ -17,7 +17,7 @@ public struct AddressResponse: Sendable {
     public var parent: AddressParent?
     public var level: String?
     
-    public init(id: Int?, lat: Double, lng: Double, name: String, distance: Double? = nil, parent: AddressParent? = nil, level: String? = nil) {
+    public init(id: Int64?, lat: Double, lng: Double, name: String, distance: Double? = nil, parent: AddressParent? = nil, level: String? = nil) {
         self.id = id
         self.lat = lat
         self.lng = lng
@@ -28,11 +28,11 @@ public struct AddressResponse: Sendable {
     }
     
     public struct AddressParent: Sendable {
-        public var id: Int
+        public var id: Int64
         public var name: String?
         public var level: String?
         
-        public init(id: Int, name: String? = nil, lavel: String? = nil) {
+        public init(id: Int64, name: String? = nil, lavel: String? = nil) {
             self.id = id
             self.name = name
             self.level = lavel
