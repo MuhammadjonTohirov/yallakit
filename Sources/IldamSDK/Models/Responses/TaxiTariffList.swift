@@ -23,9 +23,9 @@ public struct TaxiWorkingItem: Sendable {
     public var brandId: Int?
     public var isWorking: Bool
     public var text: String?
-    public var addressId: Int?
+    public var addressId: Int64?
     
-    public init(brandId: Int, isWorking: Bool, text: String, addressId: Int?) {
+    public init(brandId: Int, isWorking: Bool, text: String, addressId: Int64?) {
         self.brandId = brandId
         self.isWorking = isWorking
         self.text = text

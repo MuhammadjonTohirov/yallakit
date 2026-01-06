@@ -23,7 +23,7 @@ struct NetResTaxiWorking: Codable {
     let brandId: Int?
     let isWorking: Bool?
     let text: String?
-    let addressId: Int?
+    let addressId: Int64?
     
     enum CodingKeys: String, CodingKey {
         case brandId = "brand_id"
