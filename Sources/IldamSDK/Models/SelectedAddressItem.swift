@@ -16,10 +16,10 @@ public struct SecondaryAddressResult {
 }
 
 public struct SecondaryAddressParentItem {
-    public let id: Int?
+    public let id: Int64?
     public let name: String?
     
-    public init(id: Int?, name: String?) {
+    public init(id: Int64?, name: String?) {
         self.id = id
         self.name = name
     }
@@ -27,8 +27,8 @@ public struct SecondaryAddressParentItem {
  
 public struct SecondaryAddressItem {
     
-    public let uniqueId: Int?
-    public let addressId: Int?
+    public let uniqueId: Int64?
+    public let addressId: Int64?
     public let name: String?
     public let addressName: String?
     public let type: String?
@@ -38,7 +38,7 @@ public struct SecondaryAddressItem {
     public let duration: Double
     public let parent: SecondaryAddressParentItem?
     
-    public init(uniqueId: Int?, addressId: Int?, name: String?, addressName: String ,type: String?, lat: Double, lng: Double, distance: Double, duration: Double, parent: SecondaryAddressParentItem?) {
+    public init(uniqueId: Int64?, addressId: Int64?, name: String?, addressName: String ,type: String?, lat: Double, lng: Double, distance: Double, duration: Double, parent: SecondaryAddressParentItem?) {
         self.uniqueId = uniqueId
         self.addressId = addressId
         self.name = name
@@ -53,7 +53,7 @@ public struct SecondaryAddressItem {
 }
 
 extension SecondaryAddressItem: Identifiable {
-    public var id: Int {
+    public var id: Int64 {
         uniqueId ?? 0
     }
     

@@ -12,12 +12,12 @@ struct NetResSecondaryAddressResult: NetResBody {
 }
 
 struct NetResAddressParent: Codable {
-    let id: Int?
+    let id: Int64?
     let name: String?
 }
 struct NetResSecondaryAddressItem: Codable {
-    let uniqueId: Int?
-    let addressId: Int?
+    let uniqueId: Int64?
+    let addressId: Int64?
     let addressName: String?
     let name: String?
     let type: String?
