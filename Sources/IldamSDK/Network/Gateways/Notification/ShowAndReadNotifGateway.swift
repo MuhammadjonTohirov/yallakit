@@ -9,12 +9,12 @@ import Foundation
 import NetworkLayer
 
 protocol ShowAndReadNotifGateway {
-    func execute(notificationId: Int) async throws -> NetResNotification?
+    func execute(notificationId: Int64) async throws -> NetResNotification?
 }
 
 struct ShowAndReadNotifGatewayImpl: ShowAndReadNotifGateway {
     struct Request: URLRequestProtocol {
-        let notificationId: Int
+        let notificationId: Int64
         
         var url: URL {
             URL.baseAPICli.appending(path: "notification/show/\(notificationId)")
@@ -25,7 +25,7 @@ struct ShowAndReadNotifGatewayImpl: ShowAndReadNotifGateway {
         var method: NetworkLayer.HTTPMethod { .get }
     }
     
-    func execute(notificationId: Int) async throws -> NetResNotification? {
+    func execute(notificationId: Int64) async throws -> NetResNotification? {
         let request = Request(notificationId: notificationId)
         let res: NetRes<NetResNotification>? = try await Network.sendThrow(request: request)
         return res?.result

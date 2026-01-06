@@ -8,7 +8,7 @@
 import Foundation
 
 public protocol ShowAndReadNotifUseCaseProtocol {
-    func execute(notifId: Int) async throws -> NotificationItem?
+    func execute(notifId: Int64) async throws -> NotificationItem?
 }
 
 public final class ShowAndReadNotifUseCase: ShowAndReadNotifUseCaseProtocol {
@@ -16,7 +16,7 @@ public final class ShowAndReadNotifUseCase: ShowAndReadNotifUseCaseProtocol {
     
     public init() {}
     
-    public func execute(notifId: Int) async throws -> NotificationItem? {
+    public func execute(notifId: Int64) async throws -> NotificationItem? {
         let result = try await gateway.execute(notificationId: notifId)
         return NotificationItem(res: result)
     }
