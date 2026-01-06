@@ -12,12 +12,12 @@ public struct SearchAddressItem: Sendable {
     public let lat: Double
     public let lng: Double
     public let name: String?
-    public let addressId: Int?
+    public let addressId: Int64?
     public let addressName: String
     public let distance: Double
     public let isInDatabase: Bool
     
-    public init(lat: Double, lng: Double, name: String?, addressId: Int?, addressName: String, distance: Double, isInDatabase: Bool) {
+    public init(lat: Double, lng: Double, name: String?, addressId: Int64?, addressName: String, distance: Double, isInDatabase: Bool) {
         self.lat = lat
         self.lng = lng
         self.name = name

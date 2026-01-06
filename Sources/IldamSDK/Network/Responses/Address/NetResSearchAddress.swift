@@ -11,7 +11,7 @@ struct NetResAddressItem: Codable {
     var lat: Double
     var lng: Double
     var name: String?
-    var addressId: Int?
+    var addressId: Int64?
     var addressName: String
     var distance: Double
     var db: Bool
