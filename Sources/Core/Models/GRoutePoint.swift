@@ -10,7 +10,7 @@ import CoreLocation
 
 public struct GRoutePoint: Codable, Identifiable, Hashable, Sendable {
     /// the same order
-    public var id: Int
+    public var id: Int64
     public var order: Int
     public var location: CLLocation
     public var address: String
@@ -19,7 +19,7 @@ public struct GRoutePoint: Codable, Identifiable, Hashable, Sendable {
         hasher.combine(self.id)
     }
     
-    public init(id: Int, order: Int, location: CLLocation, address: String) {
+    public init(id: Int64, order: Int, location: CLLocation, address: String) {
         self.id = id
         self.order = order
         self.location = location
@@ -54,7 +54,7 @@ public struct GRoutePoint: Codable, Identifiable, Hashable, Sendable {
         let lat = try container.decode(Double.self, forKey: .lat)
         let lng = try container.decode(Double.self, forKey: .lng)
         self.location = CLLocation(latitude: lat, longitude: lng)
-        self.id = try container.decode(Int.self, forKey: .id)
+        self.id = try container.decode(Int64.self, forKey: .id)
     }
 }
 
