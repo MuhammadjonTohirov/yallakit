@@ -131,6 +131,7 @@ struct NetResTaxiOrderExecutor: Codable {
     let surName: String?
     let fatherName: String?
     let photo: String?
+    let rating: Int?
     var coords: NetResTaxiOrderExecutorCoords?
     let driver: NetResTaxiOrderExecutorDriver?
     
@@ -143,6 +144,7 @@ struct NetResTaxiOrderExecutor: Codable {
         case fatherName = "father_name"
         case coords
         case driver
+        case rating = "rating"
     }
 }
 

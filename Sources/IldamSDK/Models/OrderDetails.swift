@@ -213,14 +213,15 @@ public struct OrderTaxiDetails: Codable, Sendable {
 }
 
 public struct TaxiOrderExecutor: Codable, Sendable {
-    public let id: Int
-    public let phone: String
-    public let givenNames: String
-    public let surName: String
-    public let fatherName: String?
-    public let photo: String
-    public let coords: TaxiOrderExecutorCoords?
-    public let driver: TaxiOrderExecutorDriver?
+    public var id: Int
+    public var phone: String
+    public var givenNames: String
+    public var surName: String
+    public var fatherName: String?
+    public var photo: String
+    public var coords: TaxiOrderExecutorCoords?
+    public var rating: Int?
+    public var driver: TaxiOrderExecutorDriver?
     
     init?(res: NetResTaxiOrderExecutor?) {
         guard let res = res else { return nil }
@@ -232,9 +233,10 @@ public struct TaxiOrderExecutor: Codable, Sendable {
         self.photo = res.photo ?? ""
         self.coords = TaxiOrderExecutorCoords(res: res)
         self.driver = TaxiOrderExecutorDriver(res: res)
+        self.rating = res.rating
     }
     
-    public init(id: Int, phone: String, givenNames: String, surName: String, fatherName: String?, photo: String, coords: TaxiOrderExecutorCoords?, driver: TaxiOrderExecutorDriver?) {
+    public init(id: Int, phone: String, givenNames: String, surName: String, fatherName: String?, rating: Int? = 2, photo: String, coords: TaxiOrderExecutorCoords?, driver: TaxiOrderExecutorDriver?) {
         self.id = id
         self.phone = phone
         self.givenNames = givenNames
@@ -243,6 +245,7 @@ public struct TaxiOrderExecutor: Codable, Sendable {
         self.photo = photo
         self.coords = coords
         self.driver = driver
+        self.rating = rating
     }
 }
 
