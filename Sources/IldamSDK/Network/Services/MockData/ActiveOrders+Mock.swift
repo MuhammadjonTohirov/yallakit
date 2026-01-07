@@ -74,6 +74,7 @@ extension NetResTaxiOrderExecutor {
             surName: "Alisherov",
             fatherName: "Davron o'g'li",
             photo: "https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436188.jpg?t=st=1735664311~exp=1735667911~hmac=d817fa76f882c43a6eef407ff12f323c72647f8e80613ba651100c19cc3ffdf8&w=996",
+            rating: 4,
             coords: .init(lat: 40.38384858747762, lng: 71.78310088813305),
             driver: .init(
                 id: 9283,
