@@ -9,7 +9,7 @@
 import Foundation
 import NetworkLayer
 
-protocol GetOrderDetailsGatewayProtocol {
+protocol GetOrderDetailsGatewayProtocol: Sendable {
     func getOrderDetails(orderId: Int) async throws -> NetResOrderDetails?
 }
 

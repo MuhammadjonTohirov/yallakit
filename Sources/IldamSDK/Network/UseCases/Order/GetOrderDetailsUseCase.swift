@@ -9,7 +9,7 @@
 import Foundation
 import Core
 
-public protocol GetOrderDetailsUseCaseProtocol {
+public protocol GetOrderDetailsUseCaseProtocol: Sendable {
     func execute(orderId: Int) async throws -> OrderDetails?
 }
 
