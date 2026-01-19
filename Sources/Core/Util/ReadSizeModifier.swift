@@ -33,12 +33,8 @@ public struct ReadSizeModifier: ViewModifier {
             .background(
                 GeometryReader { geometry in
                     Color.clear
-                        .preference(
-                            key: SizePreferenceKey.self,
-                            value: geometry.size
-                        )
-                        .onPreferenceChange(SizePreferenceKey.self) { size in
-                            onSizeChange(size)
+                        .task(id: geometry.size) {
+                            onSizeChange(geometry.size)
                         }
                 }
             )
