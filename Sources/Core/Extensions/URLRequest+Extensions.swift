@@ -48,6 +48,10 @@ extension URLRequest {
         ConstantsProvider.shared.constants.appVersion
     }()
     
+    private static var brandId: Int? {
+        ConstantsProvider.shared.constants.brandId
+    }
+    
     /// This method helps to create a urlrequest object with headers related to this application
     public static func new(url: URL, policy: CachePolicy = .useProtocolCachePolicy, withAuth: Bool = true, interval: TimeInterval = 60.0) -> URLRequest {
         var req = URLRequest(url: url, cachePolicy: policy, timeoutInterval: interval)
@@ -58,6 +62,10 @@ extension URLRequest {
         req.addValue("application/json", forHTTPHeaderField: "accept")
         req.addValue("ios", forHTTPHeaderField: "User-Agent-OS")
         req.addValue(appVersion, forHTTPHeaderField: "User-Agent-Version")
+        
+        if let brandId {
+            req.addValue("\(brandId)", forHTTPHeaderField: "brand-id")
+        }
         
         if let accessToken = UserSettings.shared.accessToken, withAuth {
             req.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
