@@ -6,9 +6,9 @@
     "auditLog": "/Users/muhammad/Development/Work/royal/yallakit/logs/.0bce50bcebcd977a54d531fdc52f4d8bb047533e-audit.json",
     "files": [
         {
-            "date": 1768800221210,
-            "name": "/Users/muhammad/Development/Work/royal/yallakit/logs/mcp-puppeteer-2026-01-19.log",
-            "hash": "daec4db14022cdd7f3f16c7d8aa65413ee6f9cb2aed78cdc88e3538fec626178"
+            "date": 1770360415785,
+            "name": "/Users/muhammad/Development/Work/royal/yallakit/logs/mcp-puppeteer-2026-02-06.log",
+            "hash": "169c1dbb475859ffec8c040ebd07e7aa4f17ba796db321e63135c201b525b630"
         }
     ],
     "hashType": "sha256"

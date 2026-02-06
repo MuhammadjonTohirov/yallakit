@@ -10,6 +10,7 @@ import Foundation
 
 public protocol RateOrderUseCaseProtocol {
     func execute(orderId: Int, rate: Int, comment: String) async throws -> Bool
+    func execute(orderId: Int, rate: Int, reasons: [Int]) async throws -> Bool
 }
 
 public final class RateOrderUseCase: RateOrderUseCaseProtocol {
@@ -27,7 +28,15 @@ public final class RateOrderUseCase: RateOrderUseCaseProtocol {
         return try await gateway.rateOrder(
             orderId: orderId,
             rate: rate,
-            comment: comment
+            comment: comment, ratingReasonIds: []
+        )
+    }
+    
+    public func execute(orderId: Int, rate: Int, reasons: [Int]) async throws -> Bool {
+        return try await gateway.rateOrder(
+            orderId: orderId,
+            rate: rate,
+            comment: "", ratingReasonIds: reasons
         )
     }
 }

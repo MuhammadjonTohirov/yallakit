@@ -22,6 +22,11 @@ struct NetResOrderDetails: NetResBody {
     var track: [NetResOrderTaxiTrack]?
     var comment: String?
     var paymentType: String?
+    var number: Int64?
+    var options: [NetResOrderOption]?
+    var intercity: NetResOrderIntercity?
+    var tariff: NetResOrderTariff?
+    var routes: [NetResOrderRoute]?
     
     enum CodingKeys: String, CodingKey {
         case id
@@ -34,6 +39,11 @@ struct NetResOrderDetails: NetResBody {
         case statusTime = "status_time"
         case paymentType = "payment_type"
         case track
+        case number
+        case options
+        case intercity
+        case tariff
+        case routes
     }
     
     init(id: Int, dateTime: Double?, service: String, status: String, executor: NetResTaxiOrderExecutor?, taxi: NetResOrderTaxiDetails?, comment: String?) {
@@ -46,6 +56,11 @@ struct NetResOrderDetails: NetResBody {
         self.comment = comment
         self.statusTime = []
         self.paymentType = "cash"
+        self.number = nil
+        self.options = nil
+        self.intercity = nil
+        self.tariff = nil
+        self.routes = nil
     }
     
     func encode(to encoder: any Encoder) throws {
@@ -60,6 +75,11 @@ struct NetResOrderDetails: NetResBody {
         try container.encodeIfPresent(self.statusTime, forKey: .statusTime)
         try container.encodeIfPresent(self.paymentType, forKey: .paymentType)
         try container.encodeIfPresent(self.track, forKey: .track)
+        try container.encodeIfPresent(self.number, forKey: .number)
+        try container.encodeIfPresent(self.options, forKey: .options)
+        try container.encodeIfPresent(self.intercity, forKey: .intercity)
+        try container.encodeIfPresent(self.tariff, forKey: .tariff)
+        try container.encodeIfPresent(self.routes, forKey: .routes)
     }
     
     init(from decoder: any Decoder) throws {
@@ -74,6 +94,11 @@ struct NetResOrderDetails: NetResBody {
         self.statusTime = try container.decodeIfPresent([StatusTime].self, forKey: .statusTime)
         self.paymentType = try? container.decodeIfPresent(String.self, forKey: .paymentType)
         self.track = try? container.decodeIfPresent([NetResOrderTaxiTrack].self, forKey: .track)
+        self.number = try? container.decodeIfPresent(Int64.self, forKey: .number)
+        self.options = try? container.decodeIfPresent([NetResOrderOption].self, forKey: .options)
+        self.intercity = try? container.decodeIfPresent(NetResOrderIntercity.self, forKey: .intercity)
+        self.tariff = try? container.decodeIfPresent(NetResOrderTariff.self, forKey: .tariff)
+        self.routes = try? container.decodeIfPresent([NetResOrderRoute].self, forKey: .routes)
     }
     
     struct StatusTime: Codable {
@@ -96,6 +121,7 @@ struct NetResOrderTaxiDetails: Codable {
     var award: Award?
     var waitingTime: Float?
     var waitingCost: Float?
+    var duration: Float?
     
     enum CodingKeys: String, CodingKey {
         case tariff
@@ -111,6 +137,7 @@ struct NetResOrderTaxiDetails: Codable {
         case award
         case waitingTime = "waiting_time"
         case waitingCost = "waiting_cost"
+        case duration
     }
     
     struct Award: Codable {
@@ -169,8 +196,8 @@ struct NetResTaxiOrderExecutorCoords: Codable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.heading = try container.decodeIfPresent(Double.self, forKey: .heading)
         
-        var _lat = (try? container.decode(Double.self, forKey: .lat)) ?? Double((try? container.decode(String.self, forKey: .lat)) ?? "0")
-        var _lng = (try? container.decode(Double.self, forKey: .lng)) ?? Double((try? container.decode(String.self, forKey: .lng)) ?? "0")
+        let _lat = (try? container.decode(Double.self, forKey: .lat)) ?? Double((try? container.decode(String.self, forKey: .lat)) ?? "0")
+        let _lng = (try? container.decode(Double.self, forKey: .lng)) ?? Double((try? container.decode(String.self, forKey: .lng)) ?? "0")
         
         self.lat = _lat ?? 0
         self.lng = _lng ?? 0
@@ -190,6 +217,16 @@ struct NetResTaxiOrderExecutorDriver: Codable {
     let stateNumber: String?
     let mark: String?
     let model: String?
+    let callsign: String?
+    
+    init(id: Int, color: NetResTaxiOrderExecutorDriver.Color?, stateNumber: String?, mark: String?, model: String?, callsign: String? = nil) {
+        self.id = id
+        self.color = color
+        self.stateNumber = stateNumber
+        self.mark = mark
+        self.model = model
+        self.callsign = callsign
+    }
     
     enum CodingKeys: String, CodingKey {
         case id
@@ -197,13 +234,16 @@ struct NetResTaxiOrderExecutorDriver: Codable {
         case stateNumber = "state_number"
         case mark = "mark"
         case model = "model"
+        case callsign
     }
     
     struct Color: Codable {
+        let id: Int?
         let color: String?
         let colorName: String?
         
         enum CodingKeys: String, CodingKey {
+            case id
             case color
             case colorName = "name"
         }
@@ -283,4 +323,56 @@ struct NetResOrderTaxiTrack: Codable {
         try? container.encodeIfPresent(self.status, forKey: .status)
         try? container.encodeIfPresent(self.time, forKey: .time)
     }
+}
+struct NetResOrderOption: Codable {
+    let id: Int?
+    let cost: Double?
+    let costType: String?
+    let name: String?
+    
+    enum CodingKeys: String, CodingKey {
+        case id
+        case cost
+        case costType = "cost_type"
+        case name
+    }
+}
+
+struct NetResOrderIntercity: Codable {
+    let startHour: String?
+    let endHour: String?
+    let scheduleId: Int?
+    let totalPrice: Double?
+    let isBooked: Bool?
+    let seatLayouts: [SeatLayout]?
+    let isPostal: Bool?
+    
+    enum CodingKeys: String, CodingKey {
+        case startHour = "start_hour"
+        case endHour = "end_hour"
+        case scheduleId = "schedule_id"
+        case totalPrice = "total_price"
+        case isBooked = "is_booked"
+        case seatLayouts = "seat_layouts"
+        case isPostal = "is_postal"
+    }
+    
+    struct SeatLayout: Codable {
+        let slug: String?
+        let index: Int?
+        let seatLayoutId: Int?
+        let price: Double?
+        
+        enum CodingKeys: String, CodingKey {
+            case slug
+            case index
+            case seatLayoutId = "seat_layout_id"
+            case price
+        }
+    }
+}
+
+struct NetResOrderTariff: Codable {
+    let id: Int?
+    let name: String?
 }
