@@ -25,7 +25,7 @@ extension RatingReasonGateway {
         var method: HTTPMethod = .get
         
         var url: URL {
-            .baseAPI.appending(component: "/list/rating-reasons")
+            .goIldamAPI.appending(path: "/list/rating-reasons")
         }
     }
 }
