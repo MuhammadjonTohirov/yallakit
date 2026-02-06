@@ -29,7 +29,7 @@ extension GetOrderDetailsV2Gateway {
         var orderId: Int
         
         var url: URL {
-            URL.baseAPI.appending(path: "/v2/order/\(orderId)")
+            URL.goIldamV2API.appending(path: "/order/\(orderId)")
         }
         
         var method: HTTPMethod = .get

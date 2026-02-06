@@ -32,7 +32,7 @@ extension ArchivedOrdersV2Gateway {
         var method: HTTPMethod = .get
         
         var url: URL {
-            var url = URL.baseAPI.appendingPathComponent("/v2/archive/orders")
+            var url = URL.goIldamV2API.appendingPathComponent("/archive/orders")
                 .appending(queryItems: [
                     .init(name: "per_page", value: "\(limit)"),
                     .init(name: "page", value: "\(page)"),

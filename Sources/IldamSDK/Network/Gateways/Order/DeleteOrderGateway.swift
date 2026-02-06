@@ -31,7 +31,7 @@ extension DeleteOrderGateway {
         var method: HTTPMethod = .put
         
         var url: URL {
-            .baseAPI.appendingPathComponent("/v2/archive/order/deleted/\(id)")
+            .goIldamV2API.appending(path: "/archive/order/deleted/\(id)")
         }
     }
 }

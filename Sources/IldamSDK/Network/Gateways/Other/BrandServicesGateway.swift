@@ -20,7 +20,7 @@ struct NetReqBrandServices: URLRequestProtocol {
     var method: NetworkLayer.HTTPMethod = .get
     
     var url: URL {
-        URL.baseAPI.appending(path: "/v2/list/brand-services")
+        URL.goIldamV2API.appending(path: "/list/brand-services")
     }
 }
 

@@ -26,7 +26,7 @@ extension ActiveOrdersV2Gateway {
         var body: Data?
         
         var url: URL {
-            URL.baseAPI.appending(path: "/v2/active/orders")
+            URL.goIldamV2API.appending(path: "/active/orders")
         }
         
         var method: HTTPMethod = .get

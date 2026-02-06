@@ -29,7 +29,7 @@ extension ArchivedOrderV2Gateway {
         var method: HTTPMethod = .get
         
         var url: URL {
-            .baseAPI.appendingPathComponent("/v2/order/archive/show/\(id)")
+            .goIldamV2API.appending(path: "/order/archive/show/\(id)")
         }
     }
 }
