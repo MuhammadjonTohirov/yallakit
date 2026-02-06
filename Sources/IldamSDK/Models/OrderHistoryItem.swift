@@ -28,9 +28,11 @@ public struct OrderHistoryItem {
     public let service, status: String
     public let track: [Coord]?
     public let executor: TaxiOrderExecutor?
-    public let taxi: OrderTaxiDetails?
+    public var taxi: OrderTaxiDetails?
     public let comment: String?
-    
+    public var intercity: OrderDetails.OrderIntercity?
+    public var routes: [OrderRoute]?
+
     public struct Coord {
         public let lat, lng: Double
     }
@@ -57,6 +59,9 @@ public struct OrderHistoryItem {
         self.executor = .init(res: res.executor)
         self.taxi = .init(taxiRes: res.taxi)
         self.comment = res.comment
+        self.routes = res.routes?.compactMap({.init(res: $0)})
+        self.intercity = .init(res: res.intercity)
+        self.taxi?.routes = self.routes ?? []
     }
 }
 
