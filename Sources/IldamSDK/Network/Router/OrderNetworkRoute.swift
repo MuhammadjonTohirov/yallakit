@@ -33,8 +33,8 @@ enum OrderNetworkRoute: URLRequestProtocol {
     
     var body: Data? {
         switch self {
-        case let .rateOrder(orderId, rate, comment):
-            return NetReqRateOrder.init(ball: rate, orderId: orderId, comment: comment).asData
+        case let .rateOrder(orderId, rate, comment, reasonIds):
+            return NetReqRateOrder.init(ball: rate, orderId: orderId, comment: comment, reasonIds: reasonIds).asData
         case let .cancelOrderReason(_, reasonId, reasonComment):
             return NetReqCancelOrderReason.init(reasonId: reasonId, reasonComment: reasonComment).asData
         default:
@@ -65,7 +65,7 @@ enum OrderNetworkRoute: URLRequestProtocol {
     case activeOrdersCount
     case cancelOrder(id: Int)
     case cancelOrderReason(orderId: Int, reasonId: Int, reasonComment: String)
-    case rateOrder(orderId: Int, rate: Int, comment: String)
+    case rateOrder(orderId: Int, rate: Int, comment: String, ratingReasonIds: [Int])
     case archivedOrder(id: Int)
     case orderSettings
 }

@@ -1,0 +1,37 @@
+//
+//  File.swift
+//  YallaKit
+//
+//  Created by Muhammadjon Tohirov on 05/02/26.
+//
+
+import Foundation
+import NetworkLayer
+
+protocol GetOrderDetailsV2GatewayProtocol: Sendable {
+    func getOrderDetails(orderId: Int) async throws -> NetResOrderDetails?
+}
+
+/// /v2/order/:orderId
+struct GetOrderDetailsV2Gateway: GetOrderDetailsV2GatewayProtocol {
+    func getOrderDetails(orderId id: Int) async throws -> NetResOrderDetails? {
+        let result: NetRes<NetResOrderDetails>? = try await Network.sendThrow(
+            request: Request(orderId: id)
+        )
+        return result?.result
+    }
+}
+
+extension GetOrderDetailsV2Gateway {
+    struct Request: URLRequestProtocol {
+        var body: Data?
+        
+        var orderId: Int
+        
+        var url: URL {
+            URL.baseAPI.appending(path: "/v2/order/\(orderId)")
+        }
+        
+        var method: HTTPMethod = .get
+    }
+}

@@ -10,16 +10,17 @@ import Foundation
 import NetworkLayer
 
 protocol RateOrderGatewayProtocol {
-    func rateOrder(orderId: Int, rate: Int, comment: String) async throws -> Bool
+    func rateOrder(orderId: Int, rate: Int, comment: String, ratingReasonIds: [Int]) async throws -> Bool
 }
 
 struct RateOrderGateway: RateOrderGatewayProtocol {
-    func rateOrder(orderId: Int, rate: Int, comment: String) async throws -> Bool {
+    func rateOrder(orderId: Int, rate: Int, comment: String, ratingReasonIds: [Int] = []) async throws -> Bool {
         let result: NetRes<[String]>? = try await Network.sendThrow(
             request: OrderNetworkRoute.rateOrder(
                 orderId: orderId,
                 rate: rate,
-                comment: comment
+                comment: comment,
+                ratingReasonIds: ratingReasonIds
             )
         )
         return result?.success ?? false
