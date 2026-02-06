@@ -16,7 +16,7 @@ protocol DeleteOrderGatewayProtocol: Sendable {
 struct DeleteOrderGateway: DeleteOrderGatewayProtocol {
     func delete(id: Int) async throws -> Bool {
         let result: NetRes<String>? = try await Network.sendThrow(
-            request: OrderNetworkRoute.cancelOrder(id: id)
+            request: Request(id: id)
         )
         return result?.success ?? false
     }
