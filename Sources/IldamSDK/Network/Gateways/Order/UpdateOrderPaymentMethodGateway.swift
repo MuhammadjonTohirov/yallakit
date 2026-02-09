@@ -29,7 +29,7 @@ extension UpdateOrderPaymentMethodGateway {
         
         enum CodingKeys: String, CodingKey {
             case cardId = "card_id"
-            case type
+            case type = "payment_type"
         }
         
         var body: Data? {
