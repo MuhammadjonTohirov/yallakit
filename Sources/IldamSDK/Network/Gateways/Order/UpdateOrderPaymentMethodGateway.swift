@@ -39,8 +39,8 @@ extension UpdateOrderPaymentMethodGateway {
         var method: HTTPMethod = .put
         
         var url: URL {
-            // /v1/order/pay/update/2177185
-            return .goIldamAPI.appending(path: "/v1/order/pay/update/\(orderId)")
+            // /order/pay/update/2177185
+            return .goIldamV2API.appending(path: "/order/pay/update/\(orderId)")
         }
     }
 }
