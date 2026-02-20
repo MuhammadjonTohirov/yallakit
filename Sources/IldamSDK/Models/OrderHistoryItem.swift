@@ -15,7 +15,7 @@ public struct OrderHistoryResponse {
         self.list = list
     }
     
-    init?(res: [NetResOrderHistoryItem]?) {
+    init?(res: [NetResOrderDetails]?) {
         guard let res else { return nil }
         
         self.list = res.compactMap(OrderHistoryItem.init)
@@ -28,15 +28,16 @@ public struct OrderHistoryItem {
     public let service, status: String
     public let track: [Coord]?
     public let executor: TaxiOrderExecutor?
-    public let taxi: OrderTaxiDetails?
+    public var taxi: OrderTaxiDetails?
     public let comment: String?
-    public let services: [OrderHistoryService]?
-    
+    public var intercity: OrderDetails.OrderIntercity?
+    public var routes: [OrderRoute]?
+
     public struct Coord {
         public let lat, lng: Double
     }
     
-    public init(id: Int, dateTime: Double, service: String, status: String, track: [Coord]?, executor: TaxiOrderExecutor?, taxi: OrderTaxiDetails?, comment: String?, services: [OrderHistoryService]?) {
+    public init(id: Int, dateTime: Double, service: String, status: String, track: [Coord]?, executor: TaxiOrderExecutor?, taxi: OrderTaxiDetails?, comment: String?) {
         self.id = id
         self.dateTime = dateTime
         self.service = service
@@ -45,38 +46,22 @@ public struct OrderHistoryItem {
         self.executor = executor
         self.taxi = taxi
         self.comment = comment
-        self.services = services
     }
     
-    init?(res: NetResOrderHistoryItem?) {
+    init?(res: NetResOrderDetails?) {
         guard let res else { return nil }
         
         self.id = res.id
-        self.dateTime = res.dateTime
+        self.dateTime = res.dateTime ?? 0
         self.service = res.service
         self.status = res.status
-        self.track = res.track?.map { Coord(lat: $0.lat, lng: $0.lng) }
+        self.track = res.track?.map { Coord(lat: $0.lat ?? 0, lng: $0.lng ?? 0) }
         self.executor = .init(res: res.executor)
         self.taxi = .init(taxiRes: res.taxi)
         self.comment = res.comment
-        self.services = res.services?.compactMap({.init(res: $0)})
-    }
-}
-
-public struct OrderHistoryService {
-    public let id: Int
-    public let name: String
-    
-    public init(id: Int, name: String) {
-        self.id = id
-        self.name = name
-    }
-    
-    init?(res: NetResOrderHistoryService?) {
-        guard let res else { return nil }
-        
-        self.id = res.id
-        self.name = res.name
+        self.routes = res.routes?.compactMap({.init(res: $0)})
+        self.intercity = .init(res: res.intercity)
+        self.taxi?.routes = self.routes ?? []
     }
 }
 

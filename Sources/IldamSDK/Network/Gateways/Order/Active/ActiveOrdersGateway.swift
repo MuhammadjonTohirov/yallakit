@@ -9,7 +9,7 @@
 import Foundation
 import NetworkLayer
 
-protocol ActiveOrdersGatewayProtocol {
+protocol ActiveOrdersGatewayProtocol: Sendable {
     func getActiveOrders() async throws -> [NetResOrderDetails]?
 }
 

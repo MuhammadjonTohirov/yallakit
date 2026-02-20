@@ -78,7 +78,7 @@ extension NetResTaxiOrderExecutor {
             coords: .init(lat: 40.38384858747762, lng: 71.78310088813305),
             driver: .init(
                 id: 9283,
-                color: .init(color: "0x000000", colorName: "Black"),
+                color: .init(id: nil, color: "0x000000", colorName: "Black"),
                 stateNumber: "A123NN",
                 mark: "40",
                 model: "Matiz"
