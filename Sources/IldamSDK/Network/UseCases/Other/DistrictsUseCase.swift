@@ -7,11 +7,11 @@
 
 import Foundation
 
-public protocol DistrictsUseCaseProtocol {
+public protocol DistrictsUseCaseProtocol: Sendable {
     func execute() async throws -> [DistrictItem]
 }
 
-public final class DistrictsUseCase: DistrictsUseCaseProtocol {
+public struct DistrictsUseCase: DistrictsUseCaseProtocol {
     private let gateway: DistrictsGatewayProtocol
 
     init(gateway: DistrictsGatewayProtocol = DistrictsGateway()) {

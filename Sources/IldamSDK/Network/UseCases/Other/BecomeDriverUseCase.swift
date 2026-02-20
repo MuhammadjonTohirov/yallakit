@@ -7,11 +7,11 @@
 
 import Foundation
 
-public protocol BecomeDriverUseCaseProtocol {
+public protocol BecomeDriverUseCaseProtocol: Sendable {
     func execute(request: BecomeDriverRequest) async throws -> Bool
 }
 
-public final class BecomeDriverUseCase: BecomeDriverUseCaseProtocol {
+public struct BecomeDriverUseCase: BecomeDriverUseCaseProtocol {
     private let gateway: BecomeDriverGatewayProtocol
 
     init(gateway: BecomeDriverGatewayProtocol = BecomeDriverGateway()) {
