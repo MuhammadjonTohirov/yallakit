@@ -7,7 +7,7 @@
 
 import Foundation
 
-public protocol BecomeDriverUseCaseProtocol: Sendable {
+public protocol BecomeDriverUseCaseProtocol {
     func execute(request: BecomeDriverRequest) async throws -> Bool
 }
 

@@ -7,7 +7,7 @@
 
 import Foundation
 
-public protocol DistrictsUseCaseProtocol: Sendable {
+public protocol DistrictsUseCaseProtocol {
     func execute() async throws -> [DistrictItem]
 }
 
