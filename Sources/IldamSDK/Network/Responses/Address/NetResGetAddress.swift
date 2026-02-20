@@ -16,6 +16,7 @@ struct NetResGetAddress: NetResBody {
     var distance: Double?
     var parent: AddressParent?
     var level: String?
+    var regionName: String?
     
     enum CodingKeys: String, CodingKey {
         case id
@@ -25,6 +26,7 @@ struct NetResGetAddress: NetResBody {
         case distance
         case level
         case parent
+        case regionName = "region_name"
     }
     
     struct AddressParent: Codable {

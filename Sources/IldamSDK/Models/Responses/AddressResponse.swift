@@ -16,8 +16,9 @@ public struct AddressResponse: Sendable {
     public var distance: Double?
     public var parent: AddressParent?
     public var level: String?
+    public var regionName: String?
     
-    public init(id: Int64?, lat: Double, lng: Double, name: String, distance: Double? = nil, parent: AddressParent? = nil, level: String? = nil) {
+    public init(id: Int64?, lat: Double, lng: Double, name: String, distance: Double? = nil, parent: AddressParent? = nil, level: String? = nil, regionName: String? = nil) {
         self.id = id
         self.lat = lat
         self.lng = lng
@@ -25,6 +26,7 @@ public struct AddressResponse: Sendable {
         self.distance = distance
         self.parent = parent
         self.level = level
+        self.regionName = regionName
     }
     
     public struct AddressParent: Sendable {
@@ -51,5 +53,6 @@ extension AddressResponse {
         self.distance = response.distance
         self.level = response.level
         self.parent = response.parent.flatMap { AddressParent(id: $0.id, name: $0.name, lavel: $0.level) }
+        self.regionName = response.regionName
     }
 }
