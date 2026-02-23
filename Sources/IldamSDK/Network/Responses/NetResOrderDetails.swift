@@ -23,6 +23,7 @@ struct NetResOrderDetails: NetResBody {
     var comment: String?
     var paymentType: String?
     var number: Int64?
+    var cardId: String?
     var options: [NetResOrderOption]?
     var intercity: NetResOrderIntercity?
     var tariff: NetResOrderTariff?
@@ -44,6 +45,7 @@ struct NetResOrderDetails: NetResBody {
         case intercity
         case tariff
         case routes
+        case cardId = "card_id"
     }
     
     init(id: Int, dateTime: Double?, service: String, status: String, executor: NetResTaxiOrderExecutor?, taxi: NetResOrderTaxiDetails?, comment: String?) {
@@ -61,6 +63,7 @@ struct NetResOrderDetails: NetResBody {
         self.intercity = nil
         self.tariff = nil
         self.routes = nil
+        self.cardId = nil
     }
     
     func encode(to encoder: any Encoder) throws {
@@ -80,6 +83,7 @@ struct NetResOrderDetails: NetResBody {
         try container.encodeIfPresent(self.intercity, forKey: .intercity)
         try container.encodeIfPresent(self.tariff, forKey: .tariff)
         try container.encodeIfPresent(self.routes, forKey: .routes)
+        try container.encodeIfPresent(self.cardId, forKey: .cardId)
     }
     
     init(from decoder: any Decoder) throws {
@@ -99,6 +103,7 @@ struct NetResOrderDetails: NetResBody {
         self.intercity = try? container.decodeIfPresent(NetResOrderIntercity.self, forKey: .intercity)
         self.tariff = try? container.decodeIfPresent(NetResOrderTariff.self, forKey: .tariff)
         self.routes = try? container.decodeIfPresent([NetResOrderRoute].self, forKey: .routes)
+        self.cardId = try? container.decodeIfPresent(String.self, forKey: .cardId)
     }
     
     struct StatusTime: Codable {

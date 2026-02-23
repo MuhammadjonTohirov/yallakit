@@ -77,6 +77,7 @@ public struct OrderDetails: Codable, Sendable {
     public var intercity: OrderIntercity?
     public var tariff: OrderTariff?
     public var routes: [OrderRoute]?
+    public var cardId: String?
     
     init?(res: NetResOrderDetails?) {
         guard let res = res else { return nil }
@@ -96,6 +97,7 @@ public struct OrderDetails: Codable, Sendable {
         self.intercity = .init(res: res.intercity)
         self.tariff = .init(res: res.tariff)
         self.routes = res.routes?.compactMap({.init(res: $0)})
+        self.cardId = res.cardId
         print("new order", res.status)
     }
     
