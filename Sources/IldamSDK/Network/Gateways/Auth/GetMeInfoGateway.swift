@@ -9,15 +9,20 @@
 import Foundation
 import NetworkLayer
 
-protocol GetMeInfoGatewayProtocol {
+protocol GetMeInfoGatewayProtocol: Sendable {
     func getMeInfo() async -> NetResMeInfo?
 }
 
 struct GetMeInfoGateway: GetMeInfoGatewayProtocol {
+    private let client: NetworkClientProtocol
     private var session: URLSession = .init(configuration: .default)
-    
+
+    init(client: NetworkClientProtocol = DefaultNetworkClient()) {
+        self.client = client
+    }
+
     func getMeInfo() async -> NetResMeInfo? {
         await session.tasks.0.forEach({$0.cancel()})
-        return (await Network.send(urlSession: session, request: AuthNetworkRoute.getMeInfo))?.result
+        return (await client.send(urlSession: session, request: AuthNetworkRoute.getMeInfo))?.result
     }
 }

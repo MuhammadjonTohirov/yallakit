@@ -7,6 +7,7 @@
 
 // Models/AddressResponse.swift
 import Foundation
+import Core
 
 public struct AddressResponse: Sendable {
     public let id: Int64?
@@ -29,17 +30,7 @@ public struct AddressResponse: Sendable {
         self.regionName = regionName
     }
     
-    public struct AddressParent: Sendable {
-        public var id: Int64
-        public var name: String?
-        public var level: String?
-        
-        public init(id: Int64, name: String? = nil, lavel: String? = nil) {
-            self.id = id
-            self.name = name
-            self.level = lavel
-        }
-    }
+    public typealias AddressParent = Core.AddressParent
 }
 
 extension AddressResponse {
@@ -52,7 +43,7 @@ extension AddressResponse {
         self.name = response.name
         self.distance = response.distance
         self.level = response.level
-        self.parent = response.parent.flatMap { AddressParent(id: $0.id, name: $0.name, lavel: $0.level) }
+        self.parent = response.parent.flatMap { AddressParent(id: $0.id, name: $0.name, level: $0.level) }
         self.regionName = response.regionName
     }
 }

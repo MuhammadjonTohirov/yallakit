@@ -29,8 +29,14 @@ protocol BrandServicesGatewayProtocol: Sendable {
 }
 
 struct BrandServicesGateway: BrandServicesGatewayProtocol {
+    private let client: NetworkClientProtocol
+
+    init(client: NetworkClientProtocol = DefaultNetworkClient()) {
+        self.client = client
+    }
+
     func load() async throws -> [NetResBrandServiceItem] {
-        let result: NetRes<[NetResBrandServiceItem]>? = try await Network.sendThrow(request: NetReqBrandServices())
+        let result: NetRes<[NetResBrandServiceItem]>? = try await client.sendThrow(request: NetReqBrandServices())
         return result?.result ?? []
     }
 }

@@ -29,7 +29,6 @@ public struct ScrollableBottomSheet: UIViewRepresentable {
     
     public func makeUIView(context: Context) -> some UIView {
         let view = ScrollableUIBottomSheet(content: body)
-        print(#function, "Make")
         view.onExpanded = expanded
         view.onCollapsed = collapsed
         view.setMinHeight(minimumHeight)
@@ -52,9 +51,7 @@ struct ScrollableBottomSheetTestView: View {
     
     var body: some View {
         ZStack {
-            Button {
-                print("Good jobs")
-            } label: {
+            Button { } label: {
                 Text("Tap")
             }
 
@@ -64,9 +61,7 @@ struct ScrollableBottomSheetTestView: View {
                     content: {
                         VStack {
                             ForEach(items, id: \.self) { id in
-                                Button {
-                                    print(id)
-                                } label: {
+                                Button { } label: {
                                     Text("item \(id)")
                                         .frame(height: 32)
                                 }
@@ -80,12 +75,8 @@ struct ScrollableBottomSheetTestView: View {
                                 .foregroundStyle(Color.init(uiColor: .systemBackground))
                         }
                     },
-                    expanded: {
-                        print("Expanded")
-                    },
-                    collapsed: {
-                        print("Collapsed")
-                    }
+                    expanded: { },
+                    collapsed: { }
                 )
                 .clipShape(RoundedRectangle(cornerRadius: 20))
                 

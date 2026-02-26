@@ -17,17 +17,19 @@ public protocol AppConfigUseCase {
 public final class AppConfigUseCaseImpl: AppConfigUseCase {
     @codableWrapper(key: "appConfig")
     public var appConfig: AppConfig?
-    
+
+    private let client: NetworkClientProtocol
     private var trial: Int = 0
     private var maxTrial: Int = 3
-    
-    public init(maxTrial: Int = 3) {
+
+    public init(client: NetworkClientProtocol = DefaultNetworkClient(), maxTrial: Int = 3) {
+        self.client = client
         self.maxTrial = maxTrial
     }
-    
+
     public func fetchAppConfig() async throws -> Bool {
         Logging.l(tag: "AppConfigUseCase", "Fetch app config \(trial): \(trial))")
-        if let result: NetRes<NetResAppConfig> = try? await Network.sendThrow(request: Request()), let config = result.result {
+        if let result: NetRes<NetResAppConfig> = try? await client.sendThrow(request: Request()), let config = result.result {
             appConfig = .init(config)
             return true
         }

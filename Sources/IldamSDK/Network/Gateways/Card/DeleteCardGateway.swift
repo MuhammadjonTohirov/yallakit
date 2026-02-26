@@ -8,16 +8,22 @@
 import Foundation
 import NetworkLayer
 
-protocol DeleteCardGatewayProtocol {
+protocol DeleteCardGatewayProtocol: Sendable {
     func delete(id: String) async throws -> Bool?
 }
 
 struct DeleteCardGateway: DeleteCardGatewayProtocol {
+    private let client: NetworkClientProtocol
+
+    init(client: NetworkClientProtocol = DefaultNetworkClient()) {
+        self.client = client
+    }
+
     func delete(id: String) async throws -> Bool? {
-        let result: NetRes<DeleteCardGateway.Result>? = try await Network.sendThrow(
+        let result: NetRes<DeleteCardGateway.Result>? = try await client.sendThrow(
             request: Request(cardId: id)
         )
-        
+
         return result?.success
     }
 }

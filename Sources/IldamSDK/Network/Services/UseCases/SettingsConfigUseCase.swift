@@ -25,12 +25,14 @@ extension SettingsConfigUseCase {
 }
 
 public struct SettingsConfigUseCaseImpl: SettingsConfigUseCase {
-    public init() {
-        
+    private let client: NetworkClientProtocol
+
+    public init(client: NetworkClientProtocol = DefaultNetworkClient()) {
+        self.client = client
     }
-    
+
     public func fetch() async throws -> OrderConfigSettings? {
-        let result: NetRes<NetResOrderSettings>? = (try await Network.sendThrow(request: OrderNetworkRoute.orderSettings))
+        let result: NetRes<NetResOrderSettings>? = (try await client.sendThrow(request: OrderNetworkRoute.orderSettings))
         
         @codableWrapper(key: "settingsConfig", nil)
         var config: NetResOrderSettings?

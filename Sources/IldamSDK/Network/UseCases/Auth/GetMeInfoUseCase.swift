@@ -8,19 +8,19 @@
 // GetMeInfoUseCase.swift
 import Foundation
 
-public protocol GetMeInfoUseCaseProtocol {
+public protocol GetMeInfoUseCaseProtocol: Sendable {
     func execute() async -> UserInfoResponse?
 }
 
-public final class GetMeInfoUseCase: GetMeInfoUseCaseProtocol {
+public struct GetMeInfoUseCase: GetMeInfoUseCaseProtocol, Sendable {
     private let gateway: GetMeInfoGatewayProtocol
-    
-    init(gateway: GetMeInfoGatewayProtocol = GetMeInfoGateway()) {
-        self.gateway = gateway
-    }
-    
+
     public init() {
         self.gateway = GetMeInfoGateway()
+    }
+
+    init(gateway: GetMeInfoGatewayProtocol) {
+        self.gateway = gateway
     }
     
     public func execute() async -> UserInfoResponse? {

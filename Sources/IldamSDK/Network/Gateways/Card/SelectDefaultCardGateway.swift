@@ -9,13 +9,19 @@
 import Foundation
 import NetworkLayer
 
-protocol SelectDefaultCardGatewayProtocol {
+protocol SelectDefaultCardGatewayProtocol: Sendable {
     func selectDefaultCard(cardId: String) async throws -> Bool
 }
 
 struct SelectDefaultCardGateway: SelectDefaultCardGatewayProtocol {
+    private let client: NetworkClientProtocol
+
+    init(client: NetworkClientProtocol = DefaultNetworkClient()) {
+        self.client = client
+    }
+
     func selectDefaultCard(cardId: String) async throws -> Bool {
-        let result: NetRes<String>? = try await Network.sendThrow(
+        let result: NetRes<String>? = try await client.sendThrow(
             request: CardNetworkRouter.selectDefaultCard(id: cardId)
         )
         return result?.success ?? false

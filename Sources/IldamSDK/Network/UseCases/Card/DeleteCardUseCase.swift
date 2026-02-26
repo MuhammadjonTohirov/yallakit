@@ -7,19 +7,19 @@
 
 import Foundation
 
-public protocol DeleteCardUseCaseProtocol {
+public protocol DeleteCardUseCaseProtocol: Sendable {
     func delete(cardId: String) async throws -> Bool
 }
 
-public final class DeleteCardUseCase: DeleteCardUseCaseProtocol {
+public struct DeleteCardUseCase: DeleteCardUseCaseProtocol, Sendable {
     private let gateway: DeleteCardGatewayProtocol
-    
-    init(gateway: DeleteCardGatewayProtocol = DeleteCardGateway()) {
-        self.gateway = gateway
-    }
-    
+
     public init() {
         self.gateway = DeleteCardGateway()
+    }
+
+    init(gateway: DeleteCardGatewayProtocol) {
+        self.gateway = gateway
     }
     
     public func delete(cardId: String) async throws -> Bool {

@@ -9,13 +9,19 @@
 import Foundation
 import NetworkLayer
 
-protocol CancelOrderReasonGatewayProtocol {
+protocol CancelOrderReasonGatewayProtocol: Sendable {
     func cancelOrderReason(orderId: Int, reasonId: Int, reasonComment: String) async throws -> Bool
 }
 
 struct CancelOrderReasonGateway: CancelOrderReasonGatewayProtocol {
+    private let client: NetworkClientProtocol
+
+    init(client: NetworkClientProtocol = DefaultNetworkClient()) {
+        self.client = client
+    }
+
     func cancelOrderReason(orderId: Int, reasonId: Int, reasonComment: String) async throws -> Bool {
-        let result: NetRes<String>? = try await Network.sendThrow(
+        let result: NetRes<String>? = try await client.sendThrow(
             request: OrderNetworkRoute.cancelOrderReason(
                 orderId: orderId,
                 reasonId: reasonId,

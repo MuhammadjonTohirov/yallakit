@@ -8,19 +8,19 @@
 // SendOTPUseCase.swift
 import Foundation
 
-public protocol SendOTPUseCaseProtocol {
+public protocol SendOTPUseCaseProtocol: Sendable {
     func execute(username: String) async throws -> OTPResponse?
 }
 
 public struct SendOTPUseCase: SendOTPUseCaseProtocol, Sendable {
     private let gateway: SendOTPGatewayProtocol
     
-    init(gateway: SendOTPGatewayProtocol = SendOTPGateway()) {
-        self.gateway = gateway
-    }
-    
     public init() {
         self.gateway = SendOTPGateway()
+    }
+
+    init(gateway: SendOTPGatewayProtocol) {
+        self.gateway = gateway
     }
     
     public func execute(username: String) async throws -> OTPResponse? {

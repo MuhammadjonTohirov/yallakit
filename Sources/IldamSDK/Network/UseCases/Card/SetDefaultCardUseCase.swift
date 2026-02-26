@@ -8,19 +8,19 @@
 // UseCases/SetDefaultCardUseCase.swift
 import Foundation
 
-public protocol SetDefaultCardUseCaseProtocol {
+public protocol SetDefaultCardUseCaseProtocol: Sendable {
     func execute(cardId: String) async throws -> Bool
 }
 
-public final class SetDefaultCardUseCase: SetDefaultCardUseCaseProtocol {
+public struct SetDefaultCardUseCase: SetDefaultCardUseCaseProtocol, Sendable {
     private let gateway: SelectDefaultCardGatewayProtocol
-    
-    init(gateway: SelectDefaultCardGatewayProtocol = SelectDefaultCardGateway()) {
-        self.gateway = gateway
-    }
-    
+
     public init() {
         self.gateway = SelectDefaultCardGateway()
+    }
+
+    init(gateway: SelectDefaultCardGatewayProtocol) {
+        self.gateway = gateway
     }
     
     public func execute(cardId: String) async throws -> Bool {

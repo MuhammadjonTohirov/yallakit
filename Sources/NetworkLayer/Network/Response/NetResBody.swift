@@ -7,7 +7,7 @@
 
 import Foundation
 
-public protocol NetResBody: Codable {
+public protocol NetResBody: Codable, Sendable {
     
 }
 

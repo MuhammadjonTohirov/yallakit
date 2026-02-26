@@ -28,7 +28,7 @@ struct LoadingFiveLines: View {
 
     var body: some View {
         HStack(spacing: frame.width / 10) {
-            ForEach(0..<maxCounter) { index in
+            ForEach(0..<maxCounter, id: \.self) { index in
                 
                 RoundedRectangle(cornerRadius: 25.0)
                     .fill(primaryColor)

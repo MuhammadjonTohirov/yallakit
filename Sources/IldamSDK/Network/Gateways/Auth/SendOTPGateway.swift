@@ -14,7 +14,13 @@ protocol SendOTPGatewayProtocol: Sendable {
 }
 
 struct SendOTPGateway: SendOTPGatewayProtocol {
+    private let client: NetworkClientProtocol
+
+    init(client: NetworkClientProtocol = DefaultNetworkClient()) {
+        self.client = client
+    }
+
     func sendOTP(username: String) async throws -> NetResSendOTP? {
-        return (try await Network.sendThrow(request: AuthNetworkRoute.sendOTP(req: .init(phone: username))))?.result
+        return (try await client.sendThrow(request: AuthNetworkRoute.sendOTP(req: .init(phone: username))))?.result
     }
 }

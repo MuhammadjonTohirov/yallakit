@@ -30,7 +30,7 @@ public struct MultipartForm: Hashable, Equatable {
                         return
                     }
                     
-                    self.data = value.data(using: .utf8, allowLossyConversion: true)!
+                    self.data = value.data(using: .utf8, allowLossyConversion: true) ?? Data()
                 }
             }
         }
@@ -43,7 +43,7 @@ public struct MultipartForm: Hashable, Equatable {
         }
         
         public init(name: String, value: String, contentType: String = "text/plain") {
-            let data = value.data(using: .utf8, allowLossyConversion: true)!
+            let data = value.data(using: .utf8, allowLossyConversion: true) ?? Data()
             self.init(name: name, data: data, filename: nil, contentType: contentType)
         }
     }

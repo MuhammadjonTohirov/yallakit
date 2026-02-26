@@ -26,15 +26,5 @@ public struct CoordinateAddress {
         self.level = level
     }
     
-    public struct AddressParent {
-        public var id: Int64
-        public var name: String?
-        public var level: String?
-        
-        public init(id: Int64, name: String? = nil, lavel: String? = nil) {
-            self.id = id
-            self.name = name
-            self.level = lavel
-        }
-    }
+    public typealias AddressParent = Core.AddressParent
 }

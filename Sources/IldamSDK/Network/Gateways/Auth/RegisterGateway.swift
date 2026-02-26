@@ -14,7 +14,13 @@ protocol RegisterGatewayProtocol: Sendable {
 }
 
 struct RegisterGateway: RegisterGatewayProtocol {
+    private let client: NetworkClientProtocol
+
+    init(client: NetworkClientProtocol = DefaultNetworkClient()) {
+        self.client = client
+    }
+
     func register(req: NetReqRegisterProfile) async throws -> NetRes<NetResRegisterProfile>? {
-        return try await Network.sendThrow(request: AuthNetworkRoute.register(req: req))
+        return try await client.sendThrow(request: AuthNetworkRoute.register(req: req))
     }
 }

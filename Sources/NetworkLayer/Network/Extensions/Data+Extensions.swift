@@ -10,12 +10,10 @@ import Foundation
 public extension Data {
     func asJson() throws -> Any {
         let json = try JSONSerialization.jsonObject(with: self, options: .allowFragments)
-        
         return json
     }
     
     func asJsonString() throws -> String? {
-        let jsonData = try? JSONSerialization.data(withJSONObject: asJson(), options: [.prettyPrinted, .sortedKeys])
         return String.init(data: self, encoding: .utf8)
     }
 }

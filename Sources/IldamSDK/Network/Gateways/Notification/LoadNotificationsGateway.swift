@@ -8,15 +8,21 @@
 import Foundation
 import NetworkLayer
 
-protocol LoadNotificationsGatewayProtocol {
+protocol LoadNotificationsGatewayProtocol: Sendable {
     func load(page: Int, perPage: Int) async throws -> NetResNotifications?
 }
 
 struct LoadNotificationsGateway: LoadNotificationsGatewayProtocol {
+    private let client: NetworkClientProtocol
+
+    init(client: NetworkClientProtocol = DefaultNetworkClient()) {
+        self.client = client
+    }
+
     struct Request: URLRequestProtocol {
         let page: Int
         let perPage: Int
-        
+
         var url: URL {
             URL.baseAPICli.appending(path: "notifications")
                 .appending(queryItems: [
@@ -24,15 +30,15 @@ struct LoadNotificationsGateway: LoadNotificationsGatewayProtocol {
                     .init(name: "page", value: page.description)
                 ])
         }
-        
+
         var body: Data? = nil
-        
+
         var method: NetworkLayer.HTTPMethod { .get }
     }
-    
+
     func load(page: Int, perPage: Int) async throws -> NetResNotifications? {
         let request = Request(page: page, perPage: perPage)
-        let result: NetRes<NetResNotifications>? = try await Network.sendThrow(request: request)
+        let result: NetRes<NetResNotifications>? = try await client.sendThrow(request: request)
         return result?.result
     }
 }

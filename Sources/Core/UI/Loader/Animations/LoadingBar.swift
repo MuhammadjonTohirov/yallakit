@@ -41,7 +41,7 @@ struct LoadingBar: View {
                 .fill(primaryColor)
                 .frame(width: isAnimating ? frame.width / 2 : frame.width)
                 .offset(x: isAnimating ? frame.width : -frame.width)
-                .animation(Animation.easeInOut(duration: timing).repeatForever(autoreverses: false))
+                .animation(Animation.easeInOut(duration: timing).repeatForever(autoreverses: false), value: isAnimating)
 
         }
         .frame(width: frame.width, height: frame.height / 10, alignment: .center)

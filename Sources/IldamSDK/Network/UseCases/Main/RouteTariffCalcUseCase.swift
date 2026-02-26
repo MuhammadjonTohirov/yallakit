@@ -10,19 +10,19 @@ import Foundation
 import Core
 import CoreLocation
 
-public protocol RouteTariffCalcUseCaseProtocol {
+public protocol RouteTariffCalcUseCaseProtocol: Sendable {
     func execute(request: RouteTariffCalcRequest) async throws -> RouteTariffCalcResponse?
 }
 
-public final class RouteTariffCalcUseCase: RouteTariffCalcUseCaseProtocol {
+public struct RouteTariffCalcUseCase: RouteTariffCalcUseCaseProtocol, Sendable {
     private let gateway: RouteTariffCalcGatewayProtocol
-    
-    init(gateway: RouteTariffCalcGatewayProtocol = RouteTariffCalcGateway()) {
-        self.gateway = gateway
-    }
-    
+
     public init() {
         self.gateway = RouteTariffCalcGateway()
+    }
+
+    init(gateway: RouteTariffCalcGatewayProtocol) {
+        self.gateway = gateway
     }
     
     public func execute(request: RouteTariffCalcRequest) async throws -> RouteTariffCalcResponse? {

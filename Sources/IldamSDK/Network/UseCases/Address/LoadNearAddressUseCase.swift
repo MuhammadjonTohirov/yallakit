@@ -8,19 +8,19 @@
 // UseCases/LoadNearAddressUseCase.swift
 import Foundation
 
-public protocol LoadNearAddressUseCaseProtocol {
+public protocol LoadNearAddressUseCaseProtocol: Sendable {
     func execute(lat: Double, lng: Double) async -> [SearchAddressItem]
 }
 
-public final class LoadNearAddressUseCase: LoadNearAddressUseCaseProtocol {
+public struct LoadNearAddressUseCase: LoadNearAddressUseCaseProtocol, Sendable {
     private let gateway: LoadNearAddressGatewayProtocol
-    
-    init(gateway: LoadNearAddressGatewayProtocol = LoadNearAddressGateway()) {
-        self.gateway = gateway
-    }
-    
+
     public init() {
         self.gateway = LoadNearAddressGateway()
+    }
+
+    init(gateway: LoadNearAddressGatewayProtocol) {
+        self.gateway = gateway
     }
     
     public func execute(lat: Double, lng: Double) async -> [SearchAddressItem] {

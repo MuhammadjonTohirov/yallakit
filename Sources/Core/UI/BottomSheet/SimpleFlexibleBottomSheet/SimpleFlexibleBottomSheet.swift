@@ -144,7 +144,6 @@ public struct SimpleBottomSheet<Content: View, Footer: View>: View {
             .updating($dragOffset) { value, state, _ in
                 withTransaction(.init(animation: nil)) {
                     state = value.translation.height
-                    debugPrint(state)
                 }
             }
             .onEnded { value in
@@ -179,9 +178,7 @@ struct DemoBottomSheetView: View {
                     }
                 }
             }, footer: {
-                Button(action: {
-                    print("Button tapped!")
-                }) {
+                Button(action: { }) {
                     Text("Tap Me")
                         .frame(maxWidth: .infinity)
                         .padding()

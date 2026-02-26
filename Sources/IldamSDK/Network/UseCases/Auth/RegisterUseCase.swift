@@ -13,15 +13,15 @@ public protocol RegisterUseCaseProtocol: Sendable {
     func execute(request: RegistrationRequest) async throws -> Bool
 }
 
-public struct RegisterUseCase: RegisterUseCaseProtocol {
+public struct RegisterUseCase: RegisterUseCaseProtocol, Sendable {
     private let gateway: RegisterGatewayProtocol
-    
-    init(gateway: RegisterGatewayProtocol = RegisterGateway()) {
-        self.gateway = gateway
-    }
-    
+
     public init() {
         self.gateway = RegisterGateway()
+    }
+
+    init(gateway: RegisterGatewayProtocol) {
+        self.gateway = gateway
     }
     
     public func execute(request: RegistrationRequest) async throws -> Bool {

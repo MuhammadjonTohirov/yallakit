@@ -8,19 +8,19 @@
 // UseCases/LoadOrderHistoryUseCase.swift
 import Foundation
 
-public protocol LoadOrderHistoryUseCaseProtocol {
+public protocol LoadOrderHistoryUseCaseProtocol: Sendable {
     func execute(page: Int, limit: Int) async -> OrderHistoryResponse?
 }
 
-public final class LoadOrderHistoryUseCase: LoadOrderHistoryUseCaseProtocol {
+public struct LoadOrderHistoryUseCase: LoadOrderHistoryUseCaseProtocol, Sendable {
     private let gateway: OrderHistoryGatewayProtocol
-    
-    init(gateway: OrderHistoryGatewayProtocol = OrderHistoryGateway()) {
-        self.gateway = gateway
-    }
-    
+
     public init() {
         self.gateway = OrderHistoryGateway()
+    }
+
+    init(gateway: OrderHistoryGatewayProtocol) {
+        self.gateway = gateway
     }
     
     public func execute(page: Int, limit: Int = 8) async -> OrderHistoryResponse? {

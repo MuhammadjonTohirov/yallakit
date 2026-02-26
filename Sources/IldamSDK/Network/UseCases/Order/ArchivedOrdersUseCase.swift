@@ -8,19 +8,19 @@
 // UseCases/ArchivedOrderUseCase.swift
 import Foundation
 
-public protocol ArchivedOrderUseCaseProtocol {
+public protocol ArchivedOrderUseCaseProtocol: Sendable {
     func execute(id: Int) async throws -> OrderDetails?
 }
 
-public final class ArchivedOrderUseCase: ArchivedOrderUseCaseProtocol {
+public struct ArchivedOrderUseCase: ArchivedOrderUseCaseProtocol, Sendable {
     private let gateway: ArchivedOrderGatewayProtocol
-    
-    init(gateway: ArchivedOrderGatewayProtocol = ArchivedOrderGateway()) {
-        self.gateway = gateway
-    }
-    
+
     public init() {
         self.gateway = ArchivedOrderGateway()
+    }
+
+    init(gateway: ArchivedOrderGatewayProtocol) {
+        self.gateway = gateway
     }
     
     public func execute(id: Int) async throws -> OrderDetails? {

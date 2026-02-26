@@ -8,19 +8,19 @@
 // UseCases/DeleteAddressUseCase.swift
 import Foundation
 
-public protocol DeleteAddressUseCaseProtocol {
+public protocol DeleteAddressUseCaseProtocol: Sendable {
     func execute(id: Int) async -> Bool
 }
 
-public final class DeleteAddressUseCase: DeleteAddressUseCaseProtocol {
+public struct DeleteAddressUseCase: DeleteAddressUseCaseProtocol, Sendable {
     private let gateway: DeleteAddressGatewayProtocol
-    
-    init(gateway: DeleteAddressGatewayProtocol = DeleteAddressGateway()) {
-        self.gateway = gateway
-    }
-    
+
     public init() {
         self.gateway = DeleteAddressGateway()
+    }
+
+    init(gateway: DeleteAddressGatewayProtocol) {
+        self.gateway = gateway
     }
     
     public func execute(id: Int) async -> Bool {

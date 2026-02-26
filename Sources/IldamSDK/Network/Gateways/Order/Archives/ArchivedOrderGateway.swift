@@ -9,13 +9,19 @@
 import Foundation
 import NetworkLayer
 
-protocol ArchivedOrderGatewayProtocol {
+protocol ArchivedOrderGatewayProtocol: Sendable {
     func getArchivedOrder(id: Int) async throws -> NetResOrderDetails?
 }
 
 struct ArchivedOrderGateway: ArchivedOrderGatewayProtocol {
+    private let client: NetworkClientProtocol
+
+    init(client: NetworkClientProtocol = DefaultNetworkClient()) {
+        self.client = client
+    }
+
     func getArchivedOrder(id: Int) async throws -> NetResOrderDetails? {
-        let result: NetRes<NetResOrderDetails>? = try await Network.sendThrow(
+        let result: NetRes<NetResOrderDetails>? = try await client.sendThrow(
             request: OrderNetworkRoute.archivedOrder(id: id)
         )
         return result?.result

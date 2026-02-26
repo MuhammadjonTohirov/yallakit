@@ -13,13 +13,13 @@ public protocol BrandServicesUseCaseProtocol: Sendable {
 
 public struct BrandServicesUseCase: BrandServicesUseCaseProtocol, Sendable {
     private let gateway: BrandServicesGatewayProtocol
-    
-    init(gateway: BrandServicesGatewayProtocol = BrandServicesGateway()) {
-        self.gateway = gateway
-    }
-    
+
     public init() {
         self.gateway = BrandServicesGateway()
+    }
+
+    init(gateway: BrandServicesGatewayProtocol) {
+        self.gateway = gateway
     }
     
     public func execute() async throws -> [BrandServiceItem] {

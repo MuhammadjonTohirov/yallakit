@@ -9,13 +9,19 @@
 import Foundation
 import NetworkLayer
 
-protocol GetTaxiTariffsGatewayProtocol {
+protocol GetTaxiTariffsGatewayProtocol: Sendable {
     func getTaxiTariffs(coords: [(lat: Double, lng: Double)], addressId: Int, options: [Int]) async -> NetResTaxiTariffList?
 }
 
 struct GetTaxiTariffsGateway: GetTaxiTariffsGatewayProtocol {
+    private let client: NetworkClientProtocol
+
+    init(client: NetworkClientProtocol = DefaultNetworkClient()) {
+        self.client = client
+    }
+
     func getTaxiTariffs(coords: [(lat: Double, lng: Double)], addressId: Int, options: [Int]) async -> NetResTaxiTariffList? {
-        let result: NetRes<NetResTaxiTariffList>? = await Network.send(
+        let result: NetRes<NetResTaxiTariffList>? = await client.send(
             request: MainNetworkRoute.getTariffs(
                 req: .init(coords: coords, options: options, addressId: addressId)
             )

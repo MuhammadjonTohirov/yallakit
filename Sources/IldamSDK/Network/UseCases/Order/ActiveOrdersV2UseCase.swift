@@ -12,15 +12,15 @@ public protocol ActiveOrdersV2UseCaseProtocol: Sendable {
     func execute() async throws -> [OrderDetails]?
 }
 
-public struct ActiveOrdersV2UseCase: ActiveOrdersV2UseCaseProtocol {
-    private let gateway: ActiveOrdersGatewayProtocol
-    
-    init(gateway: ActiveOrdersGatewayProtocol = ActiveOrdersV2Gateway()) {
-        self.gateway = gateway
-    }
-    
-    public init () {
+public struct ActiveOrdersV2UseCase: ActiveOrdersV2UseCaseProtocol, Sendable {
+    private let gateway: ActiveOrdersV2GatewayProtocol
+
+    public init() {
         self.gateway = ActiveOrdersV2Gateway()
+    }
+
+    init(gateway: ActiveOrdersV2GatewayProtocol) {
+        self.gateway = gateway
     }
     
     public func execute() async throws -> [OrderDetails]? {

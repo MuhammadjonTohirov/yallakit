@@ -9,12 +9,18 @@
 import Foundation
 import NetworkLayer
 
-protocol GetAddressGatewayProtocol {
+protocol GetAddressGatewayProtocol: Sendable {
     func getAddress(lat: Double, lng: Double) async -> NetResGetAddress?
 }
 
 struct GetAddressGateway: GetAddressGatewayProtocol {
+    private let client: NetworkClientProtocol
+
+    init(client: NetworkClientProtocol = DefaultNetworkClient()) {
+        self.client = client
+    }
+
     func getAddress(lat: Double, lng: Double) async -> NetResGetAddress? {
-        return (await Network.send(request: MainNetworkRoute.getAddress(lat: lat, lng: lng)))?.result
+        return (await client.send(request: MainNetworkRoute.getAddress(lat: lat, lng: lng)))?.result
     }
 }

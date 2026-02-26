@@ -25,7 +25,7 @@ struct LoadingPulse: View {
     var body: some View {
         ZStack {
             
-            ForEach(0..<maxCounter) { index in
+            ForEach(0..<maxCounter, id: \.self) { index in
                 Circle()
                     .scale(isAnimating ? 1.0 : 0.0)
                     .fill(primaryColor)
@@ -33,7 +33,8 @@ struct LoadingPulse: View {
                     .animation(
                         Animation.easeOut(duration: timing)
                         .repeatForever(autoreverses: false)
-                        .delay(Double(index) * timing / 3)
+                        .delay(Double(index) * timing / 3),
+                        value: isAnimating
                     )
 
             }

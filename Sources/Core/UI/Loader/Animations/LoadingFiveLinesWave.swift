@@ -24,7 +24,7 @@ struct LoadingFiveLinesWave: View {
 
     var body: some View {
         HStack(spacing: frame.width / 10) {
-            ForEach(0..<maxCounter) { index in
+            ForEach(0..<maxCounter, id: \.self) { index in
                 
                 RoundedRectangle(cornerRadius: 25.0)
                     .fill(primaryColor)
@@ -33,7 +33,8 @@ struct LoadingFiveLinesWave: View {
                         Animation
                             .easeOut(duration: timing)
                             .repeatForever(autoreverses: true)
-                            .delay(timing / Double(maxCounter) * Double(index))
+                            .delay(timing / Double(maxCounter) * Double(index)),
+                        value: isAnimating
                     )
             }
         }

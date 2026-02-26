@@ -15,8 +15,14 @@ protocol MyPlacesGatewayProtocol: Sendable {
 }
 
 struct MyPlacesGateway: MyPlacesGatewayProtocol {
+    private let client: NetworkClientProtocol
+
+    init(client: NetworkClientProtocol = DefaultNetworkClient()) {
+        self.client = client
+    }
+
     func loadMyPlaces() async -> [NetResMyAddressItem] {
-        let result: NetRes<[NetResMyAddressItem]>? = await Network.send(request: MainNetworkRoute.getMyAddresses)
+        let result: NetRes<[NetResMyAddressItem]>? = await client.send(request: MainNetworkRoute.getMyAddresses)
         return result?.result ?? []
     }
 }

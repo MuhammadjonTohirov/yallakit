@@ -21,18 +21,24 @@ public protocol PolygonNetworkServiceProtocol: Sendable {
 
 public final class PolygonService: @unchecked Sendable, PolygonNetworkServiceProtocol {
     public var polygonList: [PolygonItem] = []
-    
+
     typealias Coor = (lat: Double, lng: Double)
-    
+
+    private let client: NetworkClientProtocol
+
     public static let shared: PolygonNetworkServiceProtocol = PolygonService()
-    
+
+    public init(client: NetworkClientProtocol = DefaultNetworkClient()) {
+        self.client = client
+    }
+
     @discardableResult
     public func getPolygonList() async throws -> [PolygonItem] {
         guard polygonList.isEmpty else {
             return polygonList
         }
-        
-        let response: NetRes<[NetResPolygoneItem]>? = try await Network.sendThrow(
+
+        let response: NetRes<[NetResPolygonItem]>? = try await client.sendThrow(
             request: PolygonNetworkRoute()
         )
         

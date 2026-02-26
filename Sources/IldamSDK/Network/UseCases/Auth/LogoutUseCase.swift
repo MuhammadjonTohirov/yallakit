@@ -12,15 +12,15 @@ public protocol LogoutUseCaseProtocol: Sendable {
     func execute() async -> Bool
 }
 
-public struct LogoutUseCase: LogoutUseCaseProtocol {
+public struct LogoutUseCase: LogoutUseCaseProtocol, Sendable {
     private let gateway: LogoutGatewayProtocol
-    
-    init(gateway: LogoutGatewayProtocol = LogoutGateway()) {
-        self.gateway = gateway
-    }
-    
+
     public init() {
         self.gateway = LogoutGateway()
+    }
+
+    init(gateway: LogoutGatewayProtocol) {
+        self.gateway = gateway
     }
     
     public func execute() async -> Bool {

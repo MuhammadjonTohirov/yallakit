@@ -28,7 +28,7 @@ struct LoadingCircleBlinks: View {
 
     var body: some View {
         ZStack {
-            ForEach(0..<maxCounter) { index in
+            ForEach(0..<maxCounter, id: \.self) { index in
                 Circle()
                     .fill(primaryColor)
                     .frame(height: frame.height / 5)

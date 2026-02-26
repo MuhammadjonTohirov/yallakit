@@ -13,12 +13,18 @@ public protocol RoutingUseCaseProtocol: Sendable {
     ) async throws -> RoutingResponse?
 }
 
-public struct RoutingUseCase: RoutingUseCaseProtocol {
+public struct RoutingUseCase: RoutingUseCaseProtocol, Sendable {
+    private let gateway: RoutingGatewayProtocol
+
     public init() {
-        
+        self.gateway = RoutingGateway()
     }
-    
+
+    init(gateway: RoutingGatewayProtocol) {
+        self.gateway = gateway
+    }
+
     public func execute(req: [(lat: Double, lng: Double)]) async throws -> RoutingResponse? {
-        try await RoutingGateway().execute(req: req)
+        try await gateway.execute(req: req)
     }
 }

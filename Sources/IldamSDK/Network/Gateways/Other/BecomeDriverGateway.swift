@@ -13,9 +13,15 @@ protocol BecomeDriverGatewayProtocol: Sendable {
 }
 
 struct BecomeDriverGateway: BecomeDriverGatewayProtocol {
+    private let client: NetworkClientProtocol
+
+    init(client: NetworkClientProtocol = DefaultNetworkClient()) {
+        self.client = client
+    }
+
     func execute(req: NetReqBeDriver) async throws -> Bool {
-        let result: NetRes<[NetResDistrictItem]>? = try await Network.sendThrow(request: req)
-        
+        let result: NetRes<[NetResDistrictItem]>? = try await client.sendThrow(request: req)
+
         return result?.success == true
     }
 }
