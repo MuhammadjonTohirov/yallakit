@@ -14,8 +14,14 @@ protocol LogoutGatewayProtocol: Sendable {
 }
 
 struct LogoutGateway: LogoutGatewayProtocol {
+    private let client: NetworkClientProtocol
+
+    init(client: NetworkClientProtocol = DefaultNetworkClient()) {
+        self.client = client
+    }
+
     func logout() async -> Bool {
-        let res: NetRes<String>? = await Network.send(request: AuthNetworkRoute.logout)
+        let res: NetRes<String>? = await client.send(request: AuthNetworkRoute.logout)
         return res?.success ?? false
     }
 }

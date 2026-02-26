@@ -106,9 +106,6 @@ struct UIScrollViewWrapper<Content: View>: UIViewRepresentable {
                 height: max(fittingSize.height, scrollView.frame.height)
             )
             
-            // Debug print
-            print("ScrollView frame: \(scrollView.frame)")
-            print("Content size: \(scrollView.contentSize)")
         }
         
         // Update scroll position if changed externally and it's a valid position

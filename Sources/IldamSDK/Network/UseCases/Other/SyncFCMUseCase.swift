@@ -9,14 +9,20 @@ import Foundation
 import NetworkLayer
 import Core
 
-public protocol SyncFCMUseCase {
+public protocol SyncFCMUseCase: Sendable {
     func sendFCMToken(token: String) async -> Bool
-    
+
     @discardableResult
     func syncFCMtoken() async -> Bool
 }
 
-public struct SyncFCMUseCaseImpl: SyncFCMUseCase {
+public struct SyncFCMUseCaseImpl: SyncFCMUseCase, Sendable {
+    private let client: NetworkClientProtocol
+
+    public init(client: NetworkClientProtocol = DefaultNetworkClient()) {
+        self.client = client
+    }
+
     struct Request: URLRequestProtocol {
         var token: String
         
@@ -39,12 +45,8 @@ public struct SyncFCMUseCaseImpl: SyncFCMUseCase {
         }
     }
     
-    public init() {
-        
-    }
-    
     public func sendFCMToken(token: String) async -> Bool {
-        let result: NetRes<String>? = await Network.send(request: Request(token: token))
+        let result: NetRes<String>? = await client.send(request: Request(token: token))
         
         return result != nil && result?.error == nil
     }

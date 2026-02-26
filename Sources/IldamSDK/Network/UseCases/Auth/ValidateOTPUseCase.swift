@@ -9,19 +9,19 @@
 import Foundation
 import Core
 
-public protocol ValidateOTPUseCaseProtocol {
+public protocol ValidateOTPUseCaseProtocol: Sendable {
     func execute(username: String, code: String) async -> ValidationResponse?
 }
 
-public final class ValidateOTPUseCase: ValidateOTPUseCaseProtocol {
+public struct ValidateOTPUseCase: ValidateOTPUseCaseProtocol, Sendable {
     private let gateway: ValidateOTPGatewayProtocol
-    
-    init(gateway: ValidateOTPGatewayProtocol = ValidateOTPGateway()) {
-        self.gateway = gateway
-    }
-    
+
     public init() {
         self.gateway = ValidateOTPGateway()
+    }
+
+    init(gateway: ValidateOTPGatewayProtocol) {
+        self.gateway = gateway
     }
     
     public func execute(username: String, code: String) async -> ValidationResponse? {

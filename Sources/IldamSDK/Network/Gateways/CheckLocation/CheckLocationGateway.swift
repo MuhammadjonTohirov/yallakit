@@ -8,14 +8,20 @@
 import SwiftUI
 import NetworkLayer
 
-protocol CheckLocationGatewayProtocol {
+protocol CheckLocationGatewayProtocol: Sendable {
     func checkLocation(lat: Double, lng: Double) async throws -> NetCheckLocationRes
 }
 
 struct CheckLocationGateway: CheckLocationGatewayProtocol {
+    private let client: NetworkClientProtocol
+
+    init(client: NetworkClientProtocol = DefaultNetworkClient()) {
+        self.client = client
+    }
+
     func checkLocation(lat: Double, lng: Double) async throws -> NetCheckLocationRes {
-        let request = Request(lat: lat,lng: lng)
-        let result: NetRes<NetCheckLocationRes>? = await Network.send(request: request)
+        let request = Request(lat: lat, lng: lng)
+        let result: NetRes<NetCheckLocationRes>? = await client.send(request: request)
         
         guard let data = result?.result else {
             throw NSError(domain: result?.error ?? "No Location", code: result?.code ?? -1)

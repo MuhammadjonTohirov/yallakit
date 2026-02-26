@@ -9,13 +9,19 @@
 import Foundation
 import NetworkLayer
 
-protocol LoadNearAddressGatewayProtocol {
+protocol LoadNearAddressGatewayProtocol: Sendable {
     func loadNearAddress(lat: Double, lng: Double) async -> [NetResAddressItem]
 }
 
 struct LoadNearAddressGateway: LoadNearAddressGatewayProtocol {
+    private let client: NetworkClientProtocol
+
+    init(client: NetworkClientProtocol = DefaultNetworkClient()) {
+        self.client = client
+    }
+
     func loadNearAddress(lat: Double, lng: Double) async -> [NetResAddressItem] {
-        let result: NetRes<[NetResAddressItem]>? = await Network.send(request: MainNetworkRoute.getNearAddresses(lat: lat, lng: lng))
+        let result: NetRes<[NetResAddressItem]>? = await client.send(request: MainNetworkRoute.getNearAddresses(lat: lat, lng: lng))
         return result?.result ?? []
     }
 }

@@ -8,19 +8,19 @@
 // UseCases/UpdatePlaceUseCase.swift
 import Foundation
 
-public protocol UpdatePlaceUseCaseProtocol {
+public protocol UpdatePlaceUseCaseProtocol: Sendable {
     func execute(request: UpdatePlaceRequest) async -> Bool
 }
 
-public final class UpdatePlaceUseCase: UpdatePlaceUseCaseProtocol {
+public struct UpdatePlaceUseCase: UpdatePlaceUseCaseProtocol, Sendable {
     private let gateway: UpdatePlaceGatewayProtocol
-    
-    init(gateway: UpdatePlaceGatewayProtocol = UpdatePlaceGateway()) {
-        self.gateway = gateway
-    }
-    
+
     public init() {
         self.gateway = UpdatePlaceGateway()
+    }
+
+    init(gateway: UpdatePlaceGatewayProtocol) {
+        self.gateway = gateway
     }
     
     public func execute(request: UpdatePlaceRequest) async -> Bool {

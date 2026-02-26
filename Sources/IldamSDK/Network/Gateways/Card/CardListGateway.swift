@@ -14,8 +14,14 @@ protocol CardListGatewayProtocol: Sendable {
 }
 
 struct CardListGateway: CardListGatewayProtocol {
+    private let client: NetworkClientProtocol
+
+    init(client: NetworkClientProtocol = DefaultNetworkClient()) {
+        self.client = client
+    }
+
     func getCardList() async throws -> [NetResCardItem]? {
-        let result: NetRes<[NetResCardItem]>? = try await Network.sendThrow(
+        let result: NetRes<[NetResCardItem]>? = try await client.sendThrow(
             request: CardNetworkRouter.cardList
         )
         return result?.result

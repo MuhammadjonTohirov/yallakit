@@ -9,19 +9,19 @@
 import Foundation
 import Core
 
-public protocol GetCardListUseCaseProtocol {
+public protocol GetCardListUseCaseProtocol: Sendable {
     func execute() async throws -> [CardItem]
 }
 
-public struct GetCardListUseCase: GetCardListUseCaseProtocol {
+public struct GetCardListUseCase: GetCardListUseCaseProtocol, Sendable {
     private let gateway: CardListGatewayProtocol
-    
-    init(gateway: CardListGatewayProtocol = CardListGateway()) {
-        self.gateway = gateway
-    }
-    
+
     public init() {
         self.gateway = CardListGateway()
+    }
+
+    init(gateway: CardListGatewayProtocol) {
+        self.gateway = gateway
     }
     
     public func execute() async throws -> [CardItem] {

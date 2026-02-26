@@ -8,20 +8,20 @@
 // UseCases/RateOrderUseCase.swift
 import Foundation
 
-public protocol RateOrderUseCaseProtocol {
+public protocol RateOrderV2UseCaseProtocol: Sendable {
     func execute(orderId: Int, rate: Int, comment: String) async throws -> Bool
     func execute(orderId: Int, rate: Int, reasons: [Int]) async throws -> Bool
 }
 
-public final class RateOrderUseCase: RateOrderUseCaseProtocol {
-    private let gateway: RateOrderGatewayProtocol
-    
-    init(gateway: RateOrderGatewayProtocol = RateOrderGateway()) {
-        self.gateway = gateway
-    }
-    
+public struct RateOrderV2UseCase: RateOrderV2UseCaseProtocol, Sendable {
+    private let gateway: RateOrderV2GatewayProtocol
+
     public init() {
-        self.gateway = RateOrderGateway()
+        self.gateway = RateOrderV2Gateway()
+    }
+
+    init(gateway: RateOrderV2GatewayProtocol) {
+        self.gateway = gateway
     }
     
     public func execute(orderId: Int, rate: Int, comment: String) async throws -> Bool {

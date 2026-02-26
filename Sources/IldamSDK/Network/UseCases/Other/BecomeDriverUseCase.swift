@@ -11,15 +11,15 @@ public protocol BecomeDriverUseCaseProtocol: Sendable {
     func execute(request: BecomeDriverRequest) async throws -> Bool
 }
 
-public struct BecomeDriverUseCase: BecomeDriverUseCaseProtocol {
+public struct BecomeDriverUseCase: BecomeDriverUseCaseProtocol, Sendable {
     private let gateway: BecomeDriverGatewayProtocol
-
-    init(gateway: BecomeDriverGatewayProtocol = BecomeDriverGateway()) {
-        self.gateway = gateway
-    }
 
     public init() {
         self.gateway = BecomeDriverGateway()
+    }
+
+    init(gateway: BecomeDriverGatewayProtocol) {
+        self.gateway = gateway
     }
 
     public func execute(request: BecomeDriverRequest) async throws -> Bool {

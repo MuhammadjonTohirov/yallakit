@@ -28,7 +28,7 @@ struct LoadingThreeBalls: View {
 
     var body: some View {
         HStack(spacing: 0) {
-            ForEach(0..<maxCounter) { index in
+            ForEach(0..<maxCounter, id: \.self) { index in
                 Circle()
                     .scale(counter == index ? 1.0 : 0.5)
                     .fill(primaryColor)

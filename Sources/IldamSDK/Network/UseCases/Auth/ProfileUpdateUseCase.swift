@@ -12,15 +12,15 @@ public protocol UpdateProfileUseCaseProtocol: Sendable {
     func execute(request: ProfileUpdateRequest) async throws -> Bool
 }
 
-public struct UpdateProfileUseCase: UpdateProfileUseCaseProtocol {
+public struct UpdateProfileUseCase: UpdateProfileUseCaseProtocol, Sendable {
     private let gateway: UpdateProfileGatewayProtocol
-    
-    init(gateway: UpdateProfileGatewayProtocol = UpdateProfileGateway()) {
-        self.gateway = gateway
-    }
-    
+
     public init() {
         self.gateway = UpdateProfileGateway()
+    }
+
+    init(gateway: UpdateProfileGatewayProtocol) {
+        self.gateway = gateway
     }
     
     public func execute(request: ProfileUpdateRequest) async throws -> Bool {

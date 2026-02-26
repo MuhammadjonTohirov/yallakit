@@ -68,8 +68,8 @@ enum AuthNetworkRoute: URLRequestProtocol {
         
         request?.httpMethod = method.rawValue
         request?.httpBody = body
-        
-        return request!
+
+        return request ?? URLRequest.new(url: url)
     }
     
     case sendOTP(req: NetReqSendOTP)

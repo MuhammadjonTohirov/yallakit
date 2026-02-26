@@ -7,15 +7,21 @@
 
 import Foundation
 
-public protocol ShowAndReadNotifUseCaseProtocol {
+public protocol ShowAndReadNotifUseCaseProtocol: Sendable {
     func execute(notifId: Int64) async throws -> NotificationItem?
 }
 
-public final class ShowAndReadNotifUseCase: ShowAndReadNotifUseCaseProtocol {
-    let gateway = ShowAndReadNotifGatewayImpl()
-    
-    public init() {}
-    
+public struct ShowAndReadNotifUseCase: ShowAndReadNotifUseCaseProtocol, Sendable {
+    private let gateway: ShowAndReadNotifGateway
+
+    public init() {
+        self.gateway = ShowAndReadNotifGatewayImpl()
+    }
+
+    init(gateway: ShowAndReadNotifGateway) {
+        self.gateway = gateway
+    }
+
     public func execute(notifId: Int64) async throws -> NotificationItem? {
         let result = try await gateway.execute(notificationId: notifId)
         return NotificationItem(res: result)

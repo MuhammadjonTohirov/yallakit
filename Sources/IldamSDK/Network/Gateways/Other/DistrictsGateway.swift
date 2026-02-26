@@ -13,11 +13,17 @@ protocol DistrictsGatewayProtocol: Sendable {
 }
 
 struct DistrictsGateway: DistrictsGatewayProtocol {
+    private let client: NetworkClientProtocol
+
+    init(client: NetworkClientProtocol = DefaultNetworkClient()) {
+        self.client = client
+    }
+
     func execute() async throws -> [NetResDistrictItem] {
-        let result: NetRes<[NetResDistrictItem]>? = try await Network.sendThrow(
+        let result: NetRes<[NetResDistrictItem]>? = try await client.sendThrow(
             request: NetReqDistricts()
         )
-        
+
         return result?.result ?? []
     }
 }

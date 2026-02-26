@@ -26,7 +26,7 @@ struct LoadingThreeBallsRotation: View {
 
     var body: some View {
         HStack(spacing: 10) {
-            ForEach(0..<maxCounter) { index in
+            ForEach(0..<maxCounter, id: \.self) { index in
                 Circle()
                     .fill(primaryColor)
             }

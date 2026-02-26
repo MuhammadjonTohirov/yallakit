@@ -8,19 +8,19 @@
 // UseCases/AddPlaceUseCase.swift
 import Foundation
 
-public protocol AddPlaceUseCaseProtocol {
+public protocol AddPlaceUseCaseProtocol: Sendable {
     func execute(request: AddPlaceRequest) async -> Bool
 }
 
-public final class AddPlaceUseCase: AddPlaceUseCaseProtocol {
+public struct AddPlaceUseCase: AddPlaceUseCaseProtocol, Sendable {
     private let gateway: AddPlaceGatewayProtocol
-    
-    init(gateway: AddPlaceGatewayProtocol = AddPlaceGateway()) {
-        self.gateway = gateway
-    }
-    
+
     public init() {
         self.gateway = AddPlaceGateway()
+    }
+
+    init(gateway: AddPlaceGatewayProtocol) {
+        self.gateway = gateway
     }
     
     public func execute(request: AddPlaceRequest) async -> Bool {

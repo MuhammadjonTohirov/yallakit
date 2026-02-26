@@ -11,15 +11,15 @@ public protocol DeleteOrderUseCaseProtocol: Sendable {
     func execute(id: Int) async throws -> Bool
 }
 
-public struct DeleteOrderUseCase: DeleteOrderUseCaseProtocol {
+public struct DeleteOrderUseCase: DeleteOrderUseCaseProtocol, Sendable {
     private let gateway: DeleteOrderGatewayProtocol
-    
-    init(gateway: DeleteOrderGatewayProtocol = DeleteOrderGateway()) {
-        self.gateway = gateway
-    }
-    
+
     public init() {
         self.gateway = DeleteOrderGateway()
+    }
+
+    init(gateway: DeleteOrderGatewayProtocol) {
+        self.gateway = gateway
     }
     
     public func execute(id: Int) async throws -> Bool {

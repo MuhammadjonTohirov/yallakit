@@ -14,8 +14,14 @@ protocol UpdateProfileGatewayProtocol: Sendable {
 }
 
 struct UpdateProfileGateway: UpdateProfileGatewayProtocol {
+    private let client: NetworkClientProtocol
+
+    init(client: NetworkClientProtocol = DefaultNetworkClient()) {
+        self.client = client
+    }
+
     func updateProfile(req: NetReqUpdateProfile) async throws -> Bool {
-        let res: NetRes<Bool>? = try await Network.sendThrow(request: AuthNetworkRoute.updateProfile(
+        let res: NetRes<Bool>? = try await client.sendThrow(request: AuthNetworkRoute.updateProfile(
             givenNames: req.givenNames,
             surName: req.surName,
             birthday: req.birthday,

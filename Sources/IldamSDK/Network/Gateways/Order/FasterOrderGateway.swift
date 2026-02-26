@@ -8,13 +8,19 @@
 import Foundation
 import NetworkLayer
 
-protocol FasterOrderGateway {
+protocol FasterOrderGateway: Sendable {
     func getFasterOrder(orderId: Int) async -> Bool
 }
 
 struct FastOrderGatewayImpl: FasterOrderGateway {
+    private let client: NetworkClientProtocol
+
+    init(client: NetworkClientProtocol = DefaultNetworkClient()) {
+        self.client = client
+    }
+
     func getFasterOrder(orderId: Int) async -> Bool {
-        let res: NetRes<String>? = await Network.send(request: Request(orderId: orderId))
+        let res: NetRes<String>? = await client.send(request: Request(orderId: orderId))
         return res?.success ?? false
     }
 }

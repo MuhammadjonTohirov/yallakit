@@ -7,21 +7,21 @@
 
 import Foundation
 
-public protocol ReadAllNotifsUseCaseProtocol {
+public protocol ReadAllNotifsUseCaseProtocol: Sendable {
     func execute() async throws -> Bool
 }
 
-public final class ReadAllNotifsUseCase: ReadAllNotifsUseCaseProtocol {
+public struct ReadAllNotifsUseCase: ReadAllNotifsUseCaseProtocol, Sendable {
     private let gateway: ReadAllNotifsGateway
-    
-    init(gateway: ReadAllNotifsGateway = ReadAllNotifsGatewayImpl()) {
+
+    public init() {
+        self.gateway = ReadAllNotifsGatewayImpl()
+    }
+
+    init(gateway: ReadAllNotifsGateway) {
         self.gateway = gateway
     }
-    
-    public init() {
-        gateway = ReadAllNotifsGatewayImpl()
-    }
-    
+
     public func execute() async throws -> Bool {
         try await gateway.execute()
     }

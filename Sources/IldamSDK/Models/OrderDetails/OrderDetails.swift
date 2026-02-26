@@ -98,7 +98,6 @@ public struct OrderDetails: Codable, Sendable {
         self.tariff = .init(res: res.tariff)
         self.routes = res.routes?.compactMap({.init(res: $0)})
         self.cardId = res.cardId
-        print("new order", res.status)
     }
     
     public init(

@@ -47,10 +47,10 @@ struct LoadingThreeBallsTriangle: View {
                     x: isAnimating ? frame.height / 3 : 0,
                     y: isAnimating ? frame.height / 3 : 0)
         }
-        .animation(Animation.easeInOut(duration: timing).repeatForever(autoreverses: true))
+        .animation(Animation.easeInOut(duration: timing).repeatForever(autoreverses: true), value: isAnimating)
         .frame(width: frame.width, height: frame.height, alignment: .center)
         .rotationEffect(Angle(degrees: isAnimating ? 360 : 0))
-        .animation(Animation.easeInOut(duration: timing).repeatForever(autoreverses: false))
+        .animation(Animation.easeInOut(duration: timing).repeatForever(autoreverses: false), value: isAnimating)
         .onAppear {
             isAnimating = true
         }

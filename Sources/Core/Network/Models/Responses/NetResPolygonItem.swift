@@ -7,23 +7,23 @@
 
 import Foundation
 
-struct NetResPolygoneItem: Codable {
+struct NetResPolygonItem: Codable {
     let addressID: Int
     let polygon: [NetCoord]
-    let config: NetResPolygoneConfig?
-    
+    let config: NetResPolygonConfig?
+
     enum CodingKeys: String, CodingKey {
         case addressID = "address_id"
         case polygon
         case config
     }
-    
-    struct NetResPolygoneConfig: Codable {
+
+    struct NetResPolygonConfig: Codable {
         let isWorkingMobile: Bool?
         let notServeMessageRu: String?
         let notServeMessageUz: String?
         let notServeMessageEn: String?
-        
+
         enum CodingKeys: String, CodingKey {
             case isWorkingMobile = "is_working_mobile"
             case notServeMessageRu = "not_serve_message_ru"
@@ -32,6 +32,12 @@ struct NetResPolygoneItem: Codable {
         }
     }
 }
+
+@available(*, deprecated, renamed: "NetResPolygonItem")
+typealias NetResPolygoneItem = NetResPolygonItem
+
+@available(*, deprecated, renamed: "NetResPolygonConfig")
+typealias NetResPolygoneConfig = NetResPolygonItem.NetResPolygonConfig
 
 struct NetCoord: Codable {
     let lat: Double

@@ -8,19 +8,19 @@
 // UseCases/ActiveOrdersCountUseCase.swift
 import Foundation
 
-public protocol ActiveOrdersCountUseCaseProtocol {
+public protocol ActiveOrdersCountUseCaseProtocol: Sendable {
     func execute() async throws -> Int
 }
 
-public final class ActiveOrdersCountUseCase: ActiveOrdersCountUseCaseProtocol {
+public struct ActiveOrdersCountUseCase: ActiveOrdersCountUseCaseProtocol, Sendable {
     private let gateway: ActiveOrdersCountGatewayProtocol
-    
-    init(gateway: ActiveOrdersCountGatewayProtocol = ActiveOrdersCountGateway()) {
-        self.gateway = gateway
-    }
-    
+
     public init() {
         self.gateway = ActiveOrdersCountGateway()
+    }
+
+    init(gateway: ActiveOrdersCountGatewayProtocol) {
+        self.gateway = gateway
     }
     
     public func execute() async throws -> Int {

@@ -11,15 +11,15 @@ public protocol RatingReasonUseCaseProtocol: Sendable {
     func execute() async throws -> [RatingReasonItem]
 }
 
-public struct RatingReasonUseCase: RatingReasonUseCaseProtocol {
+public struct RatingReasonUseCase: RatingReasonUseCaseProtocol, Sendable {
     private let gateway: RatingReasonGatewayProtocol
-    
-    init(gateway: RatingReasonGatewayProtocol = RatingReasonGateway()) {
-        self.gateway = gateway
-    }
-    
+
     public init() {
         self.gateway = RatingReasonGateway()
+    }
+
+    init(gateway: RatingReasonGatewayProtocol) {
+        self.gateway = gateway
     }
     
     public func execute() async throws -> [RatingReasonItem] {

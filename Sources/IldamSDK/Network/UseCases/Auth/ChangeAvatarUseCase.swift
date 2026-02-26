@@ -9,19 +9,19 @@
 // ChangeAvatarUseCase.swift
 import Foundation
 
-public protocol ChangeAvatarUseCaseProtocol {
+public protocol ChangeAvatarUseCaseProtocol: Sendable {
     func execute(profileAvatar: Data) async -> (success: Bool, result: AvatarResponse?)
 }
 
-public final class ChangeAvatarUseCase: ChangeAvatarUseCaseProtocol {
+public struct ChangeAvatarUseCase: ChangeAvatarUseCaseProtocol, Sendable {
     private let gateway: ChangeAvatarGatewayProtocol
-    
-    init(gateway: ChangeAvatarGatewayProtocol = ChangeAvatarGateway()) {
-        self.gateway = gateway
-    }
-    
+
     public init() {
         self.gateway = ChangeAvatarGateway()
+    }
+
+    init(gateway: ChangeAvatarGatewayProtocol) {
+        self.gateway = gateway
     }
     
     public func execute(profileAvatar: Data) async -> (success: Bool, result: AvatarResponse?) {

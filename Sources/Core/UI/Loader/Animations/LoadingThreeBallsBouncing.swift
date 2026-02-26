@@ -28,7 +28,7 @@ struct LoadingThreeBallsBouncing: View {
 
     var body: some View {
         HStack(spacing: 5) {
-            ForEach(0..<maxCounter) { index in
+            ForEach(0..<maxCounter, id: \.self) { index in
                 Circle()
                     .offset(y: counter == index ? -frame.height / 10 : frame.height / 10)
                     .fill(primaryColor)

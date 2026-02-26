@@ -40,9 +40,7 @@ class ListViewModel: ObservableObject {
     
     private func setupSubscription() {
         $items
-            .sink { [weak self] items in
-                print("Items updated")
-            }
+            .sink { _ in }
             .store(in: &cancellables)
     }
 }

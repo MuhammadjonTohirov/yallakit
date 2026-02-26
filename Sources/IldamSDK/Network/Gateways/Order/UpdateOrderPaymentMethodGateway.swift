@@ -14,9 +14,15 @@ protocol UpdateOrderPaymentMethodGatewayProtocol: Sendable {
 }
 
 struct UpdateOrderPaymentMethodGateway: UpdateOrderPaymentMethodGatewayProtocol {
+    private let client: NetworkClientProtocol
+
+    init(client: NetworkClientProtocol = DefaultNetworkClient()) {
+        self.client = client
+    }
+
     func update(orderId: Int, cardId: String?, type: String) async throws -> Bool {
-        let result: NetRes<String>? = try await Network.sendThrow(request: Request(orderId: orderId, cardId: cardId, type: type))
-        
+        let result: NetRes<String>? = try await client.sendThrow(request: Request(orderId: orderId, cardId: cardId, type: type))
+
         return result?.success == true
     }
 }

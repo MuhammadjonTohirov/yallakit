@@ -9,7 +9,7 @@ import Foundation
 import CoreLocation
 import Core
 
-public final class OrderNetworkMockService: OrderNetworkService {
+public final class OrderNetworkMockService: OrderNetworkService, @unchecked Sendable {
     private var isOrderCreated: Bool = false
     var createdDate: Date = Date()
     var orderAppointedDate: Date?
@@ -45,18 +45,6 @@ public final class OrderNetworkMockService: OrderNetworkService {
         if orderState == .atAddress || orderState == .completed {
             return .mockWith(coord: (40.383784614558365, 71.78263534351994))
         }
-        
-        guard let orderAppointedDate else {
-            Logging.l(tag: .init("OrderNetworkMockService"), "No appointed date")
-            return nil
-        }
-        
-        let waypoints = [
-            CLLocationCoordinate2D(latitude: 40.389053921075046, longitude: 71.77663351195669),
-            CLLocationCoordinate2D(latitude: 40.385105609058606, longitude: 71.7822304070526),
-            CLLocationCoordinate2D(latitude: 40.3843149414556, longitude: 71.78328451519545),
-            CLLocationCoordinate2D(latitude: 40.383784614558365, longitude: 71.78263534351994)
-        ]
         
         return .mockWith(coord: (0, 0))
     }
@@ -107,7 +95,7 @@ public final class OrderNetworkMockService: OrderNetworkService {
     
     public override func orderTaxi(req: OrderTaxiRequest) async throws -> Int? {
         isOrderCreated = true
-        Logging.l(tag: "OrderNetworkMockService", "Order new test order")
-        fatalError("\(#function), Not implemented")
+        createdDate = Date()
+        return 99999
     }
 }

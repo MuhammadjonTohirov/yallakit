@@ -11,15 +11,15 @@ public protocol DistrictsUseCaseProtocol: Sendable {
     func execute() async throws -> [DistrictItem]
 }
 
-public struct DistrictsUseCase: DistrictsUseCaseProtocol {
+public struct DistrictsUseCase: DistrictsUseCaseProtocol, Sendable {
     private let gateway: DistrictsGatewayProtocol
-
-    init(gateway: DistrictsGatewayProtocol = DistrictsGateway()) {
-        self.gateway = gateway
-    }
 
     public init() {
         self.gateway = DistrictsGateway()
+    }
+
+    init(gateway: DistrictsGatewayProtocol) {
+        self.gateway = gateway
     }
 
     public func execute() async throws -> [DistrictItem] {

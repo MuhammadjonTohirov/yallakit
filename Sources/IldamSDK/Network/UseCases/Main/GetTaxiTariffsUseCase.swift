@@ -8,17 +8,21 @@
 // UseCases/GetTaxiTariffsUseCase.swift
 import Foundation
 
-public protocol GetTaxiTariffsUseCaseProtocol {
+public protocol GetTaxiTariffsUseCaseProtocol: Sendable {
     func execute(coords: [(lat: Double, lng: Double)], addressId: Int, options: [Int]) async -> [TaxiTariff]
 }
 
-public final class GetTaxiTariffsUseCase: GetTaxiTariffsUseCaseProtocol {
+public struct GetTaxiTariffsUseCase: GetTaxiTariffsUseCaseProtocol, Sendable {
     private let gateway: GetTaxiTariffsGatewayProtocol
-    
-    init(gateway: GetTaxiTariffsGatewayProtocol = GetTaxiTariffsGateway()) {
+
+    public init() {
+        self.gateway = GetTaxiTariffsGateway()
+    }
+
+    init(gateway: GetTaxiTariffsGatewayProtocol) {
         self.gateway = gateway
     }
-    
+
     public func execute(coords: [(lat: Double, lng: Double)], addressId: Int, options: [Int]) async -> [TaxiTariff] {
         guard let result = await gateway.getTaxiTariffs(coords: coords, addressId: addressId, options: options) else {
             return []

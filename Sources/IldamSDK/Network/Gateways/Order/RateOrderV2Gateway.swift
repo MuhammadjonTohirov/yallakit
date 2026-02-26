@@ -9,13 +9,19 @@
 import Foundation
 import NetworkLayer
 
-protocol RateOrderV2GatewayProtocol {
+protocol RateOrderV2GatewayProtocol: Sendable {
     func rateOrder(orderId: Int, rate: Int, comment: String, ratingReasonIds: [Int]) async throws -> Bool
 }
 
 struct RateOrderV2Gateway: RateOrderV2GatewayProtocol {
+    private let client: NetworkClientProtocol
+
+    init(client: NetworkClientProtocol = DefaultNetworkClient()) {
+        self.client = client
+    }
+
     func rateOrder(orderId: Int, rate: Int, comment: String, ratingReasonIds: [Int] = []) async throws -> Bool {
-        let result: NetRes<[String]>? = try await Network.sendThrow(
+        let result: NetRes<[String]>? = try await client.sendThrow(
             request: Request(input: .init(ball: rate, orderId: orderId, comment: comment, reasonIds: ratingReasonIds))
         )
         return result?.success ?? false

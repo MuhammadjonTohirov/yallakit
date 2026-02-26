@@ -20,7 +20,7 @@ extension CoordinateAddress {
             lng: with.lng,
             name: with.name,
             distance: with.distance,
-            parent: with.parent.map({.init(id: $0.id, name: $0.name, lavel: $0.level)})
+            parent: with.parent.map({.init(id: $0.id, name: $0.name, level: $0.level)})
         )
     }
 }

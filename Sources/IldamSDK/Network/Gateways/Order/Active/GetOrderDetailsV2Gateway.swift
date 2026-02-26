@@ -14,8 +14,14 @@ protocol GetOrderDetailsV2GatewayProtocol: Sendable {
 
 /// /v2/order/:orderId
 struct GetOrderDetailsV2Gateway: GetOrderDetailsV2GatewayProtocol {
+    private let client: NetworkClientProtocol
+
+    init(client: NetworkClientProtocol = DefaultNetworkClient()) {
+        self.client = client
+    }
+
     func getOrderDetails(orderId id: Int) async throws -> NetResOrderDetails? {
-        let result: NetRes<NetResOrderDetails>? = try await Network.sendThrow(
+        let result: NetRes<NetResOrderDetails>? = try await client.sendThrow(
             request: Request(orderId: id)
         )
         return result?.result

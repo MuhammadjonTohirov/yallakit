@@ -9,13 +9,19 @@
 import Foundation
 import NetworkLayer
 
-protocol OrderHistoryGatewayProtocol {
+protocol OrderHistoryGatewayProtocol: Sendable {
     func loadHistory(page: Int, limit: Int) async -> NetResOrderHistory?
 }
 
 struct OrderHistoryGateway: OrderHistoryGatewayProtocol {
+    private let client: NetworkClientProtocol
+
+    init(client: NetworkClientProtocol = DefaultNetworkClient()) {
+        self.client = client
+    }
+
     func loadHistory(page: Int, limit: Int = 8) async -> NetResOrderHistory? {
-        let result: NetRes<NetResOrderHistory>? = await Network.send(
+        let result: NetRes<NetResOrderHistory>? = await client.send(
             request: MainNetworkRoute.loadOrderHistory(limit: limit, page: page)
         )
         return result?.result

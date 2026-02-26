@@ -13,17 +13,19 @@ public protocol OrderTaxiUseCaseProtocol: Sendable {
     func orderTaxi(req: OrderTaxiRequest) async throws -> Int?
 }
 
-public struct OrderTaxiUseCase: OrderTaxiUseCaseProtocol, @unchecked Sendable {
+public struct OrderTaxiUseCase: OrderTaxiUseCaseProtocol, Sendable {
     public static let shared: OrderTaxiUseCaseProtocol = OrderTaxiUseCase()
-    
-    public init() {
-        
+
+    private let client: NetworkClientProtocol
+
+    public init(client: NetworkClientProtocol = DefaultNetworkClient()) {
+        self.client = client
     }
- 
+
     public func orderTaxi(req: OrderTaxiRequest) async throws -> Int? {
         Logging.l(tag: "OrderTaxiUseCase", "order taxi")
-        
-        let result: NetRes<NetResOrderTaxi>? = try await Network.sendThrow(request: MainNetworkRoute.orderTaxi(
+
+        let result: NetRes<NetResOrderTaxi>? = try await client.sendThrow(request: MainNetworkRoute.orderTaxi(
             req: .init(model: req)
         ))
         

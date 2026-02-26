@@ -8,19 +8,19 @@
 // UseCases/SearchAddressUseCase.swift
 import Foundation
 
-public protocol SearchAddressUseCaseProtocol {
+public protocol SearchAddressUseCaseProtocol: Sendable {
     func execute(text: String) async -> [SearchAddressItem]
 }
 
-public final class SearchAddressUseCase: SearchAddressUseCaseProtocol {
+public struct SearchAddressUseCase: SearchAddressUseCaseProtocol, Sendable {
     private let gateway: SearchAddressGatewayProtocol
-    
-    init(gateway: SearchAddressGatewayProtocol = SearchAddressGateway()) {
-        self.gateway = gateway
-    }
-    
+
     public init() {
         self.gateway = SearchAddressGateway()
+    }
+
+    init(gateway: SearchAddressGatewayProtocol) {
+        self.gateway = gateway
     }
     
     public func execute(text: String) async -> [SearchAddressItem] {

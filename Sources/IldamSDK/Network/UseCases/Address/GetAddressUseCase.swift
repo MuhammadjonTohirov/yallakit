@@ -8,19 +8,19 @@
 // UseCases/GetAddressUseCase.swift
 import Foundation
 
-public protocol GetAddressUseCaseProtocol {
+public protocol GetAddressUseCaseProtocol: Sendable {
     func execute(lat: Double, lng: Double) async -> AddressResponse?
 }
 
-public final class GetAddressUseCase: GetAddressUseCaseProtocol {
+public struct GetAddressUseCase: GetAddressUseCaseProtocol, Sendable {
     private let gateway: GetAddressGatewayProtocol
-    
-    init(gateway: GetAddressGatewayProtocol = GetAddressGateway()) {
-        self.gateway = gateway
-    }
-    
+
     public init() {
         self.gateway = GetAddressGateway()
+    }
+
+    init(gateway: GetAddressGatewayProtocol) {
+        self.gateway = gateway
     }
     
     public func execute(lat: Double, lng: Double) async -> AddressResponse? {

@@ -86,7 +86,6 @@ final class ScrollableUIBottomSheet: UIView {
         
         self.minHeight = height
         self.maxYOffset = self.frame.height - height
-        debugPrint("Min height", minHeight, maxYOffset, self.frame.height)
     }
 
     func setupView() {
@@ -126,8 +125,6 @@ final class ScrollableUIBottomSheet: UIView {
     
     func updateScrollViewFrame() {
         let maxPossibleScrollContentHeight: CGFloat = frame.height - 100
-
-        let y = (maxYOffset - yOffsetShift).limitBottom(100).limitTop(maxYOffset)
         let minOffsetY: CGFloat = 100
         let maxOffsetY: CGFloat = maxYOffset
         
@@ -139,7 +136,6 @@ final class ScrollableUIBottomSheet: UIView {
                 width: frame.width,
                 height: height
             )
-        debugPrint("UpdateFrame", scrollView.frame, isExpanded)
         let minContentHeight = max(scrollView.scrollView.contentSize.height, maxPossibleScrollContentHeight + 1)
         
         scrollView.scrollView.contentSize.height = minContentHeight
@@ -208,20 +204,17 @@ extension ScrollableUIBottomSheet: UIScrollViewDelegate {
     }
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        debugPrint("Scrollview", "will begin dragging")
         lastContentOffset = scrollView.contentOffset
         lastBodyYOffset = self.scrollView.frame.origin.y
     }
     
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        debugPrint("Scrollview", "did end dragging", decelerate)
         if !decelerate {
             onEndScrollInteraction()
         }
     }
     
     func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
-        debugPrint("Scrollview", "will begin decelerating")
         onEndScrollInteraction()
     }
     
@@ -232,8 +225,6 @@ extension ScrollableUIBottomSheet: UIScrollViewDelegate {
         guard self.scrollView.frame.origin.y != lastBodyYOffset else { return }
         let isUp = self.scrollView.frame.origin.y < lastBodyYOffset
         let diff = abs(self.scrollView.frame.origin.y - lastBodyYOffset)
-        debugPrint(isUp, diff, velo)
-        
         if isUp {
             (diff > 100 || abs(velo.y) > 300) ? expand(animate: true) : collapse(animate: true)
             return
@@ -248,14 +239,9 @@ extension ScrollableUIBottomSheet: UIScrollViewDelegate {
         }
     }
     
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        debugPrint("Scrollview", "did end decelerating")
-        
-    }
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) { }
     
-    func scrollViewDidScrollToTop(_ scrollView: UIScrollView) {
-        debugPrint("Scrollview", "did scrolls to top")
-    }
+    func scrollViewDidScrollToTop(_ scrollView: UIScrollView) { }
     
     func expand(animate: Bool = false) {
         func expand() {
@@ -263,7 +249,6 @@ extension ScrollableUIBottomSheet: UIScrollViewDelegate {
             let maxYOffset = maxYOffset
             
             self.yOffsetShift = maxYOffset - minYOffset
-            debugPrint("expand", yOffsetShift)
             updateTransition(by: yOffsetShift)
         }
         self.scrollView.scrollView.isScrollEnabled = false

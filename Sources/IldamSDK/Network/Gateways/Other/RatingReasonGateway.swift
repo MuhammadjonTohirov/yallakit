@@ -13,8 +13,14 @@ protocol RatingReasonGatewayProtocol: Sendable {
 }
 
 struct RatingReasonGateway: RatingReasonGatewayProtocol {
+    private let client: NetworkClientProtocol
+
+    init(client: NetworkClientProtocol = DefaultNetworkClient()) {
+        self.client = client
+    }
+
     func load() async throws -> [NetResRatingReasonsItem] {
-        let result: NetRes<[NetResRatingReasonsItem]>? = try await Network.sendThrow(request: Request())
+        let result: NetRes<[NetResRatingReasonsItem]>? = try await client.sendThrow(request: Request())
         return result?.result ?? []
     }
 }

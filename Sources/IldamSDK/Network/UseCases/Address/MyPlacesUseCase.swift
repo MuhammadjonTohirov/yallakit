@@ -12,15 +12,15 @@ public protocol LoadMyPlacesUseCaseProtocol: Sendable {
     func execute() async -> [MyPlaceItem]
 }
 
-public struct LoadMyPlacesUseCase: LoadMyPlacesUseCaseProtocol {
+public struct LoadMyPlacesUseCase: LoadMyPlacesUseCaseProtocol, Sendable {
     private let gateway: MyPlacesGatewayProtocol
-    
-    init(gateway: MyPlacesGatewayProtocol = MyPlacesGateway()) {
-        self.gateway = gateway
-    }
-    
+
     public init() {
         self.gateway = MyPlacesGateway()
+    }
+
+    init(gateway: MyPlacesGatewayProtocol) {
+        self.gateway = gateway
     }
     
     public func execute() async -> [MyPlaceItem] {

@@ -8,19 +8,19 @@
 // UseCases/VerifyCardUseCase.swift
 import Foundation
 
-public protocol VerifyCardUseCaseProtocol {
+public protocol VerifyCardUseCaseProtocol: Sendable {
     func execute(request: CardVerifyRequest) async throws -> Bool
 }
 
-public final class VerifyCardUseCase: VerifyCardUseCaseProtocol {
+public struct VerifyCardUseCase: VerifyCardUseCaseProtocol, Sendable {
     private let gateway: VerifyCardGatewayProtocol
-    
-    init(gateway: VerifyCardGatewayProtocol = VerifyCardGateway()) {
-        self.gateway = gateway
-    }
-    
+
     public init() {
         self.gateway = VerifyCardGateway()
+    }
+
+    init(gateway: VerifyCardGatewayProtocol) {
+        self.gateway = gateway
     }
     
     public func execute(request: CardVerifyRequest) async throws -> Bool {

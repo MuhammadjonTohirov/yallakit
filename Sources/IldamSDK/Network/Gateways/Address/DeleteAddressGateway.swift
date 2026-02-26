@@ -9,13 +9,19 @@
 import Foundation
 import NetworkLayer
 
-protocol DeleteAddressGatewayProtocol {
+protocol DeleteAddressGatewayProtocol: Sendable {
     func deleteAddress(id: Int) async -> Bool
 }
 
 struct DeleteAddressGateway: DeleteAddressGatewayProtocol {
+    private let client: NetworkClientProtocol
+
+    init(client: NetworkClientProtocol = DefaultNetworkClient()) {
+        self.client = client
+    }
+
     func deleteAddress(id: Int) async -> Bool {
-        let result: NetRes<Array<String>>? = await Network.send(request: MainNetworkRoute.deleteAddress(id: id))
+        let result: NetRes<Array<String>>? = await client.send(request: MainNetworkRoute.deleteAddress(id: id))
         return result?.success ?? false
     }
 }

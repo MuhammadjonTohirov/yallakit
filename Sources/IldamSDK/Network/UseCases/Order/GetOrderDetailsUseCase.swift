@@ -13,15 +13,15 @@ public protocol GetOrderDetailsUseCaseProtocol: Sendable {
     func execute(orderId: Int) async throws -> OrderDetails?
 }
 
-public final class GetOrderDetailsUseCase: GetOrderDetailsUseCaseProtocol {
+public struct GetOrderDetailsUseCase: GetOrderDetailsUseCaseProtocol, Sendable {
     private let gateway: GetOrderDetailsGatewayProtocol
-    
-    init(gateway: GetOrderDetailsGatewayProtocol = GetOrderDetailsGateway()) {
-        self.gateway = gateway
-    }
-    
+
     public init() {
         self.gateway = GetOrderDetailsGateway()
+    }
+
+    init(gateway: GetOrderDetailsGatewayProtocol) {
+        self.gateway = gateway
     }
     
     public func execute(orderId: Int) async throws -> OrderDetails? {

@@ -7,19 +7,19 @@
 
 import Foundation
 
-public protocol UnreadNotificationsUseCaseProtocol {
+public protocol UnreadNotificationsUseCaseProtocol: Sendable {
     func execute() async throws -> Int?
 }
 
-public final class UnreadNotificationsUseCase: UnreadNotificationsUseCaseProtocol {
+public struct UnreadNotificationsUseCase: UnreadNotificationsUseCaseProtocol, Sendable {
     private let gateway: UnreadNotificationsGatewayProtocol
-    
-    init(gateway: UnreadNotificationsGatewayProtocol = UnreadNotificationsGateway()) {
-        self.gateway = gateway
-    }
 
     public init() {
-        gateway = UnreadNotificationsGateway()
+        self.gateway = UnreadNotificationsGateway()
+    }
+
+    init(gateway: UnreadNotificationsGatewayProtocol) {
+        self.gateway = gateway
     }
 
     public func execute() async throws -> Int? {

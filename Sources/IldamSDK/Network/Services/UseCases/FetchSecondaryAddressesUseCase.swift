@@ -13,12 +13,14 @@ public protocol FetchSecondaryAddressesUseCase {
 }
 
 public struct FetchSecondaryAddressUseCaseImpl: FetchSecondaryAddressesUseCase {
-    public init() {
-        
+    private let client: NetworkClientProtocol
+
+    public init(client: NetworkClientProtocol = DefaultNetworkClient()) {
+        self.client = client
     }
-    //NetResSecondaryAddressResult
+
     public func fetch(lat: Double, lng: Double) async throws -> [SecondaryAddressItem] {
-        let result: NetRes<NetResSecondaryAddressResult>? = try await Network.sendThrow(
+        let result: NetRes<NetResSecondaryAddressResult>? = try await client.sendThrow(
             request: Request(
                 lat: lat,
                 lng: lng

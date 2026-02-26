@@ -8,19 +8,19 @@
 // UseCases/CancelOrderUseCase.swift
 import Foundation
 
-public protocol CancelOrderUseCaseProtocol {
+public protocol CancelOrderUseCaseProtocol: Sendable {
     func execute(id: Int) async throws -> Bool
 }
 
-public final class CancelOrderUseCase: CancelOrderUseCaseProtocol {
+public struct CancelOrderUseCase: CancelOrderUseCaseProtocol, Sendable {
     private let gateway: CancelOrderGatewayProtocol
-    
-    init(gateway: CancelOrderGatewayProtocol = CancelOrderGateway()) {
-        self.gateway = gateway
-    }
-    
+
     public init() {
         self.gateway = CancelOrderGateway()
+    }
+
+    init(gateway: CancelOrderGatewayProtocol) {
+        self.gateway = gateway
     }
     
     public func execute(id: Int) async throws -> Bool {

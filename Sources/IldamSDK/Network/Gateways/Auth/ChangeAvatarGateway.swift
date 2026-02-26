@@ -25,11 +25,17 @@ import Foundation
 import NetworkLayer
 import Core
 
-protocol ChangeAvatarGatewayProtocol {
+protocol ChangeAvatarGatewayProtocol: Sendable {
     func changeAvatar(profileAvatar: Data) async throws -> NetRes<NetResChangeAvatar>?
 }
 
 struct ChangeAvatarGateway: ChangeAvatarGatewayProtocol {
+    private let client: NetworkClientProtocol
+
+    init(client: NetworkClientProtocol = DefaultNetworkClient()) {
+        self.client = client
+    }
+
     func changeAvatar(profileAvatar: Data) async throws -> NetRes<NetResChangeAvatar>? {
         let form = MultipartForm(
             parts: [
@@ -37,8 +43,8 @@ struct ChangeAvatarGateway: ChangeAvatarGatewayProtocol {
             ],
             boundary: "Boundary-123"
         )
-        
-        return try await Network.upload(
+
+        return try await client.upload(
             body: NetResChangeAvatar.self,
             request: AuthNetworkRoute.changeAvatar(form: form)
         )

@@ -14,8 +14,14 @@ protocol ArchivedOrdersV2GatewayProtocol: Sendable {
 }
 
 struct ArchivedOrdersV2Gateway: ArchivedOrdersV2GatewayProtocol {
+    private let client: NetworkClientProtocol
+
+    init(client: NetworkClientProtocol = DefaultNetworkClient()) {
+        self.client = client
+    }
+
     func loadHistory(page: Int, limit: Int = 8, brandServiceId: Int? = nil) async -> NetResOrderHistory? {
-        let result: NetRes<NetResOrderHistory>? = await Network.send(
+        let result: NetRes<NetResOrderHistory>? = await client.send(
             request: Request(page: page, limit: limit, brandServiceId: brandServiceId)
         )
         return result?.result

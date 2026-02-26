@@ -10,24 +10,29 @@ import Foundation
 import NetworkLayer
 import Core
 
-public protocol OrderNetworkServiceProtocol: Sendable {
+// MARK: - Focused Sub-Protocols
+
+public protocol OrderQueryServiceProtocol: Sendable {
     func activeOrders() async throws -> [OrderDetails]
-    
     func order(withId id: Int) async throws -> OrderDetails?
-    
-    func orderSettings(executor: SettingsConfigUseCase) async throws -> OrderConfigSettings?
-    
     func archivedOrder(withId id: Int) async throws -> OrderDetails?
-    
     func activeOrdersCount() async throws -> Int
-    
+}
+
+public protocol OrderMutationServiceProtocol: Sendable {
     func cancelOrder(id: Int) async throws -> Bool
-    
     func cancelOrderReason(orderId: Int, reasonId: Int, reasonComment: String) async throws -> Bool
-    
-    func rateOrder(orderId: Int, rate: Int, comment: String) async throws -> Bool
-    
     func orderTaxi(req: OrderTaxiRequest) async throws -> Int?
+}
+
+public protocol OrderRatingServiceProtocol: Sendable {
+    func rateOrder(orderId: Int, rate: Int, comment: String) async throws -> Bool
+}
+
+// MARK: - Composite Protocol
+
+public protocol OrderNetworkServiceProtocol: OrderQueryServiceProtocol, OrderMutationServiceProtocol, OrderRatingServiceProtocol {
+    func orderSettings(executor: SettingsConfigUseCase) async throws -> OrderConfigSettings?
 }
 
 public class OrderNetworkService: OrderNetworkServiceProtocol, @unchecked Sendable {
@@ -40,7 +45,7 @@ public class OrderNetworkService: OrderNetworkServiceProtocol, @unchecked Sendab
     private let cancelOrderUseCase: CancelOrderUseCaseProtocol
     private let cancelOrderReasonUseCase: CancelOrderReasonUseCaseProtocol
     private let rateOrderUseCase: RateOrderUseCaseProtocol
-    var orderTaxiUseCase: OrderTaxiUseCaseProtocol
+    private let orderTaxiUseCase: OrderTaxiUseCaseProtocol
     
     public init(
         activeOrdersUseCase: ActiveOrdersUseCaseProtocol = ActiveOrdersUseCase(),

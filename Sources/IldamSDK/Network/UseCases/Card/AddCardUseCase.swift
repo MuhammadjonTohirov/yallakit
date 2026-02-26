@@ -8,19 +8,19 @@
 // UseCases/AddCardUseCase.swift
 import Foundation
 
-public protocol AddCardUseCaseProtocol {
+public protocol AddCardUseCaseProtocol: Sendable {
     func execute(request: CardAddRequest) async throws -> CardAddResponse?
 }
 
-public struct AddCardUseCase: AddCardUseCaseProtocol {
+public struct AddCardUseCase: AddCardUseCaseProtocol, Sendable {
     private let gateway: AddCardGatewayProtocol
-    
-    init(gateway: AddCardGatewayProtocol = AddCardGateway()) {
-        self.gateway = gateway
-    }
-    
+
     public init() {
         self.gateway = AddCardGateway()
+    }
+
+    init(gateway: AddCardGatewayProtocol) {
+        self.gateway = gateway
     }
     
     public func execute(request: CardAddRequest) async throws -> CardAddResponse? {

@@ -26,7 +26,7 @@ struct LoadingFiveLinesChronological: View {
 
     var body: some View {
         HStack(spacing: frame.width / 10) {
-            ForEach(0..<maxCounter) { index in
+            ForEach(0..<maxCounter, id: \.self) { index in
                 
                 RoundedRectangle(cornerRadius: 25.0)
                     .fill(primaryColor)
@@ -36,7 +36,8 @@ struct LoadingFiveLinesChronological: View {
                             .easeOut(duration: timing / 2)
                             .delay(timing)
                             .repeatForever(autoreverses: true)
-                            .delay(timing / Double(maxCounter) * Double(index + 1))
+                            .delay(timing / Double(maxCounter) * Double(index + 1)),
+                        value: isAnimating
                     )
             }
         }

@@ -25,7 +25,7 @@ struct LoadingPulseOutline: View {
     var body: some View {
         ZStack {
             
-            ForEach(0..<maxCounter) { index in
+            ForEach(0..<maxCounter, id: \.self) { index in
                 Circle()
                     .stroke(
                         primaryColor.opacity(isAnimating ? 0.0 : 1.0),
@@ -34,7 +34,8 @@ struct LoadingPulseOutline: View {
                     .animation(
                         Animation.easeOut(duration: timing)
                         .repeatForever(autoreverses: false)
-                        .delay(Double(index) * timing / Double(maxCounter))
+                        .delay(Double(index) * timing / Double(maxCounter)),
+                        value: isAnimating
                     )
             }
         }

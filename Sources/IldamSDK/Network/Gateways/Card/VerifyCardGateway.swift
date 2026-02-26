@@ -9,13 +9,19 @@
 import Foundation
 import NetworkLayer
 
-protocol VerifyCardGatewayProtocol {
+protocol VerifyCardGatewayProtocol: Sendable {
     func verifyCard(key: String, code: String) async throws -> Bool?
 }
 
 struct VerifyCardGateway: VerifyCardGatewayProtocol {
+    private let client: NetworkClientProtocol
+
+    init(client: NetworkClientProtocol = DefaultNetworkClient()) {
+        self.client = client
+    }
+
     func verifyCard(key: String, code: String) async throws -> Bool? {
-        let result: NetRes<String>? = try await Network.sendThrow(
+        let result: NetRes<String>? = try await client.sendThrow(
             request: CardNetworkRouter.validateCard(key: key, code: code)
         )
         return result?.success

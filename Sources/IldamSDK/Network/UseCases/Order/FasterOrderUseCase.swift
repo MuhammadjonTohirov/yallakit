@@ -7,14 +7,22 @@
 
 import Foundation
 
-public protocol FasterOrderUseCaseProtocol {
+public protocol FasterOrderUseCaseProtocol: Sendable {
     func execute(orderId: Int) async -> Bool
 }
 
-public struct FasterOrderUseCase: FasterOrderUseCaseProtocol {
-    public init() {}
-    
+public struct FasterOrderUseCase: FasterOrderUseCaseProtocol, Sendable {
+    private let gateway: FasterOrderGateway
+
+    public init() {
+        self.gateway = FastOrderGatewayImpl()
+    }
+
+    init(gateway: FasterOrderGateway) {
+        self.gateway = gateway
+    }
+
     public func execute(orderId: Int) async -> Bool {
-        await FastOrderGatewayImpl().getFasterOrder(orderId: orderId)
+        await gateway.getFasterOrder(orderId: orderId)
     }
 }

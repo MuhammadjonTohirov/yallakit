@@ -12,15 +12,15 @@ public protocol ArchivedOrderV2UseCaseProtocol: Sendable {
     func execute(id: Int) async throws -> OrderDetails?
 }
 
-public struct ArchivedOrderV2UseCase: ArchivedOrderV2UseCaseProtocol {
+public struct ArchivedOrderV2UseCase: ArchivedOrderV2UseCaseProtocol, Sendable {
     private let gateway: ArchivedOrderV2GatewayProtocol
-    
-    init(gateway: ArchivedOrderV2GatewayProtocol = ArchivedOrderV2Gateway()) {
-        self.gateway = gateway
-    }
-    
+
     public init() {
         self.gateway = ArchivedOrderV2Gateway()
+    }
+
+    init(gateway: ArchivedOrderV2GatewayProtocol) {
+        self.gateway = gateway
     }
     
     public func execute(id: Int) async throws -> OrderDetails? {

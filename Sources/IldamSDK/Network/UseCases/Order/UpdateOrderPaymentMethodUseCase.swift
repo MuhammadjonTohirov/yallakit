@@ -15,15 +15,15 @@ public protocol UpdateOrderPaymentMethodUseCaseProtocol: Sendable {
     func updateToCard(orderId: Int, cardId: String) async throws -> Bool
 }
 
-public struct UpdateOrderPaymentMethodUseCase: UpdateOrderPaymentMethodUseCaseProtocol {
+public struct UpdateOrderPaymentMethodUseCase: UpdateOrderPaymentMethodUseCaseProtocol, Sendable {
     private let gateway: UpdateOrderPaymentMethodGatewayProtocol
-    
-    init(gateway: UpdateOrderPaymentMethodGatewayProtocol = UpdateOrderPaymentMethodGateway()) {
-        self.gateway = gateway
-    }
-    
+
     public init() {
         self.gateway = UpdateOrderPaymentMethodGateway()
+    }
+
+    init(gateway: UpdateOrderPaymentMethodGatewayProtocol) {
+        self.gateway = gateway
     }
     
     public func execute(orderId: Int, cardId: String?, type: String) async throws -> Bool {

@@ -9,31 +9,27 @@ import SwiftUI
 import NetworkLayer
 import Core
 
-public protocol CheckLocationUseCaseProtocol {
+public protocol CheckLocationUseCaseProtocol: Sendable {
     func checkLocation(lat: Double, lng: Double) async throws -> CheckLocationResult
 }
 
-public struct CheckLocationUseCase: CheckLocationUseCaseProtocol {
-        
-    private var gateway: any CheckLocationGatewayProtocol = CheckLocationGateway()
+public struct CheckLocationUseCase: CheckLocationUseCaseProtocol, Sendable {
+    private let gateway: CheckLocationGatewayProtocol
 
-    init(gateway: any CheckLocationGatewayProtocol) {
-        self.gateway = gateway
-    }
-    
     public init() {
         self.gateway = CheckLocationGateway()
     }
-    
+
+    init(gateway: CheckLocationGatewayProtocol) {
+        self.gateway = gateway
+    }
+
     public func checkLocation(lat: Double, lng: Double) async throws -> CheckLocationResult {
-         
         let netResult = try await self.gateway.checkLocation(lat: lat, lng: lng)
         guard let result = try CheckLocationResult(from: netResult) else {
             throw NetworkError.custom(message: "No location check founded", code: -1)
         }
         return result
-        
     }
-    
 }
 
