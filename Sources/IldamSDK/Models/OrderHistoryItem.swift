@@ -23,45 +23,66 @@ public struct OrderHistoryResponse {
 }
 
 public struct OrderHistoryItem {
-    public let id: Int
-    public let dateTime: Double
-    public let service, status: String
-    public let track: [Coord]?
-    public let executor: TaxiOrderExecutor?
+    public var id: Int
+    public var dateTime: Double?
+    public var service: String
+    public var status: OrderStatus?
+    public var executor: TaxiOrderExecutor?
     public var taxi: OrderTaxiDetails?
-    public let comment: String?
+    public var comment: String?
+    public var statusTime: [OrderDetails.StatusTime]?
+    public var paymentType: String
+    public var track: [OrderTaxiTrack]?
+    public var number: Int64?
+    public var options: [OrderDetails.OrderOption]?
     public var intercity: OrderDetails.OrderIntercity?
+    public var tariff: OrderDetails.OrderTariff?
     public var routes: [OrderRoute]?
-
-    public struct Coord {
-        public let lat, lng: Double
+    public var cardId: String?
+    
+    init?(res: NetResOrderDetails?) {
+        guard let res = res else { return nil }
+        self.id = res.id
+        self.dateTime = res.dateTime
+        self.service = res.service
+        // I'm not using init with rawValue, some times I do not know why if res.status == at_address then self.status becoming nil. so strange
+        self.status = OrderStatus.init(with: res.status)
+        self.executor = .init(res: res.executor)
+        self.comment = res.comment
+        self.taxi = .init(res: res)
+        self.statusTime = res.statusTime?.map({OrderDetails.StatusTime(res: $0)})
+        self.paymentType = res.paymentType ?? "cash"
+        self.track = res.track?.map({OrderTaxiTrack(res: $0)})
+        self.number = res.number
+        self.options = res.options?.compactMap({.init(res: $0)})
+        self.intercity = .init(res: res.intercity)
+        self.tariff = .init(res: res.tariff)
+        self.routes = res.routes?.compactMap({.init(res: $0)})
+        self.cardId = res.cardId
     }
     
-    public init(id: Int, dateTime: Double, service: String, status: String, track: [Coord]?, executor: TaxiOrderExecutor?, taxi: OrderTaxiDetails?, comment: String?) {
+    public init(
+        id: Int,
+        dateTime: Double?,
+        service: String,
+        status: OrderStatus?,
+        executor: TaxiOrderExecutor?,
+        taxi: OrderTaxiDetails?,
+        comment: String?,
+        statusTime: [OrderDetails.StatusTime]?,
+        paymentType: String,
+        track: [OrderTaxiTrack]?
+    ) {
         self.id = id
         self.dateTime = dateTime
         self.service = service
         self.status = status
-        self.track = track
         self.executor = executor
         self.taxi = taxi
         self.comment = comment
-    }
-    
-    init?(res: NetResOrderDetails?) {
-        guard let res else { return nil }
-        
-        self.id = res.id
-        self.dateTime = res.dateTime ?? 0
-        self.service = res.service
-        self.status = res.status
-        self.track = res.track?.map { Coord(lat: $0.lat ?? 0, lng: $0.lng ?? 0) }
-        self.executor = .init(res: res.executor)
-        self.taxi = .init(taxiRes: res.taxi)
-        self.comment = res.comment
-        self.routes = res.routes?.compactMap({.init(res: $0)})
-        self.intercity = .init(res: res.intercity)
-        self.taxi?.routes = self.routes ?? []
+        self.statusTime = statusTime
+        self.paymentType = paymentType
+        self.track = track
     }
 }
 
