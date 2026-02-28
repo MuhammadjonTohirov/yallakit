@@ -32,13 +32,14 @@ struct NetResOrderHistory: NetResBody {
 
 struct NetResOrderRoute: Codable {
     struct Coords: Codable {
-        let lat, lng: Double
+        let lat: Double?
+        let lng: Double?
     }
-    
+
     let index: Int?
     let fullAddress: String?
     let coords: Coords?
-    
+
     enum CodingKeys: String, CodingKey {
         case index
         case fullAddress = "full_address"
