@@ -1,13 +1,49 @@
 # ``IldamSDK``
 
-<!--@START_MENU_TOKEN@-->Summary<!--@END_MENU_TOKEN@-->
+Business logic layer containing UseCases, Gateways, and Domain Models for the Ildam taxi application.
 
 ## Overview
 
-<!--@START_MENU_TOKEN@-->Text<!--@END_MENU_TOKEN@-->
+IldamSDK follows Clean Architecture principles. UseCases orchestrate business logic, Gateways abstract data access, and Domain Models represent the application's entities.
 
 ## Topics
 
-### <!--@START_MENU_TOKEN@-->Group<!--@END_MENU_TOKEN@-->
+### Authentication
 
-- <!--@START_MENU_TOKEN@-->``Symbol``<!--@END_MENU_TOKEN@-->
+- SendOTPUseCase, ValidateOTPUseCase, RegisterUseCase
+- GetMeInfoUseCase, UpdateProfileUseCase, ChangeAvatarUseCase, LogoutUseCase
+
+### Orders
+
+- ActiveOrdersUseCase, ActiveOrdersV2UseCase
+- GetOrderDetailsUseCase, GetOrderDetailsV2UseCase
+- ArchivedOrderUseCase, ArchivedOrderV2UseCase, ArchivedOrdersV2UseCase
+- CancelOrderUseCase, CancelOrderReasonUseCase
+- RateOrderUseCase, RateOrderV2UseCase
+- DeleteOrderUseCase, FasterOrderUseCase
+- UpdateOrderPaymentMethodUseCase, OrderTaxiUseCase, BrandServicesUseCase
+
+### Addresses
+
+- GetAddressUseCase, SearchAddressUseCase, LoadNearAddressUseCase
+- MyPlacesUseCase, AddMyPlaceUseCase, UpdatePlaceUseCase, DeleteAddressUseCase
+
+### Cards
+
+- CardListUseCase, AddCardUseCase, VerifyCardUseCase
+- DeleteCardUseCase, SetDefaultCardUseCase, SyncCardsUseCase
+
+### Notifications
+
+- LoadNotificationsUseCase, UnreadNotificationsUseCase
+- ShowAndReadNotifUseCase, ReadAllNotificationsUseCase
+
+### Configuration
+
+- AppConfigUseCase, SettingsConfigUseCase, FetchSecondaryAddressesUseCase
+
+### Other
+
+- CheckLocationUseCase, FindExecutorsUseCase, RoutingUseCase
+- BecomeDriverUseCase, DistrictsUseCase, RatingReasonUseCase
+- ActivateBonuseUseCase, SyncFCMUseCase

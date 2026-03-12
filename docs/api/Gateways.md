@@ -690,6 +690,130 @@ let success = await gateway.execute()
 
 ---
 
+### ActiveOrdersV2Gateway
+
+Retrieves user's active orders using the V2 API.
+
+**Protocol:** `ActiveOrdersV2GatewayProtocol`
+
+**Methods:**
+- `getActiveOrders() async throws -> [NetResOrderDetails]?`
+
+**Example:**
+```swift
+let gateway = ActiveOrdersV2Gateway()
+let orders = try await gateway.getActiveOrders()
+```
+
+---
+
+### GetOrderDetailsV2Gateway
+
+Retrieves order details using the V2 API.
+
+**Protocol:** `GetOrderDetailsV2GatewayProtocol`
+
+**Methods:**
+- `getOrderDetails(orderId: Int) async throws -> NetResOrderDetails?`
+
+**Example:**
+```swift
+let gateway = GetOrderDetailsV2Gateway()
+let order = try await gateway.getOrderDetails(orderId: 12345)
+```
+
+---
+
+### ArchivedOrderV2Gateway
+
+Retrieves a single archived order using the V2 API.
+
+**Protocol:** `ArchivedOrderV2GatewayProtocol`
+
+**Methods:**
+- `getArchivedOrder(id: Int) async throws -> NetResOrderDetails?`
+
+**Example:**
+```swift
+let gateway = ArchivedOrderV2Gateway()
+let order = try await gateway.getArchivedOrder(id: 12345)
+```
+
+---
+
+### ArchivedOrdersV2Gateway
+
+Loads paginated archived orders using the V2 API with brand service filtering.
+
+**Protocol:** `ArchivedOrdersV2GatewayProtocol`
+
+**Methods:**
+- `loadHistory(page: Int, limit: Int, brandServiceId: Int?) async -> NetResOrderHistory?`
+
+**Example:**
+```swift
+let gateway = ArchivedOrdersV2Gateway()
+let history = await gateway.loadHistory(page: 1, limit: 8, brandServiceId: nil)
+```
+
+---
+
+### DeleteOrderGateway
+
+Deletes an archived order.
+
+**Protocol:** `DeleteOrderGatewayProtocol`
+
+**Methods:**
+- `delete(id: Int) async throws -> Bool`
+
+**Example:**
+```swift
+let gateway = DeleteOrderGateway()
+let success = try await gateway.delete(id: 12345)
+```
+
+---
+
+### UpdateOrderPaymentMethodGateway
+
+Updates the payment method for an active order.
+
+**Protocol:** `UpdateOrderPaymentMethodGatewayProtocol`
+
+**Methods:**
+- `update(orderId: Int, cardId: String?, type: String) async throws -> Bool`
+
+**Example:**
+```swift
+let gateway = UpdateOrderPaymentMethodGateway()
+let success = try await gateway.update(orderId: 12345, cardId: "card_123", type: "card")
+```
+
+---
+
+### RateOrderV2Gateway
+
+Rates a completed order with optional rating reasons.
+
+**Protocol:** `RateOrderV2GatewayProtocol`
+
+**Methods:**
+- `rateOrder(orderId: Int, rate: Int, comment: String, ratingReasonIds: [Int]) async throws -> Bool`
+
+**Example:**
+```swift
+let gateway = RateOrderV2Gateway()
+let success = try await gateway.rateOrder(
+    orderId: 12345,
+    rate: 5,
+    comment: "Great service!",
+    ratingReasonIds: [1, 3]
+)
+```
+
+---
+
 ## Other Gateways
 
 ### ActivateBonuseGateway
@@ -705,6 +829,74 @@ Activates a promotional bonus code.
 ```swift
 let gateway = ActivateBonuseGateway()
 let result = await gateway.activate(promoCode: "SAVE20")
+```
+
+---
+
+### BecomeDriverGateway
+
+Submits a request to become a driver.
+
+**Protocol:** `BecomeDriverGatewayProtocol`
+
+**Methods:**
+- `execute(req: NetReqBeDriver) async throws -> Bool`
+
+**Example:**
+```swift
+let gateway = BecomeDriverGateway()
+let success = try await gateway.execute(req: driverRequest)
+```
+
+---
+
+### DistrictsGateway
+
+Loads available districts/addresses.
+
+**Protocol:** `DistrictsGatewayProtocol`
+
+**Methods:**
+- `execute() async throws -> [NetResDistrictItem]`
+
+**Example:**
+```swift
+let gateway = DistrictsGateway()
+let districts = try await gateway.execute()
+```
+
+---
+
+### RatingReasonGateway
+
+Loads available rating reasons for order feedback.
+
+**Protocol:** `RatingReasonGatewayProtocol`
+
+**Methods:**
+- `load() async throws -> [NetResRatingReasonsItem]`
+
+**Example:**
+```swift
+let gateway = RatingReasonGateway()
+let reasons = try await gateway.load()
+```
+
+---
+
+### BrandServicesGateway
+
+Loads available brand services.
+
+**Protocol:** `BrandServicesGatewayProtocol`
+
+**Methods:**
+- `load() async throws -> [NetResBrandServiceItem]`
+
+**Example:**
+```swift
+let gateway = BrandServicesGateway()
+let services = try await gateway.load()
 ```
 
 ---

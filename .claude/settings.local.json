@@ -9,7 +9,9 @@
       "Bash(swift build:*)",
       "Bash(git mv:*)",
       "Bash(xcodebuild:*)",
-      "Bash(git:*)"
+      "Bash(git:*)",
+      "Bash(ls:*)",
+      "Bash(xargs:*)"
     ],
     "deny": [],
     "ask": []

@@ -39,7 +39,8 @@ public enum NetworkError: Error {
     case custom(message: String, code: Int = -1)
     case unauthorized
     case timeout
-    
+    case sslPinningFailed
+
     public var localizedDescription: String {
         switch self {
         case .custom(let message, _):
@@ -50,9 +51,11 @@ public enum NetworkError: Error {
             return "Timeout."
         case .emptyResponse:
             return "Empty response"
+        case .sslPinningFailed:
+            return "SSL certificate validation failed"
         }
     }
-    
+
     public var code: Int {
         switch self {
         case .custom(_, let code):
@@ -63,6 +66,8 @@ public enum NetworkError: Error {
             return -2
         case .emptyResponse:
             return 0
+        case .sslPinningFailed:
+            return -3
         }
     }
 }

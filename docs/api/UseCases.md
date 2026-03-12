@@ -747,7 +747,283 @@ let success = await useCase.execute()
 
 ---
 
+### ActiveOrdersV2UseCase
+
+Retrieves user's active orders using the V2 API.
+
+**Protocol:** `ActiveOrdersV2UseCaseProtocol`
+
+**Methods:**
+- `execute() async throws -> [OrderDetails]?`
+
+**Example:**
+```swift
+let useCase = ActiveOrdersV2UseCase()
+let orders = try await useCase.execute()
+```
+
+---
+
+### GetOrderDetailsV2UseCase
+
+Retrieves order details using the V2 API.
+
+**Protocol:** `GetOrderDetailsV2UseCaseProtocol`
+
+**Methods:**
+- `execute(orderId: Int) async throws -> OrderDetails?`
+
+**Example:**
+```swift
+let useCase = GetOrderDetailsV2UseCase()
+let order = try await useCase.execute(orderId: 12345)
+```
+
+---
+
+### ArchivedOrderV2UseCase
+
+Retrieves a single archived order using the V2 API.
+
+**Protocol:** `ArchivedOrderV2UseCaseProtocol`
+
+**Methods:**
+- `execute(id: Int) async throws -> OrderDetails?`
+
+**Example:**
+```swift
+let useCase = ArchivedOrderV2UseCase()
+let order = try await useCase.execute(id: 12345)
+```
+
+---
+
+### ArchivedOrdersV2UseCase
+
+Loads paginated archived orders with brand service filtering.
+
+**Protocol:** `ArchivedOrdersV2UseCaseProtocol`
+
+**Methods:**
+- `execute(page: Int, limit: Int, brandServiceId: Int?) async -> OrderHistoryResponse?`
+
+**Example:**
+```swift
+let useCase = ArchivedOrdersV2UseCase()
+let history = await useCase.execute(page: 1, limit: 8, brandServiceId: nil)
+```
+
+---
+
+### DeleteOrderUseCase
+
+Deletes an archived order.
+
+**Protocol:** `DeleteOrderUseCaseProtocol`
+
+**Methods:**
+- `execute(id: Int) async throws -> Bool`
+
+**Example:**
+```swift
+let useCase = DeleteOrderUseCase()
+let success = try await useCase.execute(id: 12345)
+```
+
+---
+
+### UpdateOrderPaymentMethodUseCase
+
+Updates the payment method for an active order.
+
+**Protocol:** `UpdateOrderPaymentMethodUseCaseProtocol`
+
+**Methods:**
+- `execute(orderId: Int, cardId: String?, type: String) async throws -> Bool`
+- `updateToCash(orderId: Int) async throws -> Bool`
+- `updateToCard(orderId: Int, cardId: String) async throws -> Bool`
+
+**Example:**
+```swift
+let useCase = UpdateOrderPaymentMethodUseCase()
+
+// Switch to cash
+let success = try await useCase.updateToCash(orderId: 12345)
+
+// Switch to card
+let success = try await useCase.updateToCard(orderId: 12345, cardId: "card_123")
+```
+
+---
+
+### RateOrderV2UseCase
+
+Rates a completed order with comment or rating reasons.
+
+**Protocol:** `RateOrderV2UseCaseProtocol`
+
+**Methods:**
+- `execute(orderId: Int, rate: Int, comment: String) async throws -> Bool`
+- `execute(orderId: Int, rate: Int, reasons: [Int]) async throws -> Bool`
+
+**Example:**
+```swift
+let useCase = RateOrderV2UseCase()
+let success = try await useCase.execute(orderId: 12345, rate: 5, comment: "Great!")
+// or with reasons
+let success = try await useCase.execute(orderId: 12345, rate: 4, reasons: [1, 3])
+```
+
+---
+
+## Service UseCases
+
+### OrderTaxiUseCase
+
+Creates a taxi order.
+
+**Protocol:** `OrderTaxiUseCaseProtocol`
+
+**Methods:**
+- `orderTaxi(req: OrderTaxiRequest) async throws -> Int?`
+
+**Example:**
+```swift
+let useCase = OrderTaxiUseCase()
+let orderId = try await useCase.orderTaxi(req: orderRequest)
+```
+
+---
+
+### AppConfigUseCase
+
+Fetches and caches application configuration.
+
+**Protocol:** `AppConfigUseCase`
+
+**Properties:**
+- `appConfig: AppConfig?` - Cached app configuration
+
+**Methods:**
+- `fetchAppConfig() async throws -> Bool`
+
+**Example:**
+```swift
+let useCase = AppConfigUseCaseImpl()
+let success = try await useCase.fetchAppConfig()
+if let config = useCase.appConfig {
+    // Use config
+}
+```
+
+---
+
+### SettingsConfigUseCase
+
+Fetches order settings configuration.
+
+**Protocol:** `SettingsConfigUseCase`
+
+**Properties:**
+- `config: OrderConfigSettings?` (static) - Cached settings
+
+**Methods:**
+- `fetch() async throws -> OrderConfigSettings?`
+
+**Example:**
+```swift
+let useCase = SettingsConfigUseCaseImpl()
+let settings = try await useCase.fetch()
+```
+
+---
+
+### FetchSecondaryAddressesUseCase
+
+Fetches secondary address options for an order based on coordinates.
+
+**Protocol:** `FetchSecondaryAddressesUseCase`
+
+**Methods:**
+- `fetch(lat: Double, lng: Double) async throws -> [SecondaryAddressItem]`
+
+**Example:**
+```swift
+let useCase = FetchSecondaryAddressUseCaseImpl()
+let addresses = try await useCase.fetch(lat: 41.311, lng: 69.279)
+```
+
+---
+
 ## Other UseCases
+
+### BecomeDriverUseCase
+
+Submits a request to become a driver.
+
+**Protocol:** `BecomeDriverUseCaseProtocol`
+
+**Methods:**
+- `execute(request: BecomeDriverRequest) async throws -> Bool`
+
+**Example:**
+```swift
+let useCase = BecomeDriverUseCase()
+let success = try await useCase.execute(request: driverRequest)
+```
+
+---
+
+### DistrictsUseCase
+
+Loads available districts.
+
+**Protocol:** `DistrictsUseCaseProtocol`
+
+**Methods:**
+- `execute() async throws -> [DistrictItem]`
+
+**Example:**
+```swift
+let useCase = DistrictsUseCase()
+let districts = try await useCase.execute()
+```
+
+---
+
+### RatingReasonUseCase
+
+Loads available rating reasons for order feedback.
+
+**Protocol:** `RatingReasonUseCaseProtocol`
+
+**Methods:**
+- `execute() async throws -> [RatingReasonItem]`
+
+**Example:**
+```swift
+let useCase = RatingReasonUseCase()
+let reasons = try await useCase.execute()
+```
+
+---
+
+### BrandServicesUseCase
+
+Loads available brand services.
+
+**Protocol:** `BrandServicesUseCaseProtocol`
+
+**Methods:**
+- `execute() async throws -> [BrandServiceItem]`
+
+**Example:**
+```swift
+let useCase = BrandServicesUseCase()
+let services = try await useCase.execute()
+```
+
+---
 
 ### ActivateBonuseUseCase
 

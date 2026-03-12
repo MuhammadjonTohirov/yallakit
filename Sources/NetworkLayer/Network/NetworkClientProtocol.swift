@@ -34,12 +34,12 @@ public extension NetworkClientProtocol {
     func send<T: NetResBody>(
         request: URLRequestProtocol
     ) async -> NetRes<T>? {
-        await send(urlSession: .shared, request: request)
+        await send(urlSession: Network.session, request: request)
     }
 
     func sendThrow<T: NetResBody>(
         request: URLRequestProtocol
     ) async throws -> NetRes<T>? {
-        try await sendThrow(urlSession: .shared, request: request)
+        try await sendThrow(urlSession: Network.session, request: request)
     }
 }

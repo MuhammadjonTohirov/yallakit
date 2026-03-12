@@ -247,14 +247,40 @@ let isIPhone = AppMetrics.isIPhone
 let isIPad = AppMetrics.isIPad
 ```
 
-### Constants
+### CodableWrapper
 
-App-wide constants:
+A property wrapper that persists Codable values to UserDefaults:
 
 ```swift
-Constants.apiBaseURL
-Constants.defaultTimeout
-Constants.maxRetryAttempts
+@codableWrapper(key: "myKey")
+var myValue: MyCodableType?
+```
+
+### AppTheme
+
+Enumeration for app appearance:
+
+```swift
+enum AppTheme: String, Codable {
+    case system
+    case light
+    case dark
+}
+```
+
+### Constants
+
+App-wide constants configured via builder pattern:
+
+```swift
+Constants.shared
+    .setGoBaseURL("https://api2.ildam.uz")
+    .setPhpBaseURL("https://api.ildam.uz")
+    .setGoEndpointV1("/client")
+    .setGoEndpointV2("/client/v2")
+    .setPhpEndpoint("/cli")
+    .setSuiteName("group.uz.ildam")
+    .setBrandId(1)
 ```
 
 ### Padding
@@ -356,19 +382,22 @@ struct RouteData {
 
 ### UserSettings
 
-Persistent user preferences:
+Persistent user preferences using `@codableWrapper`:
 
 ```swift
-// Save
-UserSettings.shared.token = "abc123"
-UserSettings.shared.userId = 42
+// Key properties
+UserSettings.shared.language       // String? — current language code
+UserSettings.shared.theme          // AppTheme — system/light/dark
+UserSettings.shared.accessToken    // String? — auth access token
+UserSettings.shared.refreshToken   // String? — auth refresh token
+UserSettings.shared.otpKey         // String? — OTP session key
+UserSettings.shared.userInfo       // UserInfo? — cached user profile
+UserSettings.shared.fcmToken       // String? — Firebase Cloud Messaging token
+UserSettings.shared.lastUserLocation // Coord? — last known location
+UserSettings.shared.lastActiveDate // Date? — last active timestamp
 
-// Read
-let token = UserSettings.shared.token
-let userId = UserSettings.shared.userId
-
-// Clear
-UserSettings.shared.clearAll()
+// Clear all stored data
+UserSettings.shared.clear()
 ```
 
 ### Language
