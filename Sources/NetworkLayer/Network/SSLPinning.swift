@@ -93,13 +93,67 @@ final class SSLPinningDelegate: NSObject, URLSessionDelegate, Sendable {
             return nil
         }
 
+        // SecKeyCopyExternalRepresentation returns raw key bytes.
+        // OpenSSL hashes the full DER-encoded SubjectPublicKeyInfo (SPKI),
+        // which includes an ASN.1 header. We must prepend it to match.
+        let spkiHeader = Self.spkiHeader(for: publicKey)
+        var spkiData = Data(spkiHeader)
+        spkiData.append(publicKeyData)
+
         var hash = [UInt8](repeating: 0, count: Int(CC_SHA256_DIGEST_LENGTH))
-        publicKeyData.withUnsafeBytes { buffer in
+        spkiData.withUnsafeBytes { buffer in
             _ = CC_SHA256(buffer.baseAddress, CC_LONG(buffer.count), &hash)
         }
 
         return Data(hash).base64EncodedString()
     }
+
+    // MARK: - SPKI ASN.1 Headers
+
+    private static func spkiHeader(for key: SecKey) -> [UInt8] {
+        guard let attributes = SecKeyCopyAttributes(key) as? [CFString: Any],
+              let keyType = attributes[kSecAttrKeyType] as? String,
+              let keySize = attributes[kSecAttrKeySizeInBits] as? Int else {
+            return ecP256Header
+        }
+
+        if keyType == (kSecAttrKeyTypeRSA as String) {
+            switch keySize {
+            case 4096: return rsa4096Header
+            default: return rsa2048Header
+            }
+        } else {
+            switch keySize {
+            case 384: return ecP384Header
+            default: return ecP256Header
+            }
+        }
+    }
+
+    private static let ecP256Header: [UInt8] = [
+        0x30, 0x59, 0x30, 0x13, 0x06, 0x07, 0x2A, 0x86,
+        0x48, 0xCE, 0x3D, 0x02, 0x01, 0x06, 0x08, 0x2A,
+        0x86, 0x48, 0xCE, 0x3D, 0x03, 0x01, 0x07, 0x03,
+        0x42, 0x00
+    ]
+
+    private static let ecP384Header: [UInt8] = [
+        0x30, 0x76, 0x30, 0x10, 0x06, 0x07, 0x2A, 0x86,
+        0x48, 0xCE, 0x3D, 0x02, 0x01, 0x06, 0x05, 0x2B,
+        0x81, 0x04, 0x00, 0x22, 0x03, 0x62, 0x00
+    ]
+
+    private static let rsa2048Header: [UInt8] = [
+        0x30, 0x82, 0x01, 0x22, 0x30, 0x0D, 0x06, 0x09,
+        0x2A, 0x86, 0x48, 0x86, 0xF7, 0x0D, 0x01, 0x01,
+        0x01, 0x05, 0x00, 0x03, 0x82, 0x01, 0x0F, 0x00
+    ]
+
+    private static let rsa4096Header: [UInt8] = [
+        0x30, 0x82, 0x02, 0x22, 0x30, 0x0D, 0x06, 0x09,
+        0x2A, 0x86, 0x48, 0x86, 0xF7, 0x0D, 0x01, 0x01,
+        0x01, 0x05, 0x00, 0x03, 0x82, 0x02, 0x0F, 0x00
+    ]
 }
 
 // MARK: - Pinned Session Factory
