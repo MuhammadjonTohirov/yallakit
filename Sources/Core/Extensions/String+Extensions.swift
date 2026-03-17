@@ -8,6 +8,18 @@
 import Foundation
 import UIKit
 
+public enum LocalizationConfig {
+    private static var _bundle: Bundle = .main
+
+    public static var bundle: Bundle {
+        _bundle
+    }
+
+    public static func setBundle(_ bundle: Bundle) {
+        _bundle = bundle
+    }
+}
+
 public extension Encodable {
     /// Turns json into a Dictionary
     func asDictionary() throws -> [String: Any] {
@@ -81,12 +93,11 @@ public extension String {
     
     
     func localize(language: String) -> String {
-        let path = Bundle.main.path(forResource: language, ofType: "lproj")
-        guard path != nil else {
+        let path = LocalizationConfig.bundle.path(forResource: language, ofType: "lproj")
+        guard let path, let bundle = Bundle(path: path) else {
             return self
         }
-        let bundle = Bundle(path: path!)
-        return NSLocalizedString(self, tableName: nil, bundle: bundle!, value: self, comment: self)
+        return NSLocalizedString(self, tableName: nil, bundle: bundle, value: self, comment: self)
     }
     
     var localize: String {

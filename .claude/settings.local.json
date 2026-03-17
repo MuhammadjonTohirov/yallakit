@@ -11,7 +11,13 @@
       "Bash(xcodebuild:*)",
       "Bash(git:*)",
       "Bash(ls:*)",
-      "Bash(xargs:*)"
+      "Bash(xargs:*)",
+      "WebFetch(domain:yallab2b.atlassian.net)",
+      "mcp__plugin_atlassian_atlassian__getConfluencePage",
+      "mcp__plugin_atlassian_atlassian__updateConfluencePage",
+      "Bash(cat /Users/r/.claude/projects/-Users-r-Documents-Development-Work-royal-ildam-yallakit/271f37e3-40cd-4810-a1c8-78c90d4a8ad2/tool-results/mcp-plugin_atlassian_atlassian-getConfluencePage-1773385459693.txt | python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); n=d['content']['nodes'][0]; print\\('spaceId:', n.get\\('spaceId','N/A'\\)\\); print\\('id:', n.get\\('id'\\)\\); print\\('title:', n.get\\('title'\\)\\)\")",
+      "mcp__plugin_atlassian_atlassian__getConfluenceSpaces",
+      "mcp__plugin_atlassian_atlassian__createConfluencePage"
     ],
     "deny": [],
     "ask": []
