@@ -30,7 +30,16 @@ public func setNetworkDelegate(_ delegate: NetworkDelegate?) {
 public struct Network {
 
     nonisolated(unsafe) public static var delegate: NetworkDelegate?
-    
+
+    // MARK: - SSL Pinning
+    nonisolated(unsafe) public static var session: URLSession = .shared
+
+    /// Configures SSL certificate pinning with the given pinned domains.
+    /// Call this once at app launch before any network requests.
+    public static func configureSSLPinning(_ configuration: SSLPinningConfiguration) {
+        session = SSLPinnedSession.makeSession(configuration: configuration)
+    }
+
     // MARK: - Error Localization Hook
     public typealias NetworkErrorLocalizer = (NetworkError) -> String
     nonisolated(unsafe) public static var errorLocalizer: NetworkErrorLocalizer?
@@ -42,12 +51,12 @@ public struct Network {
     // MARK: - Deprecated Static Methods (use NetworkClientProtocol instead)
 
     @available(*, deprecated, message: "Inject NetworkClientProtocol instead of using static Network methods")
-    public static func send<T: NetResBody>(urlSession: URLSession = URLSession.shared, request: URLRequestProtocol) async -> NetRes<T>? {
+    public static func send<T: NetResBody>(urlSession: URLSession = Network.session, request: URLRequestProtocol) async -> NetRes<T>? {
         await DefaultNetworkClient().send(urlSession: urlSession, request: request)
     }
 
     @available(*, deprecated, message: "Inject NetworkClientProtocol instead of using static Network methods")
-    public static func sendThrow<T: NetResBody>(urlSession: URLSession = URLSession.shared, request: URLRequestProtocol) async throws -> NetRes<T>? {
+    public static func sendThrow<T: NetResBody>(urlSession: URLSession = Network.session, request: URLRequestProtocol) async throws -> NetRes<T>? {
         try await DefaultNetworkClient().sendThrow(urlSession: urlSession, request: request)
     }
 

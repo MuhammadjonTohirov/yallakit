@@ -11,7 +11,7 @@ public struct DefaultNetworkClient: NetworkClientProtocol {
     public init() {}
 
     public func send<T: NetResBody>(
-        urlSession: URLSession = URLSession.shared,
+        urlSession: URLSession = Network.session,
         request: URLRequestProtocol
     ) async -> NetRes<T>? {
         do {
@@ -23,7 +23,7 @@ public struct DefaultNetworkClient: NetworkClientProtocol {
     }
 
     public func sendThrow<T: NetResBody>(
-        urlSession: URLSession = URLSession.shared,
+        urlSession: URLSession = Network.session,
         request: URLRequestProtocol
     ) async throws -> NetRes<T>? {
         do {
@@ -46,6 +46,9 @@ public struct DefaultNetworkClient: NetworkClientProtocol {
                 }
             } catch let networkError as NetworkError {
                 throw networkError
+            } catch let urlError as URLError where urlError.code == .cancelled
+                        || urlError.code == .serverCertificateUntrusted {
+                throw NetworkError.sslPinningFailed
             } catch {
                 throw NetworkError.timeout
             }
@@ -106,7 +109,7 @@ public struct DefaultNetworkClient: NetworkClientProtocol {
             Logging.l(json)
         }
 
-        URLSession.shared.uploadTask(with: request.request(), from: request.body) { data, _, error in
+        Network.session.uploadTask(with: request.request(), from: request.body) { data, _, error in
             guard let data = data, let res = try? JSONDecoder().decode(NetRes<T>.self, from: data) else {
                 Logging.l(error?.localizedDescription ?? "Unable to parse data")
                 completion(nil)
@@ -141,7 +144,7 @@ public struct DefaultNetworkClient: NetworkClientProtocol {
 
         let resultData: Data
         if #available(macOS 12.0, *) {
-            let (uploadData, _) = try await URLSession.shared.upload(for: mutableRequest, from: data)
+            let (uploadData, _) = try await Network.session.upload(for: mutableRequest, from: data)
             resultData = uploadData
         } else {
             throw NetworkError.custom(message: "Upload not supported on this OS version", code: -1)

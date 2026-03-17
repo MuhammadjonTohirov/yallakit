@@ -116,16 +116,38 @@ enum AuthNetworkRoute: URLRequestProtocol {
 3. **Centralization**: All endpoints for a feature in one place
 4. **Exhaustive Switching**: Compiler ensures all cases are handled
 
-## Network Class
+## NetworkClientProtocol
 
-The `Network` class provides static methods for sending requests.
+The `NetworkClientProtocol` is the main abstraction for sending requests. `DefaultNetworkClient` provides the default implementation.
+
+### Protocol Definition
+
+```swift
+public protocol NetworkClientProtocol: Sendable {
+    func send<T: NetResBody>(
+        urlSession: URLSession,
+        request: URLRequestProtocol
+    ) async -> NetRes<T>?
+
+    func sendThrow<T: NetResBody>(
+        urlSession: URLSession,
+        request: URLRequestProtocol
+    ) async throws -> NetRes<T>?
+
+    func upload<T: NetResBody>(
+        body: T.Type,
+        request: URLRequestProtocol
+    ) async throws -> NetRes<T>
+}
+```
 
 ### Sending Requests
 
 #### Basic Request (No Throwing)
 
 ```swift
-let response: NetRes<SomeResponse>? = await Network.send(
+let client: NetworkClientProtocol = DefaultNetworkClient()
+let response: NetRes<SomeResponse>? = await client.send(
     request: AuthNetworkRoute.getMeInfo
 )
 ```
@@ -133,8 +155,9 @@ let response: NetRes<SomeResponse>? = await Network.send(
 #### Throwing Request
 
 ```swift
+let client: NetworkClientProtocol = DefaultNetworkClient()
 do {
-    let response: NetRes<SomeResponse>? = try await Network.sendThrow(
+    let response: NetRes<SomeResponse>? = try await client.sendThrow(
         request: AuthNetworkRoute.sendOTP(req: otpRequest)
     )
 } catch {
@@ -147,7 +170,8 @@ do {
 For multipart form data uploads:
 
 ```swift
-let response = try await Network.upload(
+let client: NetworkClientProtocol = DefaultNetworkClient()
+let response = try await client.upload(
     body: NetResChangeAvatar.self,
     request: AuthNetworkRoute.changeAvatar(form: multipartForm)
 )
@@ -253,6 +277,7 @@ enum NetworkError: Error {
     case timeout
     case unauthorized
     case custom(message: String, code: Int)
+    case sslPinningFailed
 }
 ```
 
@@ -359,6 +384,60 @@ func request() -> URLRequest {
     req?.httpMethod = method.rawValue
     req?.httpBody = body
     return req!
+}
+```
+
+## SSL Certificate Pinning
+
+NetworkLayer supports public key pinning to prevent man-in-the-middle attacks. When configured, the library validates server public keys against pinned SHA-256 hashes before allowing connections.
+
+### Why Public Key Pinning?
+
+Certificate pinning breaks when certificates are renewed. Public key pinning survives renewal as long as the same key pair is used, making it more robust for production use.
+
+### Setup
+
+Call `configureSSLPinning()` once at app launch, before any network requests:
+
+```swift
+import NetworkLayer
+
+Network.configureSSLPinning(.init(pinnedDomains: [
+    PinnedDomain(domain: "api2.ildam.uz", publicKeyHashes: ["<hash1>", "<hash2>"]),
+    PinnedDomain(domain: "api.ildam.uz", publicKeyHashes: ["<hash1>"]),
+]))
+```
+
+### Extracting Public Key Hashes
+
+Use OpenSSL to extract the SHA-256 hash of a server's public key:
+
+```bash
+openssl s_client -connect api2.ildam.uz:443 </dev/null 2>/dev/null \
+  | openssl x509 -pubkey -noout \
+  | openssl pkey -pubin -outform DER \
+  | openssl dgst -sha256 -binary \
+  | base64
+```
+
+### Behavior
+
+- **DEBUG builds**: Pinning is skipped (`URLSession.shared` is used) so proxy tools like Proxyman and Charles continue to work during development
+- **RELEASE builds**: A pinned `URLSession` is created that validates server public keys against configured hashes
+- **Backup pins**: `publicKeyHashes` accepts an array to support key rotation — include both current and next key hashes
+- **Domain matching**: Uses suffix matching so `"api2.ildam.uz"` also covers subdomains
+
+### Error Handling
+
+When SSL pinning validation fails, `NetworkError.sslPinningFailed` is thrown:
+
+```swift
+do {
+    let response: NetRes<SomeResponse>? = try await client.sendThrow(
+        request: SomeRoute.endpoint
+    )
+} catch let error as NetworkError where error.code == -3 {
+    // SSL pinning failed — possible MITM attack
 }
 ```
 

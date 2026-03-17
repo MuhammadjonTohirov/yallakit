@@ -179,7 +179,7 @@ Learn more in [UseCase Pattern Guide](guides/UseCasePattern.md).
 ### Code Examples
 
 All code examples in this documentation are:
-- Written in Swift 5.9+
+- Written in Swift 6.1+
 - Use async/await concurrency
 - Follow YallaKit's architecture patterns
 - Tested and verified
@@ -198,4 +198,4 @@ This is internal documentation for Royal Taxi LLC. For updates or corrections, c
 
 ## 📄 License
 
-Copyright © 2025 Royal Taxi LLC. All rights reserved.
+Copyright Royal Taxi LLC. All rights reserved.

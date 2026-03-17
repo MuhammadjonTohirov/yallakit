@@ -85,14 +85,20 @@ Add YallaKit to your Swift package dependencies:
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/your-org/yallakit.git", from: "1.0.0")
+    .package(url: "https://github.com/MuhammadjonTohirov/yallakit.git", branch: "main")
 ]
 ```
 
-## 📝 License
+## CI/CD
 
-Copyright © 2025 Royal Taxi LLC. All rights reserved.
+GitHub Actions runs on every push to `main`, `develop`, and `refactor` branches, and on pull requests to `main`.
 
-## 🤝 Contributing
+The workflow builds and tests the package against the iOS 16.6 simulator SDK. See [`.github/workflows/ci.yml`](.github/workflows/ci.yml) for details.
+
+## License
+
+Copyright Royal Taxi LLC. All rights reserved.
+
+## Contributing
 
 This is a private SDK for Royal Taxi LLC internal use.

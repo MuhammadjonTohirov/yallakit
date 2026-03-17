@@ -1,13 +1,34 @@
 # ``Core``
 
-<!--@START_MENU_TOKEN@-->Summary<!--@END_MENU_TOKEN@-->
+Shared utilities, extensions, UI components, and helper classes used across YallaKit.
 
 ## Overview
 
-<!--@START_MENU_TOKEN@-->Text<!--@END_MENU_TOKEN@-->
+Core is a foundational package providing reusable components that support other packages in YallaKit. It includes Swift extensions, SwiftUI views, storage utilities, and location services.
 
 ## Topics
 
-### <!--@START_MENU_TOKEN@-->Group<!--@END_MENU_TOKEN@-->
+### Extensions
 
-- <!--@START_MENU_TOKEN@-->``Symbol``<!--@END_MENU_TOKEN@-->
+- Array, String, Date, Color, Font, Number, View, URL, and more
+- Codable helpers (asDictionary, asString, asData)
+
+### UI Components
+
+- Alert system (Popup, WindowAlertManager)
+- Bottom sheets (FlexibleDraggableBottomSheet, SimpleFlexibleBottomSheet)
+- Loading animations (20+ animation styles via LoadingIndicator)
+- Scrollable components (PageableScrollView, VerticalScrollView)
+
+### Storage
+
+- ``UserSettings`` — Persistent user preferences using @codableWrapper
+- ``Language`` — Localization support
+- ``DatabaseConfig`` — Database configuration
+
+### Utilities
+
+- ``Constants`` — App-wide configuration (API URLs, endpoints)
+- ``AppMetrics`` — Device and screen metrics
+- ``Padding`` — Consistent spacing values
+- ``SoundEffect`` — System sound playback
