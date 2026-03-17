@@ -8,34 +8,22 @@ let package = Package(
     ],
     products: [
         .library(name: "YallaKit", targets: ["YallaKit"]),
-        .library(name: "Core", targets: ["Core"]),
-        .library(name: "NetworkLayer", targets: ["NetworkLayer"]),
-        .library(name: "IldamSDK", targets: ["IldamSDK"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/MuhammadjonTohirov/SlidingBottomSheet", branch: "main")
+        .package(url: "https://github.com/MuhammadjonTohirov/YallaCore.git", branch: "main"),
+        .package(url: "https://github.com/MuhammadjonTohirov/YallaNetwork.git", branch: "main"),
+        .package(url: "https://github.com/MuhammadjonTohirov/YallaDomain.git", branch: "main"),
+        .package(url: "https://github.com/MuhammadjonTohirov/SlidingBottomSheet", branch: "main"),
     ],
     targets: [
         .target(
             name: "YallaKit",
             dependencies: [
-                "Core",
-                "NetworkLayer",
-                "IldamSDK",
-                .product(name: "SlidingBottomSheet", package: "SlidingBottomSheet")
+                .product(name: "Core", package: "YallaCore"),
+                .product(name: "NetworkLayer", package: "YallaNetwork"),
+                .product(name: "IldamSDK", package: "YallaDomain"),
+                .product(name: "SlidingBottomSheet", package: "SlidingBottomSheet"),
             ]
-        ),
-        .target(
-            name: "Core",
-            dependencies: ["NetworkLayer"]
-        ),
-        .target(
-            name: "NetworkLayer",
-            dependencies: []
-        ),
-        .target(
-            name: "IldamSDK",
-            dependencies: ["Core", "NetworkLayer"]
         ),
     ]
 )
