@@ -8,15 +8,20 @@
 import Foundation
 import UIKit
 
-public enum LocalizationConfig {
-    private static var _bundle: Bundle = .main
+public final class LocalizationConfig: @unchecked Sendable {
+    public static let shared = LocalizationConfig()
 
-    public static var bundle: Bundle {
-        _bundle
+    private let lock = NSLock()
+    private var _bundle: Bundle = .main
+
+    private init() {}
+
+    public var bundle: Bundle {
+        lock.withLock { _bundle }
     }
 
-    public static func setBundle(_ bundle: Bundle) {
-        _bundle = bundle
+    public func setBundle(_ bundle: Bundle) {
+        lock.withLock { _bundle = bundle }
     }
 }
 
@@ -93,7 +98,7 @@ public extension String {
     
     
     func localize(language: String) -> String {
-        let path = LocalizationConfig.bundle.path(forResource: language, ofType: "lproj")
+        let path = LocalizationConfig.shared.bundle.path(forResource: language, ofType: "lproj")
         guard let path, let bundle = Bundle(path: path) else {
             return self
         }
