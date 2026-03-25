@@ -10,10 +10,10 @@ let package = Package(
         .library(name: "YallaKit", targets: ["YallaKit"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/MuhammadjonTohirov/YallaCore.git", branch: "main"),
-        .package(url: "https://github.com/MuhammadjonTohirov/YallaNetwork.git", branch: "main"),
-        .package(url: "https://github.com/MuhammadjonTohirov/YallaDomain.git", branch: "main"),
-        .package(url: "https://github.com/MuhammadjonTohirov/SlidingBottomSheet", branch: "main"),
+        .package(url: "https://gitlab.ildam.uz/ildam-ios-platforma/YallaCore", branch: "main"),
+        .package(url: "https://gitlab.ildam.uz/ildam-ios-platforma/YallaNetwork", branch: "main"),
+        .package(url: "https://gitlab.ildam.uz/ildam-ios-platforma/YallaDomain", branch: "main"),
+        .package(url: "https://gitlab.ildam.uz/ildam-ios-platforma/SlidingBottomSheet", branch: "main"),
     ],
     targets: [
         .target(
