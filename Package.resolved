@@ -1,10 +1,10 @@
 {
-  "originHash" : "617b6c04cda016f53935c8d43cf80d2dc70c2716b59a3f2d3f48703fefe19df1",
+  "originHash" : "a2ecbe0f5dbc990ea134753e71460824583a523720ae5be92ada1f5372d0e88c",
   "pins" : [
     {
       "identity" : "slidingbottomsheet",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/MuhammadjonTohirov/SlidingBottomSheet",
+      "location" : "https://gitlab.ildam.uz/ildam-ios-platforma/SlidingBottomSheet",
       "state" : {
         "branch" : "main",
         "revision" : "44ca05aa014bef98a9116d8a2e3d6fd180c3c72f"
@@ -13,7 +13,7 @@
     {
       "identity" : "yallacore",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/MuhammadjonTohirov/YallaCore.git",
+      "location" : "https://gitlab.ildam.uz/ildam-ios-platforma/YallaCore",
       "state" : {
         "branch" : "main",
         "revision" : "25b4e0dc50a5dca55387c97002857c160070a961"
@@ -22,7 +22,7 @@
     {
       "identity" : "yalladomain",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/MuhammadjonTohirov/YallaDomain.git",
+      "location" : "https://gitlab.ildam.uz/ildam-ios-platforma/YallaDomain",
       "state" : {
         "branch" : "main",
         "revision" : "17a2272eb9e66da1cf571acef7651bfd735713e6"
@@ -31,7 +31,7 @@
     {
       "identity" : "yallanetwork",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/MuhammadjonTohirov/YallaNetwork.git",
+      "location" : "https://gitlab.ildam.uz/ildam-ios-platforma/YallaNetwork",
       "state" : {
         "branch" : "main",
         "revision" : "94f03f5cfd122ba02e241a46d410dff1d6653093"
