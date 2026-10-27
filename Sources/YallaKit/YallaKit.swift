@@ -6,5 +6,5 @@
 @_exported import IldamSDK
 
 public struct IldamKit {
-    public static let version = "2.0.0"
+    public static let version = "3.0.0"
 }

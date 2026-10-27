@@ -7,6 +7,10 @@
 
 # Changelog
 
+## 3.0.0 — 2026-10-27
+
+- Re-export YallaDomain 3.0.0. Executor timeout and distance are optional; missing heading defaults to zero.
+
 ## 2.0.0 — 2026-10-15
 
 - Re-export YallaDomain 2.0.0 and require YallaNetwork 1.0.1, making the corrected order response contracts available through YallaKit.
